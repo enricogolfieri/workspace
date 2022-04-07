@@ -5,7 +5,9 @@ Personal Workspace
 `
 git clone git@github.com:enricogolfieri/workspace ~/.config/workspace 
 `
+
 update .bashrc
+
 `
 source ./config/workspace/linux/.bashrc
 `
