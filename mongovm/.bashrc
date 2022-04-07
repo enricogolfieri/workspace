@@ -1,5 +1,5 @@
 ### Set personal Linux settings
-. ~/.config/workspace/linux/bashrc_lnx
+. ~/.config/workspace/linux/bashrc
 
 ### Set general environment settings
 export PATH=~/bin:${PATH}

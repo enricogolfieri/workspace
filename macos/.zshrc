@@ -1,7 +1,7 @@
 PATH="/opt/homebrew/bin:$PATH"
 
 ### Set personal Linux settings
-. ~/.config/workspace/linux/bashrc_lnx
+. ~/.config/workspace/linux/.bashrc
 
 ### Set aliases
 unalias ls
