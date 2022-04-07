@@ -4,7 +4,7 @@
 ### Set general environment settings
 export PATH=~/bin:${PATH}
 #export PS1='\[\e[0;31m\][\u@devel-ws:\[\e[0;33m\]\w\[\e[0;31m\]]\[\e[0;35m\]$(__git_ps1 "(%s)")\[\e[0;31m\]\$\[\e[0m\] '
-. ~/.config/workspace/personal/virtualenv-auto-activate.sh
+. ~/.config/workspace/linux/virtualenv-auto-activate.sh
 
 ### Set MongoDB's development settings
 export LC_ALL='C'
