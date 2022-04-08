@@ -6,4 +6,4 @@
 export PATH=~/.config/workspace/mongo/devscripts:${PATH}\
 
 #add mongofunction
-. ~/.config/workspace/mongo/mongo_functions.sh
+. ~/.config/workspace/mongo/mongo-functions.sh

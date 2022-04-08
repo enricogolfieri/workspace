@@ -24,7 +24,9 @@ git clone git@github.com:enricogolfieri/workspace ~/.config/workspace
 `
 
 `
-brew install miniconda;
+brew install miniconda
+brew install bash-completion
+brew install oh-my-posh
 `
 
 `
