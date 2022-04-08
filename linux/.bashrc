@@ -35,5 +35,3 @@ alias e='emacs'
 
 ### Set fzf (command-line fuzzy finder)
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
-
-export PATH=~/.config/workspace/mongo/devscripts:${PATH}
