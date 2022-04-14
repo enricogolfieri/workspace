@@ -12,8 +12,7 @@ mongo-prepare ()
 	__mongo-parse-args $@;
 
 	if [[ ${__cmd_prefix} != echo ]]; then
-		echo "WARNING: All uncommitted changes and unversioned 
-files will be lost";
+		echo "WARNING: All uncommitted changes and unversioned files will be lost";
 		read -p "Are you sure you want to proceed? [y/N] ";
 		[[ ${REPLY} =~ (y|Y) ]] || return 0;
 	fi
@@ -26,18 +25,15 @@ files will be lost";
 	v4.2 | v4.4 | v5.0 | v5.3 | master)
 		${__cmd_prefix} \python3 -m venv .venv;
 		${__cmd_prefix} . .venv/bin/activate;
-		${__cmd_prefix} .venv/bin/python3 -m pip install -r 
-buildscripts/requirements.txt --use-feature=2020-resolver
+		${__cmd_prefix} .venv/bin/python3 -m pip install -r buildscripts/requirements.txt --use-feature=2020-resolver
 		;;
 	v4.0)
 		${__cmd_prefix} \virtualenv -p python2 .venv;
 		${__cmd_prefix} . .venv/bin/activate;
-		${__cmd_prefix} .venv/bin/python2 -m pip install -r 
-buildscripts/requirements.txt --use-feature=2020-resolver
+		${__cmd_prefix} .venv/bin/python2 -m pip install -r buildscripts/requirements.txt --use-feature=2020-resolver
 		;;
 	*)
-		echo "ERROR: ${__mongo_branch} branch is not supported by 
-${FUNCNAME[0]}" 1>&2;
+		echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
 		return 1
 		;;
 	esac )
@@ -85,14 +81,12 @@ mongo-build ()
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
 
-	[[ ${__format} == 1 ]] && ${__cmd_prefix} mongo-format 
-${__mongo_branch}
+	[[ ${__format} == 1 ]] && ${__cmd_prefix} mongo-format ${__mongo_branch}
 
 	case ${__mongo_branch} in
 	v4.4 | v5.0 | v5.3 | master)
 		[[ -f build.ninja ]] || __mongo-configure-ninja $@;
-		[[ -f compile_commands.json ]] || 
-__mongo-configure-compilation-db $@;
+		[[ -f compile_commands.json ]] || __mongo-configure-compilation-db $@;
 		${__cmd_prefix} ninja \
 			-j400 \
 			generated-sources \
@@ -100,11 +94,9 @@ __mongo-configure-compilation-db $@;
 			${__args[@]}
 		;;
 	v4.0 | v4.2)
-		[[ -f compile_commands.json ]] || 
-__mongo-configure-compilation-db $@;
+		[[ -f compile_commands.json ]] || __mongo-configure-compilation-db $@;
 		${__cmd_prefix} ./buildscripts/scons.py \
-			
---variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
+			--variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
 			${__build_mode} \
 			ICECC=icecc \
 			generated-sources \
@@ -112,8 +104,7 @@ __mongo-configure-compilation-db $@;
 			${__args[@]}
 		;;
 	*)
-		echo "ERROR: ${__mongo_branch} branch is not supported by 
-${FUNCNAME[0]}" 1>&2;
+		echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
 		return 1
 		;;
 	esac )
@@ -142,14 +133,12 @@ mongo-clean ()
 		;;
 	v4.0 | v4.2)
 		${__cmd_prefix} ./buildscripts/scons.py \
-			
---variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
+			--variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
 			--clean \
 			${__target}
 		;;
 	*)
-		echo "ERROR: ${__mongo_branch} branch is not supported by 
-${FUNCNAME[0]}" 1>&2;
+		echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
 		return 1
 		;;
 	esac )
@@ -175,8 +164,7 @@ mongo-format ()
 		${__cmd_prefix} ./buildscripts/clang_format.py format
 		;;
 	*)
-		echo "ERROR: ${__mongo_branch} branch is not supported by 
-${FUNCNAME[0]}" 1>&2;
+		echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
 		return 1
 		;;
 	esac )
@@ -200,8 +188,7 @@ mongo-test-locally ()
 	${__cmd_prefix} ./buildscripts/resmoke.py run \
 		--storageEngine=wiredTiger \
 		--storageEngineCacheSizeGB=0.5 \
-		--mongodSetParameters='{logComponentVerbosity: {verbosity: 
-2}}' \
+		--mongodSetParameters='{logComponentVerbosity: {verbosity: 2}}' \
 		--jobs=${__tasks} \
 		--log=file \
 		${__args[@]} )
@@ -222,8 +209,7 @@ mongo-test-remotely ()
 	msg=$(git log -n 1 --pretty=%B | head -n 1)
 	if [[ ${__cmd_prefix} != echo ]]; then
 		echo ${msg}
-		read -p "Do you want to use this title for the Evergreen 
-patch? [Y/n] ";
+		read -p "Do you want to use this title for the Evergreen patch? [Y/n] ";
 		if [[ ${REPLY} =~ (n|N) ]]; then
 			read -p "Type the custom title: " msg
 		fi
@@ -248,8 +234,7 @@ mongo-verify-tee ()
 	${__cmd_prefix} ./buildscripts/resmoke.py run \
 		--storageEngine=wiredTiger \
 		--storageEngineCacheSizeGB=0.5 \
-		--mongodSetParameters='{logComponentVerbosity: {verbosity: 
-2}}' \
+		--mongodSetParameters='{logComponentVerbosity: {verbosity: 2}}' \
 		--jobs=${__tasks} \
 		${__args[@]} \
 		| tee tests.log )
@@ -291,8 +276,7 @@ mongo-debug ()
 __mongo-check-wrkdir ()
 {
 	if [[ ! -d buildscripts ]]; then
-		echo "ERROR: ${PWD} is not a mongo working directory" 
-1>&2;
+		echo "ERROR: ${PWD} is not a mongo working directory" 1>&2;
 		return 1;
 	fi
 }
@@ -386,14 +370,12 @@ __mongo-parse-args ()
 			shift
 			;;
 		--multi-task)
-			__tasks=`cat /proc/cpuinfo | grep processor | wc 
--l`
+			__tasks=`cat /proc/cpuinfo | grep processor | wc -l`
 			shift
 			;;
 		*)
 			#if [[ $1 == -* ]]; then
-			#	echo "ERROR: $1 is not a supported option" 
-1>&2;
+			#	echo "ERROR: $1 is not a supported option" 1>&2;
 			#	return 1;
 			#fi
 			__args+=($1)
@@ -418,8 +400,8 @@ __mongo-configure-ninja ()
 	case ${__mongo_branch} in
 	master)
 		${__cmd_prefix} ./buildscripts/scons.py \
-			
---variables-files=etc/scons/mongodbtoolchain_v4_${__toolchain}.vars \
+			--variables-files=etc/scons/mongodbtoolchain_v3_${__toolchain}.vars \
+			--modules= \
 			${__build_mode} \
 			${__link_model} \
 			--ninja generate-ninja \
@@ -429,8 +411,8 @@ __mongo-configure-ninja ()
 		;;
 	v4.4 | v5.0 | v5.3)
 		${__cmd_prefix} ./buildscripts/scons.py \
-			
---variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
+			--variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
+			--modules= \
 			${__build_mode} \
 			${__link_model} \
 			--ninja generate-ninja \
@@ -459,8 +441,7 @@ __mongo-configure-compilation-db ()
 		;;
 	v4.0 | v4.2)
 		${__cmd_prefix} ./buildscripts/scons.py \
-			
---variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
+			--variables-files=etc/scons/mongodbtoolchain_stable_${__toolchain}.vars \
 			${__build_mode} \
 			ICECC=icecc \
 			compiledb \
