@@ -38,12 +38,16 @@ git clone git@github.com:enricogolfieri/workspace ~/.config/workspace
 brew install miniconda
 brew install bash-completion
 brew install oh-my-posh
+brew install --cask iterm2
+```
 
-### Install Menslo LF Nerd Font (refer to "MesloLGM Nerd Font" family)
+Install Menslo LF Nerd Font (refer to "MesloLGM Nerd Font" family)
+```
 brew tap homebrew/cask-fonts
 brew install --cask font-meslo-lg-nerd-font
 ```
 
+Install python 3.9
 ```
 conda install python=3.9 
 ```
