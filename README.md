@@ -37,6 +37,10 @@ git clone git@github.com:enricogolfieri/workspace ~/.config/workspace
 brew install miniconda
 brew install bash-completion
 brew install oh-my-posh
+
+### Install Menslo LF Nerd Font (refer to "MesloLGM Nerd Font" family)
+brew tap homebrew/cask-fonts
+brew install --cask font-meslo-lg-nerd-font
 `
 
 `
