@@ -404,7 +404,7 @@ __mongo-configure-ninja ()
 	case ${__mongo_branch} in
 		v4.4 | v5.0 | v5.3 | master)
 			${__cmd_prefix} ./buildscripts/scons.py \
-					--variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
+					--modules= --variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
 					${__build_mode} \
 					${__link_model} \
 					--ninja generate-ninja \
