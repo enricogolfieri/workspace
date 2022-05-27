@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ninja -f build.ninja -j12 +${1} 

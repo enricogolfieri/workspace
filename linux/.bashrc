@@ -32,6 +32,8 @@ alias more='more --RAW-CONTROL-CHARS --chop-long-lines'
 alias less='less --RAW-CONTROL-CHARS --chop-long-lines --IGNORE-CASE'
 alias emacs='emacs -nw'
 alias e='emacs'
+alias cdws='cd ~/.config/workspace'
+
 
 ### Set fzf (command-line fuzzy finder)
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
