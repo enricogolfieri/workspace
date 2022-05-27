@@ -1,4 +1,4 @@
-# workspace
+# Workspace
 Personal Workspace
 
 # Linux 
@@ -12,22 +12,6 @@ update .bashrc
 source ./config/workspace/linux/.bashrc
 `
 
-## Mongodb Linux 
-
-to work on mongodb, update .bashrc 
-
-```
-source ./config/workspace/linux/mongoenv.sh
-```
-
-install 
-
-```
-sudo apt install ninja 
-sudo apt install ccache 
-```
-
-clone mongodbtoolchain in /opt/
 # Mac 
 
 ```
@@ -65,13 +49,14 @@ update .zshrc
 source ./config/workspace/macos/.zshrc
 ```
 
-## MongoDb mac 
+# MongoDb 
 
+## Mac
 to work on mongodb, update .bashrc 
 
 ```
 source ~/.config/workspace/macos/.bashrc
-source ~/.config/workspace/macos/mongoenv.sh 
+source ~/.config/workspace/mongo/mongoenv.sh 
 ```
 
 install 
@@ -80,4 +65,22 @@ install
 brew install ninja 
 brew install ccache
 ```
+
+## Linux 
+
+to work on mongodb, update .bashrc 
+
+```
+source ./config/workspace/linux/mongoenv.sh
+```
+
+install 
+
+```
+sudo apt install ninja 
+sudo apt install ccache 
+```
+
+clone mongodbtoolchain in /opt/
+
 
