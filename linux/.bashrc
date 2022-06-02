@@ -34,6 +34,8 @@ alias emacs='emacs -nw'
 alias e='emacs'
 alias cdws='cd ~/.config/workspace'
 
-
 ### Set fzf (command-line fuzzy finder)
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
+
+### Update path #####
+export PATH=~/.config/workspace/linux/sysutil:${PATH}\

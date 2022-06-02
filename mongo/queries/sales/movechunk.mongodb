@@ -1,0 +1,25 @@
+
+use('foo')
+print("_id 1 should be in undefined_rs0 :",db.sales.find({_id:1}).explain().queryPlanner.winningPlan.shards[0].shardName);
+//first move chunk
+db.adminCommand( { moveChunk : "foo.sales",
+                 find : { _id:1},
+                 to : "undefined-rs2",
+                 forceJumbo: false, 
+                 _secondaryThrottle : true,
+                 writeConcern:{w:1},
+                 _waitForDelete:false} );
+
+print("_id 1 should be in undefined_rs2 :",db.sales.find({_id:1}).explain().queryPlanner.winningPlan.shards[0].shardName);
+
+
+//back again
+db.adminCommand( { moveChunk : "foo.sales",
+                 find : { _id:1},
+                 to : "undefined-rs0",
+                 forceJumbo: false, 
+                 _secondaryThrottle : true,
+                 writeConcern:{w:1},
+                 _waitForDelete:false} );
+
+print("_id 1 should be in undefined_rs0 :",db.sales.find({_id:1}).explain().queryPlanner.winningPlan.shards[0].shardName);
