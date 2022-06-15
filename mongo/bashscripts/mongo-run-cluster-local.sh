@@ -26,4 +26,5 @@ sleep 3
 PORT_ms=$(($minport + $shards * $nodes));
 
 echo "build/debug/install/bin/mongo --port $PORT_ms"
-mongo --port $PORT_ms
+mongo --port $PORT_ms 
+#"/home/ubuntu/.config/workspace/mongo/queries/sales/init.mongodb"
