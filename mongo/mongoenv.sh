@@ -1,7 +1,6 @@
 
 #add scripts
-export PATH=~/.config/workspace/mongo/bashscripts:${PATH}\
-export PATH=~/.config/workspace/mongo/tools:${PATH}\
+export PATH=~/.config/workspace/mongo/bashscripts:~/.config/workspace/mongo/tools:${PATH}\
 
 
 #!/usr/bin/env bash
