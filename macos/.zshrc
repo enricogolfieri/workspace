@@ -11,6 +11,9 @@ eval "$(oh-my-posh --init --shell zsh --config ~/.config/workspace/linux/oh-my-p
 
 ### Set aliases
 alias python3=python #for compiling mongo, this takes for granted miniconda is installed with python3.9
-alias dcr=docker-compose run --rm 
+
 ### Set Homebrew bash completion
 [[ -r /usr/local/etc/profile.d/bash_completion.sh ]] && . /usr/local/etc/profile.d/bash_completion.sh
+
+### functions ######
+cheat() { curl cheat.sh/"$1" ; }

@@ -21,6 +21,11 @@ mongo-prepare ()
 	${__cmd_prefix} \python3 -m venv ${MONGO_VENV_DIRNAME};
 	${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
 	${__cmd_prefix} ${MONGO_VENV_DIRNAME}/bin/python3 -m pip install -r buildscripts/requirements.txt )
+
+	ln -s ~/.config/workspace/mongo/.vscode/ .
+	ln -s ~/.config/workspace/mongo/tools/ .
+
+	pip install -r  ~/.config/workspace/mongo/tools/requirements.txt
 }
 
 # Generates the `build.ninja` and `compile_commands.json` files, which are
@@ -102,6 +107,17 @@ mongo-format ()
 	__mongo-parse-args $@;
 
 	${__cmd_prefix} ./buildscripts/clang_format.py format-my )
+}
+
+
+mongo-fix-lint ()
+{
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-check-venv;
+
+	${__cmd_prefix} ./buildscripts/eslint.py fix
+	)
 }
 
 # Runs on the current machine the infrastructure to process the specified

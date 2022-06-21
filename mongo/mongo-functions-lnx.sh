@@ -37,6 +37,11 @@ mongo-prepare ()
 			return 1
 		;;
 	esac )
+
+	ln -s ~/.config/workspace/mongo/.vscode/ .
+	ln -s ~/.config/workspace/mongo/tools/ .
+
+	pip install -r  ~/.config/workspace/mongo/tools/requirements.txt
 }
 
 # Generates the `build.ninja` and `compile_commands.json` files, which are
@@ -172,6 +177,18 @@ mongo-format ()
 		;;
 	esac )
 }
+
+
+mongo-fix-lint ()
+{
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-check-venv;
+
+	${__cmd_prefix} ./buildscripts/eslint.py fix
+	)
+}
+
 
 # Runs on the current machine the infrastructure to process the specified
 # JavaScript test. This proposes the last commit comment as a description of the

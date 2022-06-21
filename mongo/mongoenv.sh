@@ -37,6 +37,22 @@ cd ()
 	fi
 }
 
+mongo-download-evg-logs() {
+    _workstation="mongo-ws"
+    _logs_url=$1
+	_logs_folder="~/logs"
+
+    _filename=${_logs_url##*/}
+	mkdir -p $_logs_folder
+
+    ssh ${_workstation} "cd $_logs_folder; wget -q -O ${_filename} $1"
+    if [ $? -ne 0 ]; then
+         return 1;
+    fi;
+
+    scp -C ${_workstation}:${_logs_folder}/${_filename} .
+}
+
 
 echo "mongo environment activated for $_machine"
 

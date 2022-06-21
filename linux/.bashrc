@@ -39,3 +39,7 @@ alias cdws='cd ~/.config/workspace'
 
 ### Update path #####
 export PATH=~/.config/workspace/linux/sysutil:${PATH}\
+
+### functions ######
+cheat() { curl cheat.sh/"$1" ; }
+
