@@ -40,10 +40,9 @@ cd ()
 mongo-download-evg-logs() {
     _workstation="mongo-ws"
     _logs_url=$1
-	_logs_folder="~/logs"
+	_logs_folder="~/tmp"
 
     _filename=${_logs_url##*/}
-	mkdir -p $_logs_folder
 
     ssh ${_workstation} "cd $_logs_folder; wget -q -O ${_filename} $1"
     if [ $? -ne 0 ]; then
