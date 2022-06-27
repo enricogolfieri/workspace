@@ -1,0 +1,121 @@
+#!/bin/bash
+
+kill() {
+  echo "About to kill all processes" 
+  $__cmd_prefix mlaunch kill 
+}
+
+list(){
+    echo
+    echo -e "\033[1;4;32m""Functions:""\033[0;34m"
+    compgen -A function
+    echo
+    echo -e "\033[1;4;32m""Aliases:""\033[0;34m"
+    compgen -A alias
+    echo
+    echo -e "\033[0m"
+}
+clean() {
+  
+  echo "erasing data on $__dir"
+  $__cmd_prefix rm -rf $__dir
+}
+
+__load_file()
+{
+	tilde=~
+	$__cmd_prefix mongo --eval "load('$tilde/.config/workspace/mongo/queries/$1)";
+}
+
+load-sales()
+{
+	__load_file "sales/init.js"
+}
+
+load-bigstring()
+{
+	__load_file "bigstring/init.js"
+}
+
+launch()
+{
+	$__cmd_prefix mlaunch --dir $__dir $__args 
+}
+
+__init()
+{
+	echo "ready to init..."
+	clean 
+	$__cmd_prefix mlaunch init --dir $__dir $@ 
+}
+
+init()
+{
+	__init
+}
+
+init-babyset()
+{
+	__init --replicaset --nodes 1 --sharded 2 $__args 
+}
+
+init-standardset()
+{
+	__init --replicaset --nodes 3 --sharded 2 $__args 
+}
+
+init-heavyset()
+{
+	__init --replicaset --nodes 3 --sharded 3 $__args 
+}
+
+connect()
+{
+	$__cmd_prefix mongo --port 27017
+}
+
+__set()
+{
+	#first argument it s one command , followings are arguments
+	if [ -z "$__cmd" ]; then 
+		__cmd=$1;
+	else
+		__args+=($1);
+	fi
+}
+
+
+__parse_args()
+{
+	export PATH=./build/debug/install/bin:$PATH
+	[[ -z ${__parsed_args} ]] && __parsed_args=true || return 0;
+
+	__cmd_prefix=;
+	__dir="~/mlaunch/data/"
+	__cmd=;
+	__args=();
+
+	while [[ $# -gt 0 ]]; do
+		case $1 in
+			--echo)
+				__cmd_prefix=echo;
+				shift
+			;;
+			
+			--dir)
+				__dir=$2;
+				shift
+				shift
+			;;
+			*)
+				__set $1;
+				shift
+			;;
+		esac;
+	done;
+}
+
+__parse_args $@
+echo "ready to $__cmd"
+$__cmd
+echo "Stay committed"
