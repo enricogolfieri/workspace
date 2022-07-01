@@ -4,6 +4,8 @@ PATH="/opt/homebrew/bin:$PATH"
 
 eval "$(oh-my-posh --init --shell zsh --config ~/.config/workspace/linux/oh-my-posh-v2.omp.json)"
 
+##fuzzy finder 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ### Set Git completition
 . ~/.config/workspace/macos/git-completion.zsh

@@ -4,7 +4,6 @@ export HISTCONTROL=ignoreboth
 ### Silence zsh message as default shell
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-
 ### Set aliases
 alias ls='ls -h --color=auto'
 alias ll='ls -l'
@@ -16,8 +15,6 @@ alias less='less --RAW-CONTROL-CHARS --chop-long-lines --IGNORE-CASE'
 alias v='vim'
 alias cdws='cd ~/.config/workspace'
 
-### Set fzf (command-line fuzzy finder)
-[[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
 
 ### Update path #####
 export PATH=~/.config/workspace/linux/sysutil:${PATH}\
