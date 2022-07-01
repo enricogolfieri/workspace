@@ -1,6 +1,3 @@
-### Set spelling correction
-shopt -s cdspell
-
 ### Do not put duplicate lines or lines starting with space in the history
 export HISTCONTROL=ignoreboth
 
@@ -36,6 +33,16 @@ function workspace-git-pull() {
     cd ~/.config/workspace
     git pull
     cd -
+}
+
+function workspace-git-push() {
+    cd ~/.config/workspace
+    git push
+    cd -
+}
+
+function workspace-update-dependencies(){
+    apt-get install 
 }
 
 ## system utilities #####
