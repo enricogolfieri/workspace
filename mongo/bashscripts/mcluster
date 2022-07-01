@@ -5,7 +5,7 @@ kill() {
   $__cmd_prefix mlaunch kill 
 }
 
-list(){
+help(){
     echo
     echo -e "\033[1;4;32m""Functions:""\033[0;34m"
     compgen -A function
@@ -15,16 +15,16 @@ list(){
     echo
     echo -e "\033[0m"
 }
+
+list()
+{
+	__launch list
+}
+
 clean() {
   
   echo "erasing data on $__dir"
   $__cmd_prefix rm -rf $__dir
-}
-
-__load_file()
-{
-	tilde=~
-	$__cmd_prefix mongo --eval "load('$tilde/.config/workspace/mongo/queries/$1)";
 }
 
 load-sales()
@@ -42,36 +42,67 @@ launch()
 	$__cmd_prefix mlaunch --dir $__dir $__args 
 }
 
-__init()
-{
-	echo "ready to init..."
-	clean 
-	$__cmd_prefix mlaunch init --dir $__dir $@ 
-}
-
 init()
 {
 	__init
 }
 
+initd()
+{
+	__init --single 
+}
+
+init-replica()
+{
+	__init --replicaset --nodes 3
+}
+
+#1 nodes x 2 shards + 1 node csrs
 init-babyset()
 {
 	__init --replicaset --nodes 1 --sharded 2 $__args 
 }
 
+#3 nodes x 2 shards + 1 node csrs
 init-standardset()
 {
 	__init --replicaset --nodes 3 --sharded 2 $__args 
 }
 
+#3 nodes x 2 shards + 3 node csrs
 init-heavyset()
 {
-	__init --replicaset --nodes 3 --sharded 3 $__args 
+	__init --replicaset --nodes 3 --sharded 2 --csrs $__args 
 }
 
 connect()
 {
 	$__cmd_prefix mongo --port 27017
+}
+
+plot()
+{
+	mplotqueries $__args
+}
+#private ----------------------------------------
+
+__launch()
+{
+	$__cmd_prefix mlaunch --dir $__dir
+}
+
+__load_file()
+{
+	tilde=~
+	$__cmd_prefix mongo --eval "load('$tilde/.config/workspace/mongo/queries/$1)"
+}
+
+__init()
+{
+	echo "ready to init..."
+	clean 
+	__launch init $@ 
+	__load_file "utils.js"
 }
 
 __set()
@@ -91,7 +122,7 @@ __parse_args()
 	[[ -z ${__parsed_args} ]] && __parsed_args=true || return 0;
 
 	__cmd_prefix=;
-	__dir="~/mlaunch/data/"
+	__dir="./cdata/"
 	__cmd=;
 	__args=();
 
@@ -99,12 +130,6 @@ __parse_args()
 		case $1 in
 			--echo)
 				__cmd_prefix=echo;
-				shift
-			;;
-			
-			--dir)
-				__dir=$2;
-				shift
 				shift
 			;;
 			*)

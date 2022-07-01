@@ -3,18 +3,6 @@
 export PATH=~/.config/workspace/mongo/bashscripts:~/.config/workspace/mongo/tools:${PATH}\
 
 
-#!/usr/bin/env bash
-_machine=;
-if [ "$(uname)" == "Darwin" ]; then
-    #add mongofunction
-    . ~/.config/workspace/mongo/mongo-functions-mac.sh      
-    _machine="Darwin";
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    #add mongofunction
-    . ~/.config/workspace/mongo/mongo-functions-lnx.sh
-    _machine="Linux";
-fi
-
 #redifining cd to automatically activate python inside .venv
 cd ()
 {
@@ -52,6 +40,19 @@ mongo-download-evg-logs() {
     scp -C ${_workstation}:${_logs_folder}/${_filename} .
 }
 
+
+#!/usr/bin/env bash
+_machine=;
+if [ "$(uname)" == "Darwin" ]; then
+    #add mongofunction
+    . ~/.config/workspace/mongo/mongo-functions-mac.sh      
+    _machine="Darwin";
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    #add mongofunction
+    . ~/.config/workspace/mongo/mongo-functions-lnx.sh
+    _machine="Linux";
+fi
+[[ $- == *i* ]] || return
 
 echo "mongo environment activated for $_machine"
 

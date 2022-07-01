@@ -1,10 +1,9 @@
-PATH="/opt/homebrew/bin:$PATH"
+. ~/.config/workspace/linux/.bashrc-base
 
+PATH="/opt/homebrew/bin:$PATH"
 
 eval "$(oh-my-posh --init --shell zsh --config ~/.config/workspace/linux/oh-my-posh-v2.omp.json)"
 
-##fuzzy finder 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ### Set Git completition
 . ~/.config/workspace/macos/git-completion.zsh
@@ -15,5 +14,3 @@ alias python3=python #for compiling mongo, this takes for granted miniconda is i
 ### Set Homebrew bash completion
 [[ -r /usr/local/etc/profile.d/bash_completion.sh ]] && . /usr/local/etc/profile.d/bash_completion.sh
 
-### functions ######
-cheat() { curl cheat.sh/"$1" ; }
