@@ -35,10 +35,6 @@ function workspace-git-push() {
     cd -
 }
 
-function workspace-update-dependencies(){
-    apt-get install 
-}
-
 ## system utilities #####
 function sys-clean-tmp()
 {
