@@ -1,4 +1,4 @@
-. ~/.config/workspace/linux/.bashrc-base
+. ~/.config/workspace/linux/.functions
 
 PATH="/opt/homebrew/bin:$PATH"
 
@@ -9,9 +9,6 @@ eval "$(oh-my-posh --init --shell zsh --config ~/.config/workspace/linux/oh-my-p
 
 ### Set Git completition
 . ~/.config/workspace/macos/git-completion.zsh
-
-### Set aliases
-alias python3=python #for compiling mongo, this takes for granted miniconda is installed with python3.9
 
 ### Set Homebrew bash completion
 [[ -r /usr/local/etc/profile.d/bash_completion.sh ]] && . /usr/local/etc/profile.d/bash_completion.sh

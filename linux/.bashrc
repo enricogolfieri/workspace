@@ -1,4 +1,11 @@
-. ~/.config/workspace/linux/.bashrc-base
+. ~/.config/workspace/linux/functions.sh
+. ~/.config/workspace/linux/.bash_aliases
+
+### Do not put duplicate lines or lines starting with space in the history
+export HISTCONTROL=ignoreboth
+
+### Silence zsh message as default shell
+export BASH_SILENCE_DEPRECATION_WARNING=1
 
 ### Set spelling correction
 shopt -s cdspell
@@ -6,8 +13,19 @@ shopt -s cdspell
 ### Append to the history file (do not overwrite it)
 shopt -s histappend
 
-### Set fzf (command-line fuzzy finder)
+### fzf 
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
+
+# fzf
+export FZF_DEFAULT_COMMAND='fd --type f --color=never --hidden'
+export FZF_DEFAULT_OPTS='--no-height --color=bg+:#343d46,gutter:-1,pointer:#ff3c3c,info:#0dbc79,hl:#0dbc79,hl+:#23d18b'
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
+
+export FZF_ALT_C_COMMAND='fd --type d . --color=never --hidden'
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
+
 
 ### Set general environment settings
 export CLICOLOR=1
@@ -17,37 +35,10 @@ eval "$(oh-my-posh --init --shell bash --config ~/.config/workspace/linux/oh-my-
 . ~/.config/workspace/linux/git-prompt.sh
 
 ### Set Git completition
-. ~/.config/workspace/linux/git-completion.bash
+. ~/.config/workspace/linux/git-completion.sh
 
-function workspace-setup(){
-
-    if [ "$EUID" -ne 0 ]
-    then echo "Please run with sudo"
-    exit
-    fi
-
-    #Install oh-my-posh 
-    wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
-    chmod +x /usr/local/bin/oh-my-posh
-
-    mkdir ~/.poshthemes
-    wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
-    unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
-    chmod u+rw ~/.poshthemes/*.json
-    rm ~/.poshthemes/themes.zip
-
-    #install meslo font 
-    wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-    wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-
-    sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
-    sudo mv PowerlineSymbols.otf /usr/share/fonts/
-
-    #Install build tools 
-    apt-get update 
-    apt-get install ninja-build 
-    apt-get install cmake 
-    apt-get install build-essential
-
-    echo "Done!"
-}
+### Add cargo bin if it exists
+if [ -d "$HOME/.cargo/bin" ]
+then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi

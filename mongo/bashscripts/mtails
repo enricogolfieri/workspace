@@ -1,0 +1,51 @@
+#!/bin/bash
+
+TMUX=$(type -p tmux) || { echo "This script requires tmux"; exit 1; }
+
+SESSION="tmux-tail-f-$$"
+
+__dir=$1;
+
+function at_exit() {
+	tmux kill-session -t "$SESSION" >/dev/null 2>&1
+}
+
+function split_and_cmd(){
+    #$1 cmd 
+    #$2 pane name 
+
+    tmux split-window -t "$SESSION" "source .venv/bin/activate && $1"
+    if [ $? -ne 0 ]; then
+        tmux select-layout -t "$SESSION" tiled
+        tmux split-window -t "$SESSION" "source .venv/bin/activate && $1" #retry
+    fi
+
+    if [ $? -eq 0 ]; then
+        tmux  select-pane -T $2
+    fi
+}
+
+
+trap at_exit EXIT
+
+tmux new-session -d -s "$SESSION"
+tmux set -g pane-border-status top
+set -g mouse on        #For tmux version 2.1 and up
+
+#for every folder in __dir run tmux with tail -F on mongod.log
+for d in "$__dir"/*; do
+    if [ -d "$d" ]; then
+        for subdir in "$d"/*; do
+            if [ -f "$subdir/mongod.log" ]; then
+                echo "Tailing $subdir/mongod.log"
+                split_and_cmd "tail -F $subdir/mongod.log | python $HOME/.config/workspace/mongo/bashscripts/jcolor.py" "$subdir"
+            fi
+        done
+    fi
+done
+
+split_and_cmd "tail -f $__dir/mongos.log" "mongos"
+
+tmux select-layout -t "$SESSION" tiled
+tmux select-pane -t "$SESSION" -t 0
+tmux attach -t "$SESSION" >/dev/null 2>&1

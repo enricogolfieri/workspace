@@ -1,0 +1,23 @@
+
+### functions ######
+cheat() { curl cheat.sh/"$1" ; }
+
+## Workspace functions #####
+function workspace-git-pull() {
+    cd ~/.config/workspace
+    git pull
+    cd -
+}
+
+function workspace-git-push() {
+    cd ~/.config/workspace
+    git push
+    cd -
+}
+
+
+## system utilities #####
+function sys-clean-tmp()
+{
+    sudo find /tmp -type f -atime +10 -delete
+}

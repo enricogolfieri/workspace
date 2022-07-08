@@ -39,7 +39,7 @@ load-bigstring()
 
 launch()
 {
-	$__cmd_prefix mlaunch --dir $__dir $__args 
+	__launch $__args 
 }
 
 init()
@@ -88,7 +88,7 @@ plot()
 
 __launch()
 {
-	$__cmd_prefix mlaunch --dir $__dir
+	$__cmd_prefix mlaunch --dir $__dir $@
 }
 
 __load_file()
