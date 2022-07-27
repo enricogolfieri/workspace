@@ -3,13 +3,13 @@
 cheat() { curl cheat.sh/"$1" ; }
 
 ## Workspace functions #####
-function workspace-git-pull() {
+function workspace-pull() {
     cd ~/.config/workspace
     git pull
     cd -
 }
 
-function workspace-git-push() {
+function workspace-push() {
     cd ~/.config/workspace
     git push
     cd -
