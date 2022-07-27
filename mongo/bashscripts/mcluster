@@ -1,8 +1,9 @@
 #!/bin/bash
 
 kill() {
+	__enable_python_env
   echo "About to kill all processes" 
-  $__cmd_prefix mlaunch kill 
+  __launch kill 
 }
 
 help(){
@@ -18,91 +19,117 @@ help(){
 
 list()
 {
+	__enable_python_env
 	__launch list
 }
 
 clean() {
-  
   echo "erasing data on $__dir"
   $__cmd_prefix rm -rf $__dir
 }
 
 load-sales()
 {
+	__enable_python_env
 	__load_file "sales/init.js"
 }
 
 load-bigstring()
 {
+	__enable_python_env
 	__load_file "bigstring/init.js"
 }
 
 launch()
 {
+	__enable_python_env
 	__launch $__args 
 }
 
 init()
 {
+	__enable_python_env
 	__init
 }
 
 initd()
 {
+	__enable_python_env
 	__init --single 
 }
 
 init-replica()
 {
+	__enable_python_env
 	__init --replicaset --nodes 3
 }
 
 #1 nodes x 2 shards + 1 node csrs
 init-babyset()
 {
+	__enable_python_env
 	__init --replicaset --nodes 1 --sharded 2 $__args 
 }
 
 #3 nodes x 2 shards + 1 node csrs
 init-standardset()
 {
+	__enable_python_env
 	__init --replicaset --nodes 3 --sharded 2 $__args 
 }
 
 #3 nodes x 2 shards + 3 node csrs
 init-heavyset()
 {
+	__enable_python_env
 	__init --replicaset --nodes 3 --sharded 2 --csrs $__args 
 }
 
 connect()
 {
-	$__cmd_prefix mongo --port 27017
+	echo "connecting to $_args"
+	__port="${__args:-27017}" 
+
+	__enable_python_env
+	$__cmd_prefix mongo --port $__port
+}
+
+test()
+{
+	initd 
+	$__cmd_prefix mongo --eval $1
 }
 
 plot()
 {
+	__enable_python_env
 	mplotqueries $__args
 }
 #private ----------------------------------------
 
 __launch()
 {
-	$__cmd_prefix mlaunch --dir $__dir $@
+	$__cmd_prefix mlaunch $@ --dir $__dir 
 }
 
 __load_file()
 {
-	tilde=~
-	$__cmd_prefix mongo --eval "load('$tilde/.config/workspace/mongo/queries/$1)"
+	$__cmd_prefix mongo --eval "load('$HOME/.config/workspace/mongo/queries/$1)"
 }
 
 __init()
 {
 	echo "ready to init..."
 	clean 
+	kill
 	__launch init $@ 
 	__load_file "utils.js"
+}
+
+__enable_python_env()
+{
+	echo "enabling python env"
+	$__cmd_prefix . .venv/bin/activate
 }
 
 __set()
