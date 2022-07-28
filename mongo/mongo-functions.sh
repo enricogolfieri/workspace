@@ -10,6 +10,7 @@ mongo-prepare ()
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
+	echo 
 
 	if [[ ${__cmd_prefix} != echo ]]; then
 		echo "WARNING: All uncommitted changes and unversioned files will be lost";
@@ -17,12 +18,20 @@ mongo-prepare ()
 		[[ ${REPLY} =~ (y|Y) ]] || return 0;
 	fi
 
+	#add enterprise module 
+	echo "modules $__modules"
+	if [ $__modules == "enterprise" ]; then
+		${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
+		${__cmd_prefix} mkdir -p src/mongo/db/modules/
+		${__cmd_prefix} git clone git@github.com:10gen/mongo-enterprise-modules.git src/mongo/db/modules/enterprise
+	fi
+
 	[[ -n ${VIRTUAL_ENV} ]] && ${__cmd_prefix} deactivate;
 	${__cmd_prefix} \git clean -fdx;
 	${__cmd_prefix} ccache -C;
 
 	case ${__mongo_branch} in
-		v4.2 | v4.4 | v5.0 | v5.3 | master)
+		v4.2 | v4.4 | v5.0 | v5.3 | v6.0 | master)
 			${__cmd_prefix} \python3 -m venv ${MONGO_VENV_DIRNAME};
 			${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
 			${__cmd_prefix} ${MONGO_VENV_DIRNAME}/bin/python3 -m pip install -r buildscripts/requirements.txt --use-feature=2020-resolver
@@ -37,6 +46,7 @@ mongo-prepare ()
 			return 1
 		;;
 	esac )
+
 
 	ln -s ~/.config/workspace/mongo/.vscode/ .
 	ln -s ~/.config/workspace/mongo/tools/ .
@@ -89,7 +99,7 @@ mongo-build ()
 	[[ ${__format} == 1 ]] && ${__cmd_prefix} mongo-format ${__mongo_branch};
 
 	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | master)
+		v4.4 | v5.0 | v5.3 | v6.0 | master)
 			[[ -f build.ninja ]] || __mongo-configure-ninja $@;
 			[[ -f compile_commands.json ]] || __mongo-configure-compilation-db $@;
 			${__cmd_prefix} ninja \
@@ -133,7 +143,7 @@ mongo-clean ()
 	__mongo-parse-args $@;
 
 	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | master)
+		v4.4 | v5.0 | v5.3 | v6.0 | master)
 			${__cmd_prefix} ninja -t clean;
 			${__cmd_prefix} ccache -c
 		;;
@@ -165,7 +175,7 @@ mongo-format ()
 	__mongo-parse-args $@;
 
 	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | master)
+		v4.4 | v5.0 | v5.3 | v6.0 | master)
 			${__cmd_prefix} ./buildscripts/clang_format.py format-my
 		;;
 		v4.0 | v4.2)
@@ -317,6 +327,7 @@ __mongo-parse-args ()
 	__format=1;
 	__target=all;
 	__tasks=1;
+	__modules=;
 	__args=();
 
 	while [[ $# -gt 0 ]]; do
@@ -327,6 +338,10 @@ __mongo-parse-args ()
 			;;
 			--master)
 				__mongo_branch=master;
+				shift
+			;;
+			--v6.0)
+				__mongo_branch=v6.0;
 				shift
 			;;
 			--v5.3)
@@ -397,6 +412,10 @@ __mongo-parse-args ()
 				__tasks=`cat /proc/cpuinfo | grep processor | wc -l`;
 				shift
 			;;
+			--enterprise)
+				__modules="enterprise";
+				shift
+			;;
 			*)
 				__args+=($1);
 				shift
@@ -419,9 +438,9 @@ __mongo-configure-ninja ()
 	__mongo-parse-args $@;
 
 	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | master)
+		v4.4 | v5.0 | v5.3 | v6.0 | master)
 			${__cmd_prefix} ./buildscripts/scons.py \
-					--modules= --variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
+					--modules=$__modules --variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
 					${__build_mode} \
 					${__link_model} \
 					--ninja generate-ninja \
@@ -443,7 +462,7 @@ __mongo-configure-compilation-db ()
 	__mongo-parse-args $@;
 
 	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | master)
+		v4.4 | v5.0 | v5.3 | v6.0 | master)
 			${__cmd_prefix} ninja \
 					compiledb \
 					${__args[@]}

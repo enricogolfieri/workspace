@@ -1,9 +1,7 @@
 
 #add mongofunction
-. ~/.config/workspace/mongo/mongo-functions.zsh     
 . ~/.config/workspace/mongo/.common
-
-alias python3=python 
+. ~/.config/workspace/mongo/mongo-functions.zsh     
 
 _machine="Darwin";
 

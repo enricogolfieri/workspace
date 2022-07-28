@@ -55,8 +55,7 @@ source ./config/workspace/macos/.zshrc
 to work on mongodb, update .bashrc 
 
 ```
-source ~/.config/workspace/macos/.bashrc
-source ~/.config/workspace/mongo/mongoenv.sh 
+source ~/.config/workspace/mongo/.zshrc
 ```
 
 install 
@@ -71,7 +70,7 @@ brew install ccache
 to work on mongodb, update .bashrc 
 
 ```
-source ./config/workspace/linux/mongoenv.sh
+source ./config/workspace/linux/.bashrc
 ```
 
 install 

@@ -11,7 +11,9 @@
         ".ccls-cache/": true,
         "build.ninja": true,
         "compile_commands.json": true,
-        "resmoke.ini": true
+        "resmoke.ini": true,
+        ".cache" : true ,
+        ".mypy_cache" : true 
     },
     "files.watcherExclude": {
         "buildscripts/": true,
