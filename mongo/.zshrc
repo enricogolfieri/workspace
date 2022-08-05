@@ -1,7 +1,10 @@
 
 #add mongofunction
-. ~/.config/workspace/mongo/.common
+. ~/.config/workspace/mongo/.functions
 . ~/.config/workspace/mongo/mongo-functions.zsh     
+
+#add scripts
+export PATH=~/.config/workspace/mongo/bashscripts:$PATH
 
 _machine="Darwin";
 

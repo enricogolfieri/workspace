@@ -8,3 +8,7 @@ alias more='more --RAW-CONTROL-CHARS --chop-long-lines'
 alias less='less --RAW-CONTROL-CHARS --chop-long-lines --IGNORE-CASE'
 alias v='nvim'
 alias osinfo='lsb_release -a'
+
+function nanorc {
+    nano ~/.bashrc
+}

@@ -1,8 +1,4 @@
 
-#add scripts
-export PATH=~/.config/workspace/mongo/bashscripts:$PATH
-
-
 #redifining cd to automatically activate python inside .venv
 cd ()
 {

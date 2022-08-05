@@ -3,19 +3,13 @@
 . ~/.config/workspace/macos/setup.zsh
 
 #load aliases
-. ~/.config/workspace/macos/.zsh_aliases
+. ~/.config/workspace/zsh/.zsh_aliases
 
 #load utility functions (no apt-get specific)
-. ~/.config/workspace/linux/.functions
+. ~/.config/workspace/bash/.functions
 
 #load environment settings
-. ~/.config/workspace/macos/.profile
+. ~/.config/workspace/zsh/.profile
 
 ### Set Git completition
-. ~/.config/workspace/macos/git-completion.sh
-
-
-### Set Git completition
-. ~/.config/workspace/macos/git-completion.zsh
-
-
+. ~/.config/workspace/zsh/git-completion.zsh

@@ -1,0 +1,6 @@
+
+
+function nanorc {
+    nano ~/.zshrc
+}
+

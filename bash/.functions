@@ -15,9 +15,19 @@ function workspace-push() {
     cd -
 }
 
+function workspace-code()
+{
+    code ~/.config/workspace
+}
+
+function cdws()
+{
+    cd ~/.config/workspace
+}
 
 ## system utilities #####
 function sys-clean-tmp()
 {
     sudo find /tmp -type f -atime +10 -delete
 }
+
