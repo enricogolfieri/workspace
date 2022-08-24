@@ -31,6 +31,10 @@ function __tmux_split_and_cmd(){
     fi
 }
 
+function watch()
+{
+    __tmux_split_and_cmd "mongo --port 20018 --eval ./watch.js" "watch"
+}
 
 function multi_mode()
 {   

@@ -24,6 +24,7 @@ list()
 }
 
 clean() {
+  kill
   echo "erasing data on $__dir"
   $__cmd_prefix rm -rf $__dir
 }
@@ -65,21 +66,28 @@ init-replica()
 }
 
 #1 nodes x 2 shards + 1 node csrs
-init-babyset()
+init-minicluster()
 {
 	__enable_python_env
-	__init --replicaset --nodes 1 --sharded 2 $__args 
+
+	#if __watch is set, then launch a tmux session to watch the cluster
+	if [ -n "$__watch" ]; then
+		__init --replicaset --nodes 1 --sharded 2 $__args 
+	else
+		__init --replicaset --nodes 1 --sharded 2 --mongos 2 $__args 
+		$__cmd_prefix mtails watch 
+	fi
 }
 
 #3 nodes x 2 shards + 1 node csrs
-init-standardset()
+init-cluster()
 {
 	__enable_python_env
 	__init --replicaset --nodes 3 --sharded 2 $__args 
 }
 
 #3 nodes x 2 shards + 3 node csrs
-init-heavyset()
+init-bigcluster()
 {
 	__enable_python_env
 	__init --replicaset --nodes 3 --sharded 2 --csrs $__args 
@@ -121,8 +129,12 @@ __init()
 {
 	echo "ready to init..."
 	clean 
-	kill
-	__launch init $@ 
+	if [ -n "$__watch" ]; then
+		__launch init --mongos 2 $@ 
+		$__cmd_prefix mtails watch 
+	else
+		__launch init $__args 
+	fi
 	__load_file "utils.js"
 }
 
@@ -151,12 +163,17 @@ __parse_args()
 	__cmd_prefix=;
 	__dir="./cdata/"
 	__cmd=;
+	__watch=;
 	__args=();
 
 	while [[ $# -gt 0 ]]; do
 		case $1 in
 			--echo)
 				__cmd_prefix=echo;
+				shift
+			;;
+			--watch)
+				__watch=true;
 				shift
 			;;
 			*)
