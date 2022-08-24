@@ -12,6 +12,7 @@ update .bashrc
 source ./config/workspace/linux/.bashrc
 `
 
+workspace-setup
 # Mac 
 
 ```

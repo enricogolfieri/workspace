@@ -34,5 +34,6 @@ mongo-download-evg-logs() {
     fi;
 
     scp -C ${_workstation}:${_logs_folder}/${_filename} .
+	open .
 }
 
