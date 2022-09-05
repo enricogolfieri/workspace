@@ -6,7 +6,7 @@
 . ~/.config/workspace/zsh/.zsh_aliases
 
 #load utility functions (no apt-get specific)
-. ~/.config/workspace/bash/.functions
+. ~/.config/workspace/.functions
 
 #load environment settings
 . ~/.config/workspace/zsh/.profile

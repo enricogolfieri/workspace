@@ -5,9 +5,21 @@
       "alignment": "left",
       "segments": [
         {
-          "type": "session",
+          "type": "time",
           "style": "diamond",
           "leading_diamond": "\ue0b2",
+          "trailing_diamond": "\ue0b0",
+          "background": "#2e9599",
+          "foreground": "#ffffff",
+          "properties": {
+            "template": " {{ .CurrentDate | date .Format }} ",
+            "time_format": "15:04:05"
+          }
+        },
+        {
+          "type": "session",
+          "style": "diamond",
+          "leading_diamond": "<transparent,background>\ue0b0</>",
           "trailing_diamond": "\ue0b0",
           "background": "#9a348e",
           "foreground": "#ffffff",
@@ -38,7 +50,18 @@
             "fetch_stash_count": true,
             "fetch_status": true,
             "fetch_upstream_icon": true,
-            "template": " {{ .HEAD }}{{ .BranchStatus }} \ue0b1{{ if .Working.Changed }} {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} \ue0b1{{ end }}{{ if .Staging.Changed }} {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} {{ .StashCount }}{{ end }} "
+            "template": " {{ .HEAD }}{{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} \uf692 {{ .StashCount }}{{ end }} "
+          }
+        },
+        {
+          "type": "python",
+          "style": "diamond",
+          "leading_diamond": "<transparent,background>\ue0b0</>",
+          "trailing_diamond": "\ue0b0",
+          "foreground": "#100e23",
+          "background": "#906cff",
+          "properties": {
+            "template": " {{ .Full }} "
           }
         }
       ],
@@ -46,31 +69,7 @@
     },
     {
       "alignment": "right",
-      "segments": [
-        {
-          "type": "python",
-          "style": "diamond",
-          "leading_diamond": "\ue0b2",
-          "trailing_diamond": "<transparent,background>\ue0b2</>",
-          "foreground": "#100e23",
-          "background": "#906cff",
-          "properties": {
-            "template": " \uE235  {{ .Full }} "
-          }
-        },
-        {
-          "type": "time",
-          "style": "diamond",
-          "leading_diamond": "\ue0b2",
-          "trailing_diamond": "\ue0b0",
-          "background": "#2e9599",
-          "foreground": "#ffffff",
-          "properties": {
-            "template": " {{ .CurrentDate | date .Format }} ",
-            "time_format": "15:04:05"
-          }
-        }
-      ],
+      "segments": [],
       "type": "prompt"
     },
     {

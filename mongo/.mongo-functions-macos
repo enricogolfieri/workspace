@@ -172,6 +172,45 @@ mongo-test-remotely ()
 			${__args[@]} )
 }
 
+mongo-add-enterprise-to-patch()
+{
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-check-venv;
+
+	if [ -z "$1" ]; then
+		echo "You must provide the id of the patch to add the enterprise module to using command"
+		echo "mongo-test-remotely"
+		exit 1
+	fi;
+
+	cd src/mongo/db/modules/enterprise
+	${__cmd_prefix} evergreen patch-set-module -m enterprise -i $1
+	cd - )
+}
+
+mongo-add-enterprise-to-queue()
+{
+	#before running this command:
+	# - git reset --soft commit-id (last commit before yours)
+	# - git add .; git commit -m "message"
+	# evergren commit-queue 
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-check-venv;
+
+	if [ -z "$1" ]; then
+		echo "You must provide the id of the patc to add the enterprise module to using command: "
+		echo "evergreen commit-queue merge -p mongodb-mongo-master --pause"
+		exit 1
+	fi;
+
+	${__cmd_prefix} cd src/mongo/db/modules/enterprise
+	${__cmd_prefix} evergreen commit-queue set-module --id $1 -m enterprise 
+	${__cmd_prefix} evergreen commit-queue merge --resume $1
+	${__cmd_prefix} cd - )
+}
+
 ################################################################################
 
 mongo-merge ()

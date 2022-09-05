@@ -1,4 +1,4 @@
-. ~/.config/workspace/linux/.functions
+. ~/.config/workspace/.functions
 
 
 function _install_cargo()

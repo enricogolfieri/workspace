@@ -4,7 +4,7 @@ export NINJA_STATUS='[%f/%t (%p) %es] '
 . ~/.config/workspace/bash/.bash_aliases
 
 #load utility functions (no apt-get specific)
-. ~/.config/workspace/bash/.functions
+. ~/.config/workspace/.functions
 
 #load environment settings
 . ~/.config/workspace/bash/.profile
