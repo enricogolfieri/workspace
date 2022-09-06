@@ -4,18 +4,7 @@
     {
       "alignment": "left",
       "segments": [
-        {
-          "background": "#2e9599",
-          "foreground": "#ffffff",
-          "leading_diamond": "\ue0b2",
-          "properties": {
-            "time_format": "15:04:05"
-          },
-          "style": "diamond",
-          "template": " {{ .CurrentDate | date .Format }} ",
-          "trailing_diamond": "\ue0b0",
-          "type": "time"
-        },
+        { "type": "executiontime", "style": "powerline", "powerline_symbol": "\uE0B0", "foreground": "#ffffff", "background": "#8800dd", "properties": { "threshold": 1, "style": "austin", "always_enabled": true, "prefix": " <#fefefe>\ufbab $(get_execution_time)ns</> " }},
         {
           "background": "#e512cc",
           "foreground": "#ffffff",

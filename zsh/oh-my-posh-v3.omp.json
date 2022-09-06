@@ -15,7 +15,7 @@
           "template": " {{ .CurrentDate | date .Format }} ",
           "trailing_diamond": "\ue0b0",
           "type": "time"
-        },
+        }
         {
           "background": "#00c600",
           "foreground": "#ffffff",
