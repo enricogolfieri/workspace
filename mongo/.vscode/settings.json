@@ -180,23 +180,28 @@
     ],
     "python.linting.pylintEnabled": true,
     "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#7be948",
-        "activityBar.background": "#7be948",
+        "activityBar.activeBackground": "#a85ce4",
+        "activityBar.background": "#a85ce4",
         "activityBar.foreground": "#15202b",
         "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#5484ea",
-        "activityBarBadge.foreground": "#15202b",
-        "commandCenter.border": "#15202b99",
-        "sash.hoverBorder": "#7be948",
-        "statusBar.background": "#5ae31b",
-        "statusBar.foreground": "#15202b",
-        "statusBarItem.hoverBackground": "#48b516",
-        "statusBarItem.remoteBackground": "#5ae31b",
-        "statusBarItem.remoteForeground": "#15202b",
-        "titleBar.activeBackground": "#5ae31b",
-        "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#5ae31b99",
-        "titleBar.inactiveForeground": "#15202b99"
+        "activityBarBadge.background": "#6d4512",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#a85ce4",
+        "statusBar.background": "#9130dd",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#a85ce4",
+        "statusBarItem.remoteBackground": "#9130dd",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#9130dd",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#9130dd99",
+        "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.remoteColor": "#5ae31b"
+    "peacock.remoteColor": "#9130dd",
+    "clangd.arguments": [
+            "--header-insertion=never",
+            "--query-driver=/opt/mongodbtoolchain/*/bin/clang++"
+        ],
+    "clang-format.executable": "/opt/mongodbtoolchain/v3/bin/clang-format"
 }

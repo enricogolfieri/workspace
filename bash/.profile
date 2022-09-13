@@ -18,7 +18,7 @@ export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
 
 ### Set Style
 export CLICOLOR=1
-eval "$(oh-my-posh --init --shell bash --config ~/.config/workspace/bash/oh-my-posh-v3.omp.json)"
+eval "$(oh-my-posh --init --shell bash --config ~/.config/workspace/easy-term-v1.omp.json)"
 
 ### Do not put duplicate lines or lines starting with space in the history
 export HISTCONTROL=ignoreboth

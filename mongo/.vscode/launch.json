@@ -39,9 +39,9 @@
             "description": "Select build variant.",
             "options": [
                 "debug",
-                "opt"
+                ""
             ],
-            "default": "debug"
+            "default": ""
         },
         {
             "type": "promptString",

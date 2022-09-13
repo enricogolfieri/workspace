@@ -188,6 +188,7 @@ __set()
 __parse_args()
 {
 	export PATH=./build/debug/install/bin:$PATH
+	export PATH=./build/install/bin:$PATH
 	[[ -z ${__parsed_args} ]] && __parsed_args=true || return 0;
 
 	__cmd_prefix=;
