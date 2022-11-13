@@ -1,11 +1,18 @@
-
 #add mongofunction
-. ~/.config/workspace/mongo/mongo-functions.zsh     
-. ~/.config/workspace/mongo/.common
+. ~/.config/workspace/mongo/.functions
 
-alias python3=python 
+_machine="Linux";
 
-_machine="Darwin";
+if [ "$(uname)" == "Darwin" ]; then
+    _machine="Darwin";
+    . ~/.config/workspace/mongo/.mongo-functions-macos   
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    _machine="Linux";
+    . ~/.config/workspace/mongo/.mongo-functions-lnx
+fi
+
+#add scripts
+export PATH=~/.config/workspace/mongo/bashscripts:$PATH
 
 [[ $- == *i* ]] || return
 

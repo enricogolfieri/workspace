@@ -1,15 +1,15 @@
-. ~/.config/workspace/linux/.functions
 
-PATH="/opt/homebrew/bin:$PATH"
+#load brew specific functions 
+. ~/.config/workspace/macos/setup.zsh
 
-eval "$(oh-my-posh --init --shell zsh --config ~/.config/workspace/linux/oh-my-posh-v2.omp.json)"
+#load aliases
+. ~/.config/workspace/zsh/.zsh_aliases
 
-##fuzzy finder 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#load utility functions (no apt-get specific)
+. ~/.config/workspace/.functions
+
+#load environment settings
+. ~/.config/workspace/zsh/.profile
 
 ### Set Git completition
-. ~/.config/workspace/macos/git-completion.zsh
-
-### Set Homebrew bash completion
-[[ -r /usr/local/etc/profile.d/bash_completion.sh ]] && . /usr/local/etc/profile.d/bash_completion.sh
-
+. ~/.config/workspace/zsh/git-completion.zsh

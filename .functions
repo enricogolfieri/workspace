@@ -11,12 +11,27 @@ function workspace-update() {
     cd -
 }
 
+function workspace-push() {
+    cd ~/.config/workspace
+    git push
+    cd -
+}
+
+function workspace-code()
+{
+    code ~/.config/workspace
+}
+
+function cdws()
+{
+    cd ~/.config/workspace
+}
+
 ## system utilities #####
 function sys-clean-tmp()
 {
     sudo find /tmp -type f -atime +10 -delete
 }
-
 
 ## install utilities ####
 function install_pyenv()

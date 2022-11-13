@@ -33,7 +33,7 @@ def colored_print_function(jsonline):
     elif jsonline['s'] == 'W':
         cprint(f"### WARNING - ctx:{jsonline['ctx']} msg:{jsonline['msg']} attr:{jsonline['attr']}",'white','on_yellow',file = sys.stdout)
     elif jsonline['s'] == 'F':
-        cprint(f"### FATAL - ctx:{jsonline['ctx']} msg:{jsonline['msg']} attr:{jsonline['attr']}", 'white','on_red',attrs=['bold'],file = sys.stdout)
+        cprint(f"### FATAL - ctx:{jsonline['ctx']} msg:{jsonline['msg']} attr:{jsonline['attr']}", 'yellow','on_red',attrs=['bold'],file = sys.stdout)
     else:
         c = jsonline["c"]
         if c in colored_print:

@@ -1,8 +1,4 @@
 
-#add scripts
-export PATH=~/.config/workspace/mongo/bashscripts:$PATH
-
-
 #redifining cd to automatically activate python inside .venv
 cd ()
 {
@@ -38,5 +34,6 @@ mongo-download-evg-logs() {
     fi;
 
     scp -C ${_workstation}:${_logs_folder}/${_filename} .
+	open .
 }
 
