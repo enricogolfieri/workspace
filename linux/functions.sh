@@ -46,7 +46,10 @@ function _install_bat()
 function workspace-setup(){
     echo "installin workspace dependencies..."
 
-
+    sudo apt-get install make build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    
     #Install oh-my-posh 
     if [ ! -d "/usr/local/bin/oh-my-posh" ] 
     then
@@ -81,6 +84,10 @@ function workspace-setup(){
     then
        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     fi
+
+    #install pyenv
+    install_pyenv
+
 
     echo "Done!"
 }
