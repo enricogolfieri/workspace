@@ -109,14 +109,13 @@ mongo-format ()
 	${__cmd_prefix} ./buildscripts/clang_format.py format-my )
 }
 
-
-mongo-fix-lint ()
+mongo-lint-check ()
 {
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-check-venv;
 
-	${__cmd_prefix} ./buildscripts/eslint.py fix
+	${__cmd_prefix} ./buildscripts/scons.py --variables-files=etc/scons/mongodbtoolchain_stable_clang.vars lint
 	)
 }
 
@@ -198,16 +197,17 @@ mongo-add-enterprise-to-queue()
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-check-venv;
-
 	if [ -z "$1" ]; then
 		echo "You must provide the id of the patc to add the enterprise module to using command: "
 		echo "evergreen commit-queue merge -p mongodb-mongo-master --pause"
 		exit 1
 	fi;
+	__id=$1
+	__mongo-parse-args $@;
 
 	${__cmd_prefix} cd src/mongo/db/modules/enterprise
-	${__cmd_prefix} evergreen commit-queue set-module --id $1 -m enterprise 
-	${__cmd_prefix} evergreen commit-queue merge --resume $1
+	${__cmd_prefix} evergreen commit-queue set-module --id $__id -m enterprise 
+	${__cmd_prefix} evergreen commit-queue merge --resume $__id
 	${__cmd_prefix} cd - )
 }
 

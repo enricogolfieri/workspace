@@ -148,10 +148,8 @@
     },
     "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.default.cStandard": "c17",
-    "C_Cpp.autocomplete": "Disabled",
     "C_Cpp.formatting": "Disabled",
     "C_Cpp.errorSquiggles": "Disabled",
-    "C_Cpp.intelliSenseEngine": "Disabled",
     "cSpell.words": [
         "BSON",
         "BSONOBJ",
@@ -179,29 +177,12 @@
         "wuow"
     ],
     "python.linting.pylintEnabled": true,
-    "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#a85ce4",
-        "activityBar.background": "#a85ce4",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#6d4512",
-        "activityBarBadge.foreground": "#e7e7e7",
-        "commandCenter.border": "#e7e7e799",
-        "sash.hoverBorder": "#a85ce4",
-        "statusBar.background": "#9130dd",
-        "statusBar.foreground": "#e7e7e7",
-        "statusBarItem.hoverBackground": "#a85ce4",
-        "statusBarItem.remoteBackground": "#9130dd",
-        "statusBarItem.remoteForeground": "#e7e7e7",
-        "titleBar.activeBackground": "#9130dd",
-        "titleBar.activeForeground": "#e7e7e7",
-        "titleBar.inactiveBackground": "#9130dd99",
-        "titleBar.inactiveForeground": "#e7e7e799"
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
     },
-    "peacock.remoteColor": "#9130dd",
-    "clangd.arguments": [
-            "--header-insertion=never",
-            "--query-driver=/opt/mongodbtoolchain/*/bin/clang++"
-        ],
-    "clang-format.executable": "/opt/mongodbtoolchain/v3/bin/clang-format"
+    "[javascript]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "clang-format.executable": "/opt/mongodbtoolchain/v3/bin/clang-format",
+    "editor.formatOnSave": true
 }

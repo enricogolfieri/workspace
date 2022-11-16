@@ -46,7 +46,6 @@ function _install_bat()
 function workspace-setup(){
     echo "installin workspace dependencies..."
 
-
     #Install oh-my-posh 
     if [ ! -d "/usr/local/bin/oh-my-posh" ] 
     then
@@ -88,6 +87,20 @@ function workspace-setup(){
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
     sudo apt update
     sudo apt install gh
+
+    #install nvm 
+    if ! [ -x "$(command -v nvm)" ]; then
+        ccurl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o /tmp/install_nvm.sh
+        /tmp/install_nvm.sh
+        rm -rf /tmp/install_nvm.sh
+        #reload
+        source ~/.bash_profile
+    fi
+
+    #install nodejs
+    if ! [ -x "$(command -v node)" ]; then
+        nvm install --lts
+    fi
 
     echo "Done!"
 }

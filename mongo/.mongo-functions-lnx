@@ -47,11 +47,10 @@ mongo-prepare ()
 		;;
 	esac )
 
+	cp -r ~/.config/workspace/mongo/.vscode/ .
+	cp -r ~/.config/workspace/mongo/tools/ .
 
-	ln -s ~/.config/workspace/mongo/.vscode/ .
-	ln -s ~/.config/workspace/mongo/tools/ .
-
-	pip install -r  ~/.config/workspace/mongo/tools/requirements.txt
+	pip install -r ~/.config/workspace/mongo/tools/requirements.txt
 }
 
 # Generates the `build.ninja` and `compile_commands.json` files, which are
@@ -199,13 +198,13 @@ mongo-format ()
 }
 
 
-mongo-fix-lint ()
+mongo-lint-check ()
 {
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-check-venv;
 
-	${__cmd_prefix} ./buildscripts/eslint.py fix
+	${__cmd_prefix} ./buildscripts/scons.py --variables-files=etc/scons/mongodbtoolchain_stable_clang.vars lint
 	)
 }
 
