@@ -1,3 +1,6 @@
+### fzf aliases
+. $HOME/.config/workspace/base/.fzf_aliases
+
 ### functions ######
 cheat() { curl cheat.sh/"$1" ; }
 
