@@ -31,3 +31,13 @@ function sys-clean-tmp()
     sudo find /tmp -type f -atime +10 -delete
 }
 
+function backup()
+{
+    mkdir -p ~/backups 
+    cp $1 ~/backups/$1 
+    local __size=$(wc -c ~/backups/$1 | awk '{print $1}')
+
+    echo "Backup of $1 created. Size: $__size"
+}
+
+
