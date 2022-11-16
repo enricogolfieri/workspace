@@ -1,8 +1,4 @@
-### Add cargo bin if it exists
-if [ -d "$HOME/.cargo/bin" ]
-then
-    export PATH="$HOME/.cargo/bin:$PATH"
-fi
+. ~/.config/workspace/base/.profile
 
 ### fzf 
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
@@ -28,3 +24,4 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 ### Append to the history file (do not overwrite it)
 shopt -s histappend
+
