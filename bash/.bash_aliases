@@ -1,3 +1,5 @@
+. ~/.config/workspace/base/.aliases
+
 ### Set aliases
 alias ls='ls -h --color=auto'
 alias ll='ls -l'

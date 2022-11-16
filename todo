@@ -1,0 +1,5 @@
+
+remove macos folder 
+remove linux folder
+
+you can now just source bashrc for bash and zshrc in zsh indipendently on the os
