@@ -22,3 +22,7 @@ eval "$(oh-my-posh --init --shell bash --config ~/.config/workspace/easy-term-v1
 
 ### Do not put duplicate lines or lines starting with space in the history
 export HISTCONTROL=ignoreboth
+
+### Load nvm
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
