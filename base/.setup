@@ -139,11 +139,20 @@ function _install_nvm_nodejs()
 {
     #install nvm 
     if ! [ -x "$(command -v nvm)" ]; then
-        ccurl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o /tmp/install_nvm.sh
-        bash /tmp/install_nvm.sh
-        rm -rf /tmp/install_nvm.sh
-        #reload
-        source ~/.bash_profile
+        if [[ "$_os" = "Linux" ]]; then
+            curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o /tmp/install_nvm.sh
+            bash /tmp/install_nvm.sh
+            rm -rf /tmp/install_nvm.sh
+            #reload
+            source ~/.bash_profile
+        elif [[ "$_os" = "Darwin" ]]; then
+            brew install nvm
+            mkdir -p ~/.nvm    
+            export NVM_DIR=~/.nvm
+            source $(brew --prefix nvm)/nvm.sh
+        else
+            echo "[install_nvm_nodejs] Unsupported OS"
+        fi
     fi
 
     #install nodejs
