@@ -12,66 +12,44 @@ update .bashrc
 source ./config/workspace/linux/.bashrc
 `
 
+reload terminal and run
+
+`
 workspace-setup
+`
+
+reload terminal 
+
 # Mac 
-
-```
+`
 git clone git@github.com:enricogolfieri/workspace ~/.config/workspace 
-```
+`
 
-```
-brew install miniconda
-brew install bash-completion
-brew install oh-my-posh
-brew install --cask iterm2
-```
+update .bashrc
 
-Install Menslo LF Nerd Font (refer to "MesloLGM Nerd Font" family)
-```
-brew tap homebrew/cask-fonts
-brew install --cask font-meslo-lg-nerd-font
-```
-
-Install python 3.9
-```
-conda install python=3.9 
-```
-
-
-To install useful key bindings and fuzzy completion:
-
-```
-$(brew --prefix)/opt/fzf/install
-```
+`
+source ./config/workspace/macos/.bashrc
+`
 
 update .zshrc
 
-```
+`
 source ./config/workspace/macos/.zshrc
-```
+`
+
+on either zshell or shell run
+
+`
+workspace-setup
+`
+
+reload terminal 
 
 # MongoDb 
-
-## Mac
-to work on mongodb, update .bashrc 
+To work on mongodb, add to .bashrc 
 
 ```
-source ~/.config/workspace/mongo/.zshrc
-```
-
-install 
-
-```
-brew install ninja 
-brew install ccache
-```
-
-## Linux 
-
-to work on mongodb, update .bashrc 
-
-```
-source ./config/workspace/linux/.bashrc
+source ./config/workspace/mongo/.bashrc
 ```
 
 install 
@@ -82,5 +60,6 @@ sudo apt install ccache
 ```
 
 clone mongodbtoolchain in /opt/
+
 
 
