@@ -161,6 +161,27 @@ function _install_nvm_nodejs()
     fi
 }
 
+function _install_ncdu()
+{
+    if [[ "$_os" = "Linux" ]]; then
+        sudo apt install ncdu
+    elif [[ "$_os" = "Darwin" ]]; then
+        brew install ncdu
+    else
+        echo "[install_ncdu] Unsupported OS"
+    fi
+}
+
+function _install_bpytop()
+{
+    if [[ "$_os" = "Linux" ]]; then
+        sudo snap install bpytop
+    elif [[ "$_os" = "Darwin" ]]; then
+        brew install bpytop
+    else
+        echo "[install_bpytop] Unsupported OS"
+    fi
+}
 
 function workspace-setup(){
     echo "installin workspace dependencies..."
@@ -182,6 +203,8 @@ function workspace-setup(){
     _install_gh
 
     _install_nvm_nodejs
+
+    _install_ncdu
 
     echo "Done!"
 }
