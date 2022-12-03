@@ -1,0 +1,51 @@
+
+. ~/.config/workspace/base/envs/.aliases
+
+if  [[ "$_os" = "Darwin" ]]; then
+    . ~/.config/workspace/repoenvs/mongo/.mongo-functions-macos   
+elif  [[ "$_os" = "Linux" ]]; then
+    . ~/.config/workspace/repoenvs/mongo/.mongo-functions-lnx
+fi
+
+#download $1 log link into your workstation and then to your laptop
+mongo-download-evg-logs() {
+    _workstation="mongo-ws"
+    _logs_url=$1
+	_logs_folder="~/tmp"
+
+    _filename=${_logs_url##*/}
+
+    ssh ${_workstation} "cd $_logs_folder; wget -q -O ${_filename} $1"
+    if [ $? -ne 0 ]; then
+         return 1;
+    fi;
+
+    scp -C ${_workstation}:${_logs_folder}/${_filename} .
+	open .
+}
+
+#setups your working station with the required tools to work with mongo
+mongo-setup()
+{	
+	mkdir -p $HOME/mongo-tools
+	command -v npm >/dev/null 2>&1 || { echo >&2 "I require npm but it's not installed.  Aborting."; exit 1; }
+	command -v cargo >/dev/null 2>&1 || { echo >&2 "I require cargo but it's not installed.  Aborting."; exit 1; }
+
+	#install lobster
+	git clone https://github.com/evergreen-ci/lobster.git $HOME/mongo-tools/lobster
+	cd ~/mongo-tools/lobster
+	npm install
+	npm build
+
+	#install mrlog 
+	git clone https://github.com/markbenvenuto/mrlog.git $HOME/mongo-tools/mrlog
+	cd ~/mongo-tools/mrlog
+	cargo install --path .
+
+	#install mark-benvenuto extension
+	git clone git@github.com:markbenvenuto/mongodev.git $HOME/mongo-tools/mongodev
+	cd ~/mongo-tools/mongodev
+	npm install && npm run compile
+	[ -d "$HOME/.vscode/extensions" ] && ln -s ``pwd`` $HOME/.vscode/extensions/markbenvenuto.mongodev-0.0.1;
+	[ -d "$HOME/.vscode-server/extensions" ] && ln -s ``pwd`` $HOME/.vscode-server/extensions/markbenvenuto.mongodev-0.0.1;
+}

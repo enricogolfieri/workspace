@@ -3,7 +3,7 @@
 TMUX=$(type -p tmux) || { echo "This script requires tmux"; exit 1; }
 SESSION="tmux-tail-f-$$"
 __istmux=false;
-__jcolor_cmd="python $HOME/.config/workspace/mongo/bashscripts/jcolor.py"
+__jcolor_cmd="python $HOME/.config/workspace/repoenvs/mongo/bashscripts/jcolor.py"
 
 function __at_exit() {
     if [ $__istmux = true ]; then
@@ -96,7 +96,7 @@ function single_mode()
     tmux set -g mouse on        #For tmux version 2.1 and up
     __istmux=true
 
-    __tmux_split_and_cmd "$HOME/.config/workspace/mongo/bashscripts/__single_mode $__dir" "unified logs"
+    __tmux_split_and_cmd "$HOME/.config/workspace/repoenvs/mongo/bashscripts/__single_mode $__dir" "unified logs"
 
     tmux select-layout -t "$SESSION" main-vertical
     tmux select-pane -t "$SESSION" -t 0

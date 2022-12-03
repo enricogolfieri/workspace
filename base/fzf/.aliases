@@ -1,5 +1,14 @@
 ### Folder navigation ###
 
+## Utility installer ####
+function ws-install-fzf()
+{
+    if [ ! -d "$HOME/.fzf" ] 
+    then
+       git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
+    fi
+}
+
 # fd - cd to selected directory
 fd() {
   local dir
@@ -156,6 +165,3 @@ gshow() {
 fman() {
     man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
 }
-
-
-

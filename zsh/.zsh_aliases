@@ -1,7 +1,0 @@
-
-. ~/.config/workspace/base/.aliases
-
-function nanorc {
-    nano ~/.zshrc
-}
-
