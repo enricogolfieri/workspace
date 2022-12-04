@@ -4,8 +4,9 @@
 ### Load utility functions and aliases
 . ~/.config/workspace/base/.aliases
 
-### Load mongo module
-. ~/.config/workspace/repoenvs/mongo/.bashrc
+### Load repoenvs utilities & always enable mongo environment
+. ~/.config/workspace/repoenvs/.aliases
+mongoenv
 
 ### Set general environment settings
 export PATH=~/bin:${PATH}

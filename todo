@@ -19,13 +19,7 @@ mperf
 
 mark-benvenuto extensions
 
-- cleanup
-    - remove .setup
-    - remove env.sh
-    - remove fzfaliases
-    - remove general profile under base
-    -  rename base to modules
-    - 
+
 
 
 

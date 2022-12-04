@@ -68,6 +68,25 @@ function _install_cargo()
     fi
 }
 
+## C/C++ ####
+function _install_cpp_env()
+{
+    if ! [ -x "$(command -v cmake)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install -y cmake
+            sudo apt-get install -y build-essential
+            sudo apt-get install -y ninja-build
+            sudo apt install clang lldb lld
+            sudo apt-get install -y ccache
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install cmake
+            brew install ninja
+            brew install ccache
+            #better install xcode manually
+        fi
+    fi
+}
+
 ## Javascript ####
 function _install_nvm_nodejs()
 {
@@ -98,6 +117,7 @@ function _install_nvm_nodejs()
 ## Utility installer ####
 function ws-install-env()
 {
+    _install_cpp_env
     _install_conda
     _install_pyenv
     _install_cargo
@@ -127,31 +147,40 @@ cd ()
 	fi
 }
 
-#create a new python virtual environment
+# activate python env
+function _activate_venv()
+{
+    . .venv/bin/activate
+}
+
+# create a new python virtual environment local to the current directory
 function vsetup()
 {   
     _pyversion=$1
-    if [ -z "$1" ]
-    then
-        _pyversion=$__sys_python_version
-    fi
+    [ -z "$1" ] && _pyversion=$__sys_python_version
+    
     pyenv shell $_pyversion
     python -m venv ./.venv
 
     #install requirements if exists
     if [ -f "requirements.txt" ]; then
-        . .venv/bin/activate
+        _activate_venv
         pip install -r requirements.txt
     fi
 }
 
+# create a new conda virtual environment and activate it
 function vsetup-conda()
 {
     conda env create -f ./environment.yml
     
     #install requirements if exists
+    local _envname=$(head -n 1 environment.yml | cut -d' ' -f2)
     if [ -f "requirements.txt" ]; then
-        . .venv/bin/activate
-        pip install -r requirements.txt
+        conda activate $_envname
+        pip install -r requirements.txt 
     fi
+
+    #activate conda env
+    conda activate $_envname
 }
