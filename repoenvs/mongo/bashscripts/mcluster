@@ -152,7 +152,7 @@ __launch()
 
 __load_file()
 {
-	$__cmd_prefix mongo --eval "load('$HOME/.config/workspace/mongo/queries/$1)"
+	$__cmd_prefix mongo --eval "load('$HOME/.config/workspace/repoenvs/mongo/queries/$1)"
 }
 
 __init()

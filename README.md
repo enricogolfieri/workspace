@@ -49,7 +49,7 @@ reload terminal
 To work on mongodb, add to .bashrc 
 
 ```
-source ./config/workspace/mongo/.bashrc
+source ./config/workspace/repoenvs/mongo/.bashrc
 ```
 
 install 

@@ -1,0 +1,35 @@
+function _install_meslo_font()
+{
+    if [[ ! -f "/usr/share/fonts/PowerlineSymbols.otf " ]] 
+    then  
+        wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+        wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+
+        sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
+        sudo mv PowerlineSymbols.otf /usr/share/fonts/
+    fi
+}
+
+function _install_oh_my_posh()
+{
+    if [ ! -d "/usr/local/bin/oh-my-posh" ] 
+    then
+        wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+        chmod +x /usr/local/bin/oh-my-posh
+    fi
+
+    if [ ! -d "$HOME/.poshthemes" ] 
+    then
+        mkdir ~/.poshthemes
+        wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+        unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+        chmod u+rw ~/.poshthemes/*.json
+        rm ~/.poshthemes/themes.zip
+    fi
+}
+
+function ws-install-oh_my_posh()
+{
+    _install_meslo_font
+    _install_oh_my_posh
+}

@@ -3,3 +3,23 @@ remove macos folder
 remove linux folder
 
 you can now just source bashrc for bash and zshrc in zsh indipendently on the os
+
+mlog:
+    - lobster locally
+    - DOWNLLAODS LOG FROM WS 
+    - uses mrlog for local test.log
+
+mtail (multiwatch)
+
+mcluster
+    - add multiwatch that works
+
+mperf
+    - test performance on local cluster
+
+mark-benvenuto extensions
+
+
+
+
+

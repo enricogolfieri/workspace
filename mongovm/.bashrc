@@ -1,6 +1,12 @@
-### Set personal Linux settings
-. ~/.config/workspace/linux/.bashrc
-. ~/.config/workspace/mongo/.bashrc
+### Load environment settings
+. ~/.config/workspace/base/.profile.bash
+
+### Load utility functions and aliases
+. ~/.config/workspace/base/.aliases
+
+### Load repoenvs utilities & always enable mongo environment
+. ~/.config/workspace/repoenvs/.aliases
+mongoenv
 
 ### Set general environment settings
 export PATH=~/bin:${PATH}

@@ -1,0 +1,186 @@
+
+__sys_python_version="3.9.2"
+
+### Compute _os variable
+_os="Linux";
+
+case `uname` in
+    Darwin)
+        _os="Darwin"
+    ;;
+    Linux)
+        _os="Linux"
+    ;;
+    *)
+        echo "[ENV] Unsupported OS, impossible to setup"
+        exit 1            
+    ;;
+esac
+
+## python ####
+function _install_conda()
+{
+    # Install conda
+    if ! [ -x "$(command -v conda)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
+        elif  [[ "$_os" = "Darwin" ]]; then
+            wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O /tmp/miniconda.sh
+        else
+            echo "[install_conda] Unsupported OS"
+            return
+        fi
+        bash /tmp/miniconda.sh -b -p $HOME/miniconda
+        rm /tmp/miniconda.sh
+    else
+        echo "[install_conda] Conda already installed"
+    fi
+
+    ### init conda, the following command write scripts into your shell init file automatically
+    export PATH="$HOME/miniconda/bin:$PATH"
+    conda init
+
+    # disable init of env "base"
+    conda config --set auto_activate_base false
+}
+
+function _install_pyenv()
+{
+    #install pyenv
+    if [ ! -d "$HOME/.pyenv" ] 
+    then
+        git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
+    fi
+
+    #setup python
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    pyenv install $__sys_python_version
+    pyenv global $__sys_python_version
+}
+
+## Rust ####
+function _install_cargo()
+{
+    if ! [ -x "$(command -v cargo)" ]; then
+        curl https://sh.rustup.rs -sSf | sh
+    fi
+}
+
+## C/C++ ####
+function _install_cpp_env()
+{
+    if ! [ -x "$(command -v cmake)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install -y cmake
+            sudo apt-get install -y build-essential
+            sudo apt-get install -y ninja-build
+            sudo apt install clang lldb lld
+            sudo apt-get install -y ccache
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install cmake
+            brew install ninja
+            brew install ccache
+            #better install xcode manually
+        fi
+    fi
+}
+
+## Javascript ####
+function _install_nvm_nodejs()
+{
+    #install nvm 
+    if ! [ -x "$(command -v nvm)" ]; then
+        if [[ "$_os" = "Linux" ]]; then
+            curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o /tmp/install_nvm.sh
+            bash /tmp/install_nvm.sh
+            rm -rf /tmp/install_nvm.sh
+            #reload
+            source ~/.bash_profile
+        elif [[ "$_os" = "Darwin" ]]; then
+            brew install nvm
+            mkdir -p ~/.nvm    
+            export NVM_DIR=~/.nvm
+            source $(brew --prefix nvm)/nvm.sh
+        else
+            echo "[install_nvm_nodejs] Unsupported OS"
+        fi
+    fi
+
+    #install nodejs
+    if ! [ -x "$(command -v node)" ]; then
+        nvm install --lts
+    fi
+}
+
+## Utility installer ####
+function ws-install-env()
+{
+    _install_cpp_env
+    _install_conda
+    _install_pyenv
+    _install_cargo
+    _install_nvm_nodejs
+}
+
+## Utility python ####
+#redifining cd to automatically activate python inside .venv
+cd ()
+{
+	builtin cd $@
+
+	# Check there is no virtual environment activated.
+	if [[ -z ${VIRTUAL_ENV} ]]; then
+		# If the .venv directory is found then activate the virtual
+		# environment.
+		if [[ -d ./.venv ]]; then
+			. .venv/bin/activate
+		fi
+	else
+		# If the current directory does not belong to earlier VIRTUAL_ENV
+		# directory then deactivate the virtual environment.
+		PARENT_DIR=$(dirname ${VIRTUAL_ENV})
+		if [[ ${PWD}/ != ${PARENT_DIR}/* ]]; then
+			deactivate
+		fi
+	fi
+}
+
+# activate python env
+function _activate_venv()
+{
+    . .venv/bin/activate
+}
+
+# create a new python virtual environment local to the current directory
+function vsetup()
+{   
+    _pyversion=$1
+    [ -z "$1" ] && _pyversion=$__sys_python_version
+    
+    pyenv shell $_pyversion
+    python -m venv ./.venv
+
+    #install requirements if exists
+    if [ -f "requirements.txt" ]; then
+        _activate_venv
+        pip install -r requirements.txt
+    fi
+}
+
+# create a new conda virtual environment and activate it
+function vsetup-conda()
+{
+    conda env create -f ./environment.yml
+    
+    #install requirements if exists
+    local _envname=$(head -n 1 environment.yml | cut -d' ' -f2)
+    if [ -f "requirements.txt" ]; then
+        conda activate $_envname
+        pip install -r requirements.txt 
+    fi
+
+    #activate conda env
+    conda activate $_envname
+}

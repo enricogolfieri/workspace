@@ -1,3 +1,4 @@
+. ~/.config/workspace/base/envs/.aliases
 ### Add cargo bin if it exists
 if [ -d "$HOME/.cargo/bin" ]
 then
@@ -15,3 +16,8 @@ fi
 ### Add conda
 export PATH="$HOME/miniconda/bin:$PATH"
 
+### Load nvm
+if [[ _os == "Darwin" ]]; then
+    export NVM_DIR="$HOME/.nvm"
+    source $(brew --prefix nvm)/nvm.sh
+fi

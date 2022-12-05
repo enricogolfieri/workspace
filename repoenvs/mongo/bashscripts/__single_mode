@@ -1,5 +1,5 @@
 #for every folder in __dir run tmux with tail -F on mongod.log
-__jcolor_cmd="python $HOME/.config/workspace/mongo/bashscripts/jcolor.py"
+__jcolor_cmd="python $HOME/.config/workspace/repoenvs/mongo/bashscripts/jcolor.py"
 __log=$1/unified.log
 
 rm -rf $__log
