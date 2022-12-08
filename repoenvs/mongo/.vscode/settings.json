@@ -183,6 +183,12 @@
     "[javascript]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },
+    "[yaml]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
     "clang-format.executable": "/opt/mongodbtoolchain/v3/bin/clang-format",
     "editor.formatOnSave": true
 }

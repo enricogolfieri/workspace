@@ -1,17 +1,18 @@
 #Utility to load all modules
 
+# Load all aliases 
+. $HOME/.config/workspace/base/.aliases
+
+## Load git module 
+. $HOME/.config/workspace/base/git/.profile.bash
 ## Load envs module
-. ~/.config/workspace/base/envs/.profile
+. $HOME/.config/workspace/base/envs/.profile
 ## Load oh-my-posh module
-. ~/.config/workspace/base/oh-my-posh/.profile.bash
+. $HOME/.config/workspace/base/oh-my-posh/.profile.bash
 ## Load tools module
-. ~/.config/workspace/base/tools/.profile
+. $HOME/.config/workspace/base/tools/.profile
 ## Load fzf module
-. ~/.config/workspace/base/fzf/.profile.bash
-## Load git-completion module
-. ~/.config/workspace/base/git-prompt/git-prompt.sh
-## Load git-prompt module
-. ~/.config/workspace/base/git-completion/git-completion.sh
+. $HOME/.config/workspace/base/fzf/.profile.bash
 
 ### Do not put duplicate lines or lines starting with space in the history
 export HISTCONTROL=ignoreboth

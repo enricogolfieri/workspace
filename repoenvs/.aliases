@@ -1,5 +1,5 @@
 # load the mongo environment
 function mongoenv() {
-    . ~/.config/workspace/repoenvs/mongo/.aliases
-    . ~/.config/workspace/repoenvs/mongo/.profile
+    . $HOME/.config/workspace/repoenvs/mongo/.aliases
+    . $HOME/.config/workspace/repoenvs/mongo/.profile
 }

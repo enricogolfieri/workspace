@@ -22,7 +22,7 @@ mongo-prepare ()
 	${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
 	${__cmd_prefix} ${MONGO_VENV_DIRNAME}/bin/python3 -m pip install -r buildscripts/requirements.txt 
 
-	cp ~/.config/workspace/repoenvs/mongo/.vscode/ .
+	cp $HOME/.config/workspace/repoenvs/mongo/.vscode/ .
 	pip install 'mtools[all]'
 	)
 }

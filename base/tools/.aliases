@@ -1,29 +1,4 @@
 
-function _check_cargo()
-{
-    if ! [ -x "$(command -v cargo)" ]; then
-        echo "cargo not found, please install cargo."
-        exit 1
-    fi
-}
-
-function _install_gh()
-{
-    if [[ "$_os" = "Linux" ]]; then
-        #install gh 
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-        sudo apt update
-        sudo apt install gh
-    elif [[ "$_os" = "Darwin" ]]; then
-        brew install gh
-    else
-        echo "[install_gh] Unsupported OS"
-    fi
-}
-
-
 function _install_ncdu()
 {
     if [[ "$_os" = "Linux" ]]; then
@@ -46,38 +21,8 @@ function _install_bpytop()
     fi
 }
 
-function _install_bat()
-{
-    # Install bat
-    if ! [ -x "$(command -v bat)" ]; then
-        [[ ! -d "$HOME/.cargo/bin" ]] && echo "cargo not installed" && return 1
-        _check_cargo
-        git clone git@github.com:sharkdp/bat.git /tmp/bat
-        cd /tmp/bat
-        cargo install --path . 
-        cd - 
-        rm -rf /tmp/bat
-    fi
-}
-
-function _install_fd_find()
-{
-    # Install fd find
-    if ! [ -x "$(command -v fd)" ]; then
-        _check_cargo 
-        git clone git@github.com:sharkdp/fd.git /tmp/fd
-        cd /tmp/fd
-        cargo install --path . 
-        cd - 
-        rm -rf /tmp/fd
-    fi  
-}
-
 function ws-install-tools()
 {
-    _install_gh
     _install_ncdu
     _install_bpytop
-    _install_bat
-    _install_fd_find
 }

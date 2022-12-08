@@ -1,8 +1,40 @@
-### Folder navigation ###
+#load envs utility checks
+source $HOME/.config/workspace/base/envs/.aliases
+__bat_version="v0.21.0"
 
 ## Utility installer ####
+function _install_bat()
+{
+    # Install bat
+    if ! [ "$(command -v bat)" ]; then
+        [[ ! -d "$HOME/.cargo/bin" ]] && echo "cargo not installed" && return 1
+        _check_cargo
+        git clone git@github.com:sharkdp/bat.git /tmp/bat
+        cd /tmp/bat
+        git checkout $__bat_version
+        cargo install --path . 
+        cd - 
+        rm -rf /tmp/bat
+    fi
+}
+
+function _install_fd_find()
+{
+    # Install fd find
+    if ! [ "$(command -v fd)" ]; then
+        _check_cargo
+        git clone git@github.com:sharkdp/fd.git /tmp/fd
+        cd /tmp/fd
+        cargo install --path . 
+        cd - 
+        rm -rf /tmp/fd
+    fi  
+}
+
 function ws-install-fzf()
 {
+    _install_bat
+    _install_fd_find
     if [ ! -d "$HOME/.fzf" ] 
     then
        git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
@@ -44,7 +76,7 @@ fdr() {
 fde() {
   local file
 
-  file="$(locate -Ai -0 $@ | grep -z -vE '~$' | fzf --read0 -0 -1)"
+  file="$(locate -Ai -0 $@ | grep -z -vE '$HOME$' | fzf --read0 -0 -1)"
 
   if [[ -n $file ]]
   then

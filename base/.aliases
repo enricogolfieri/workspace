@@ -1,3 +1,4 @@
+. $HOME/.config/workspace/base/git/.aliases
 . $HOME/.config/workspace/base/fzf/.aliases
 . $HOME/.config/workspace/base/envs/.aliases
 . $HOME/.config/workspace/base/oh-my-posh/.aliases
@@ -17,24 +18,25 @@ cheat() { curl cheat.sh/"$1" ; }
 
 ## Workspace functions #####
 function ws-update() {
-    cd ~/.config/workspace
+    cd $HOME/.config/workspace
     git pull
     cd -
 }
 
 function ws-code()
 {
-    code ~/.config/workspace
+    code $HOME/.config/workspace
 }
 
 function wscd()
 {
-    cd ~/.config/workspace
+    cd $HOME/.config/workspace
 }
 
 function ws-setup(){
     echo "installin workspace dependencies..."
 
+    ws-install-git
     ws-install-env
     ws-install-tools
     ws-install-fzf
@@ -53,9 +55,9 @@ function cleantmp()
 
 function tmpbackup()
 {
-    mkdir -p ~/backups 
-    cp $1 ~/backups/$1 
-    local __size=$(wc -c ~/backups/$1 | awk '{print $1}')
+    mkdir -p $HOME/backups 
+    cp $1 $HOME/backups/$1 
+    local __size=$(wc -c $HOME/backups/$1 | awk '{print $1}')
 
     echo "Backup of $1 created. Size: $__size"
 }

@@ -1,7 +1,7 @@
 To work with mongo simply add to your .bashrc 
 
 ```
-. ~/.config/workspace/repoenvs/mongo/mongoenv.sh 
+. $HOME/.config/workspace/repoenvs/mongo/mongoenv.sh 
 ```
 
 this will set your environment to work easily using scripts inside the mongo folder

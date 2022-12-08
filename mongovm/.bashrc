@@ -1,28 +1,42 @@
-### Load environment settings
-. ~/.config/workspace/base/.profile.bash
 
-### Load utility functions and aliases
-. ~/.config/workspace/base/.aliases
+# Source server_bashrc.sh
+source /home/ubuntu/mongodb-mongo-master/server-workflow-tool/server_bashrc.sh
+
+### Load environment settings, aliases and utility functions
+. $HOME/.config/workspace/base/.profile.bash
 
 ### Load repoenvs utilities & always enable mongo environment
-. ~/.config/workspace/repoenvs/.aliases
+. $HOME/.config/workspace/repoenvs/.aliases
 mongoenv
 
 ### Set general environment settings
-export PATH=~/bin:${PATH}
-#export PS1='\[\e[0;31m\][\u@devel-ws:\[\e[0;33m\]\w\[\e[0;31m\]]\[\e[0;35m\]$(__git_ps1 "(%s)")\[\e[0;31m\]\$\[\e[0m\] '
+export LC_ALL="C"
+if [ -d /opt/go ]; then
+    export PATH=/opt/go/bin:$PATH
+    export GOROOT=/opt/go
+fi
 
 ### Set MongoDB's development settings
-export LC_ALL='C'
 ulimit -v 65011712
 ulimit -n 64000
 ulimit -u 64000
 ulimit -l 1024
+# ulimit wt
 ulimit -c unlimited
+
+# JIRA Username
+export JIRA_USERNAME=enrico.golfieri@mongodb.com
+
+# pipx config
+export PATH="/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/node/bin:/opt/node/bin:/home/ubuntu/cli_bin:/opt/node/bin:/opt/node/bin:/opt/node/bin:/opt/node/bin:/home/ubuntu/cli_bin:/opt/node/bin:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:${PATH}"
+
+export PATH=/opt/mongodbtoolchain/v3/bin:${PATH}
+alias ninja=/opt/mongodbtoolchain/v4/bin/ninja
+
+#evergreen group failures by test
+alias egf='node $HOME/util/evg_group_failures_by_test/evg_get_failing_tests.js --patch_id'
 
 ### Set general environment settings
 export PATH=~/bin:${PATH}
 export PATH=~/util:${PATH}
-export PATH=~/bat/target/release:${PATH}
 
-export PATH=~/.local/bin:~/devel/bin:/opt/mongodbtoolchain/v4/bin:/opt/nodejs/node-v8.11.3-linux-x64/bin:${PATH}

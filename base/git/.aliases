@@ -1,0 +1,72 @@
+function _install_ssh()
+{
+    if ! [ "$(command -v ssh)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install ssh
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install ssh
+        fi
+    fi
+}
+
+## Install git if not installed
+function _install_git()
+{
+    if ! [ "$(command -v git)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install git
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install git
+        fi
+    fi
+}
+
+function _install_gh()
+{
+    if [[ "$_os" = "Linux" ]]; then
+        #install gh 
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt update
+        sudo apt install gh
+    elif [[ "$_os" = "Darwin" ]]; then
+        brew install gh
+    fi
+}
+
+function ws-install-git()
+{
+    _install_ssh
+    _install_git
+    _install_gh
+}
+
+function ws-generate-rsa-key()
+{
+    echo "Please enter your email address: "
+    read email
+    ssh-keygen -t rsa -b 4096 -C $email
+
+    # Start the ssh-agent in the background
+    eval "$(ssh-agent -s)"
+
+    # Add your SSH private key to the ssh-agent
+    ssh-add ~/.ssh/id_rsa
+
+    # Copy the SSH key to your clipboard
+    xclip -sel clip < ~/.ssh/id_rsa.pub
+    echo "Note: SSH public key copied to clipboard"
+
+    if [[ "$_os" = "Darwin" ]]; then
+        echo "You are on a Mac. Please update ~/.ssh/config (create if does not exist) with the following:"
+        echo "Host *.github.com
+                AddKeysToAgent yes
+                UseKeychain yes
+                IdentityFile ~/.ssh/id_rsa"
+        echo "if you chose not to add a passphrase to your key:"
+        echo "Host *.github.com
+              IgnoreUnknown UseKeychain"
+    fi
+}
+

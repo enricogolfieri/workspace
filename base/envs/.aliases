@@ -17,11 +17,35 @@ case `uname` in
     ;;
 esac
 
+## Install curl if not installed
+function _install_curl()
+{
+    if ! [ "$(command -v curl)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install curl
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install curl
+        fi
+    fi
+}
+
+## Install wget if not installed
+function _install_wget()
+{
+    if ! [ "$(command -v wget)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install wget
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install wget
+        fi
+    fi
+}
+
 ## python ####
 function _install_conda()
 {
     # Install conda
-    if ! [ -x "$(command -v conda)" ]; then
+    if ! [ "$(command -v conda)" ]; then
         if  [[ "$_os" = "Linux" ]] ; then
             wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
         elif  [[ "$_os" = "Darwin" ]]; then
@@ -63,7 +87,8 @@ function _install_pyenv()
 ## Rust ####
 function _install_cargo()
 {
-    if ! [ -x "$(command -v cargo)" ]; then
+    _install_curl
+    if ! [ "$(command -v cargo)" ]; then
         curl https://sh.rustup.rs -sSf | sh
     fi
 }
@@ -71,7 +96,7 @@ function _install_cargo()
 ## C/C++ ####
 function _install_cpp_env()
 {
-    if ! [ -x "$(command -v cmake)" ]; then
+    if ! [ "$(command -v cmake)" ]; then
         if  [[ "$_os" = "Linux" ]] ; then
             sudo apt-get install -y cmake
             sudo apt-get install -y build-essential
@@ -88,33 +113,51 @@ function _install_cpp_env()
 }
 
 ## Javascript ####
+### Load nvm
+function _load_nvm()
+{
+    if [[ _os == "Darwin" ]]; then
+        export NVM_DIR="$HOME/.nvm"
+        source $(brew --prefix nvm)/nvm.sh
+    else
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+    fi
+}
 function _install_nvm_nodejs()
 {
     #install nvm 
-    if ! [ -x "$(command -v nvm)" ]; then
+    if ! [ "$(command -v nvm)" ]; then
         if [[ "$_os" = "Linux" ]]; then
             curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o /tmp/install_nvm.sh
             bash /tmp/install_nvm.sh
             rm -rf /tmp/install_nvm.sh
-            #reload
-            source ~/.bash_profile
         elif [[ "$_os" = "Darwin" ]]; then
             brew install nvm
-            mkdir -p ~/.nvm    
-            export NVM_DIR=~/.nvm
-            source $(brew --prefix nvm)/nvm.sh
+            mkdir -p $HOME/.nvm    
         else
             echo "[install_nvm_nodejs] Unsupported OS"
         fi
     fi
 
+    _load_nvm
     #install nodejs
-    if ! [ -x "$(command -v node)" ]; then
+    if ! [ "$(command -v node)" ]; then
         nvm install --lts
     fi
 }
 
 ## Utility installer ####
+
+function _check_cargo()
+{
+    if ! [ "$(command -v cargo)" ]; then
+        echo "cargo not found, please install it first"
+        return 1
+    fi
+}
+
 function ws-install-env()
 {
     _install_cpp_env
@@ -122,6 +165,31 @@ function ws-install-env()
     _install_pyenv
     _install_cargo
     _install_nvm_nodejs
+}
+
+function ws-test-env()
+{
+    echo "OS: $_os"
+    #Rust
+    ( [ "$(command -v rustc)" ] && echo "Rustc: $(rustc --version)" ) || echo "Rustc: NOT FOUND";
+    ( [ "$(command -v cargo)" ] && echo "Cargo: $(cargo --version)" ) || echo "Cargo: NOT FOUND";
+    #Python
+    ( [ "$(command -v python)" ] && echo "Python: $(python --version)" ) || echo "Python: NOT FOUND";
+    ( [ "$(command -v python3)" ] && echo "Python3: $(python3 --version)" ) || echo "Python3: NOT FOUND";
+    ( [ "$(command -v pip)" ] && echo "Pip: $(pip --version)" ) || echo "Pip: NOT FOUND";
+    ( [ "$(command -v pip3)" ] && echo "Pip3: $(pip3 --version)" ) || echo "Pip3: NOT FOUND";
+    
+    ( [ "$(command -v conda)" ] && echo "Conda: $(conda --version)" ) || echo "Conda: NOT FOUND";
+    ( [ "$(command -v pyenv)" ] && echo "Pyenv: $(pyenv --version)" ) || echo "Pyenv: NOT FOUND";
+    #Javascript
+    ( [ "$(command -v node)" ] && echo "Node: $(node --version)" ) || echo "Node: NOT FOUND";
+    ( [ "$(command -v nvm)" ] && echo "Nvm: $(nvm --version)" ) || echo "Nvm: NOT FOUND";
+    #Cpp
+    ( [ "$(command -v gcc)" ] && echo "Gcc: $(gcc --version)" ) || echo "Gcc: NOT FOUND";
+    ( [ "$(command -v clang)" ] && echo "Clang: $(clang --version)" ) || echo "Clang: NOT FOUND";
+    ( [ "$(command -v ninja)" ] && echo "Ninja: $(ninja --version)" ) || echo "Ninja: NOT FOUND";
+    ( [ "$(command -v ccache)" ] && echo "Ccache: $(ccache --version)" ) || echo "Ccache: NOT FOUND";
+    ( [ "$(command -v cmake)" ] && echo "CMake: $(cmake --version)" ) || echo "CMake: NOT FOUND";
 }
 
 ## Utility python ####
@@ -159,8 +227,12 @@ function vsetup()
     _pyversion=$1
     [ -z "$1" ] && _pyversion=$__sys_python_version
     
-    pyenv shell $_pyversion
-    python -m venv ./.venv
+    pyenv shell $_pyversion ||
+    echo "$_pyversion not found, ready to install..." &&
+    pyenv install $_pyversion && pyenv shell $_pyversion ||
+    echo "pyenv shell $_pyversion failed" && return 1;
+
+    python -m venv ./.venv || echo "Failed to create virtual environment" && return 1;
 
     #install requirements if exists
     if [ -f "requirements.txt" ]; then

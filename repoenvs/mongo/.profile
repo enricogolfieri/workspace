@@ -1,5 +1,5 @@
 #add mongofunction
-. ~/.config/workspace/repoenvs/mongo/.aliases
+. $HOME/.config/workspace/repoenvs/mongo/.aliases
 
 export NINJA_STATUS='[%f/%t (%p) %es] '
 

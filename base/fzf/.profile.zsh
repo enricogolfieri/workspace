@@ -1,5 +1,5 @@
 ### fzf 
-[[ -f ~/.fzf.zsh ]] && . ~/.fzf.zsh
+[[ -f $HOME/.fzf.zsh ]] && . $HOME/.fzf.zsh
 
 export FZF_DEFAULT_COMMAND='fd --type f --color=never --hidden'
 export FZF_DEFAULT_OPTS='--no-height --color=bg+:#343d46,gutter:-1,pointer:#ff3c3c,info:#0dbc79,hl:#0dbc79,hl+:#23d18b'

@@ -1,8 +1,5 @@
-### Load environment settings
-. ~/.config/workspace/base/.profile.bash
-
-### Load utility functions and aliases
-. ~/.config/workspace/base/.aliases
+### Load environment settings, aliases and utility functions
+. $HOME/.config/workspace/base/.profile.bash
 
 ### Load repoenvs utilities
-. ~/.config/workspace/repoenvs/.aliases
+. $HOME/.config/workspace/repoenvs/.aliases

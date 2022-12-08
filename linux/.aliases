@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#install snap 
+_install-snap()
+{
+    sudo apt-get install snapd
+}
+
+#install vscode
+_install-vscode()
+{
+    sudo snap install --classic code
+}
+
+#install ffmpeg
+_install-ffmpeg()
+{
+    sudo apt-get install ffmpeg
+}
+
+ws-install-linux-home-env()
+{
+    sudo apt-get update
+    sudo apt-get upgrade 
+    
+    _install-snap
+    _install-vscode
+    _install-ffmpeg
+}

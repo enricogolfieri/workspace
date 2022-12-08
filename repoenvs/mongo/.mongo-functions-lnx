@@ -43,7 +43,7 @@ mongo-prepare ()
 		;;
 	esac 
 
-	cp ~/.config/workspace/repoenvs/mongo/.vscode/ .
+	cp $HOME/.config/workspace/repoenvs/mongo/.vscode/ .
 	pip install 'mtools[all]'
 	)
 
@@ -125,15 +125,16 @@ mongo-build ()
 mongo-unit()
 {
 	( set -e;
-	__mongo-check-wrkdir;
-	__mongo-parse-args $@;
+		__mongo-check-wrkdir;
+		__mongo-parse-args $@;
+		__mongo-check-mrlog;
 
-	if[[ -n $1 ]]; then
-		${__cmd_prefix} ninja -f build.ninja -j12 +${1}
-	else
-		${__cmd_prefix} python buildscripts/resmoke.py run --jobs=12 --suite=unittests
-	fi
-
+		if [[ -n $1 ]]; 
+		then
+			${__cmd_prefix} mrlog -c -e ninja -- -f build.ninja -j12 +${1}
+		else
+			${__cmd_prefix} mrlog -c -e python -- buildscripts/resmoke.py run --jobs=12 --suite=unittests
+		fi
 	)
 }
 
@@ -225,7 +226,7 @@ mongo-test-locally ()
 	__mongo-check-venv;
 	__mongo-parse-args --master $@;
 
-	${__cmd_prefix} \rm -f executor.log fixture.log tests.log;
+	${__cmd_prefix} \rm -f executor.log fixture.log tests.log mrtests.log ;
 	set +e;
 	${__cmd_prefix} ./buildscripts/resmoke.py run \
 			--storageEngine=wiredTiger \
@@ -233,7 +234,22 @@ mongo-test-locally ()
 			--mongodSetParameters='{logComponentVerbosity: {verbosity: 2}}' \
 			--jobs=${__tasks} \
 			--log=file \
-			${__args[@]} )
+			${__args[@]} 
+
+	testresult=$?
+
+	#run mrlog if it exists
+	__mongo-check-mrlog && ${__cmd_prefix} mrlog tests.log > mrtests.log
+	if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  		( [[ -f mrtests.log ]] && ${__cmd_prefix} code -r mrtests.log ) || 
+		( [[ -f tests.log ]] && ${__cmd_prefix} code -r tests.log )
+	fi
+
+	return ${testresult}
+			
+	)
+	
+
 }
 
 # Creates a new Evergreen path where it is possible to select the specific
@@ -272,7 +288,7 @@ mongo-add-enterprise-to-patch()
 	if [ -z "$1" ]; then
 		echo "You must provide the id of the patch to add the enterprise module to using command"
 		echo "mongo-test-remotely"
-		exit 1
+		return 1;
 	fi;
 
 	cd src/mongo/db/modules/enterprise
@@ -293,7 +309,7 @@ mongo-add-enterprise-to-queue()
 	if [ -z "$1" ]; then
 		echo "You must provide the id of the patc to add the enterprise module to using command: "
 		echo "evergreen commit-queue merge -p mongodb-mongo-master --pause"
-		exit 1
+		return 1
 	fi;
 
 	${__cmd_prefix} cd src/mongo/db/modules/enterprise
@@ -344,6 +360,16 @@ MONGO_TOOLCHAIN_VER=${MONGO_TOOLCHAIN_VER:-'v3'}
 ###
 ### Internal functions
 ###
+
+__mongo-check-mrlog()
+{
+    if ! [ "$(command -v mrlog)" ]; then
+        echo "mrlog not found, please install mrlog or run `mongo-setup` )."
+        return 1
+    fi
+
+	return 0
+}
 
 __mongo-check-wrkdir ()
 {

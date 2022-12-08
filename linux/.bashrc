@@ -1,8 +1,13 @@
-### Load environment settings
-. ~/.config/workspace/base/.profile.bash
 
-### Load utility functions and aliases
-. ~/.config/workspace/base/.aliases
+### sudo 
+#see here https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
+alias sudo='sudo '
+
+### Load environment settings
+. $HOME/.config/workspace/base/.profile.bash
 
 ### Load repoenvs utilities
-. ~/.config/workspace/repoenvs/.aliases
+. $HOME/.config/workspace/repoenvs/.aliases
+
+### Load Linux utilities
+. $HOME/.config/workspace/linux/.aliases

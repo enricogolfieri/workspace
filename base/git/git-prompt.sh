@@ -7,9 +7,9 @@
 #
 # To enable:
 #
-#    1) Copy this file to somewhere (e.g. ~/.git-prompt.sh).
+#    1) Copy this file to somewhere (e.g. $HOME/.git-prompt.sh).
 #    2) Add the following line to your .bashrc/.zshrc:
-#        source ~/.git-prompt.sh
+#        source $HOME/.git-prompt.sh
 #    3a) Change your PS1 to call __git_ps1 as
 #        command-substitution:
 #        Bash: PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
@@ -24,7 +24,7 @@
 #          will show username, at-sign, host, colon, cwd, then
 #          various status string, followed by dollar and SP, as
 #          your prompt.
-#        ZSH:  precmd () { __git_ps1 "%n" ":%~$ " "|%s" }
+#        ZSH:  precmd () { __git_ps1 "%n" ":%$HOME$ " "|%s" }
 #          will show username, pipe, then various status string,
 #          followed by colon, cwd, dollar and SP, as your prompt.
 #        Optionally, you can supply a third argument with a printf
@@ -88,8 +88,8 @@
 # commits checked out as a detached HEAD, set GIT_PS1_DESCRIBE_STYLE
 # to one of these values:
 #
-#     contains      relative to newer annotated tag (v1.6.3.2~35)
-#     branch        relative to newer tag or branch (master~4)
+#     contains      relative to newer annotated tag (v1.6.3.2$HOME35)
+#     branch        relative to newer tag or branch (master$HOME4)
 #     describe      relative to older annotated tag (v1.6.3.1-13-gdd42c2f)
 #     tag           relative to any older tag (v1.6.3.1-13-gdd42c2f)
 #     default       exactly matching tag
