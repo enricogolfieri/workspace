@@ -70,3 +70,14 @@ function ws-generate-rsa-key()
     fi
 }
 
+## Configure git email and name
+function ws-git-configure()
+{
+    echo "Please enter your git email address: "
+    read email
+    echo "Please enter your git name: "
+    read name
+    git config --global user.email $email
+    git config --global user.name $name
+}
+

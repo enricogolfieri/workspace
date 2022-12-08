@@ -14,8 +14,8 @@ function _install_oh_my_posh()
 {
     if [ ! -d "/usr/local/bin/oh-my-posh" ] 
     then
-        wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
-        chmod +x /usr/local/bin/oh-my-posh
+        sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+        sudo chmod +x /usr/local/bin/oh-my-posh
     fi
 
     if [ ! -d "$HOME/.poshthemes" ] 
