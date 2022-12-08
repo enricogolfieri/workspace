@@ -18,6 +18,14 @@ _install-ffmpeg()
     sudo apt-get install ffmpeg
 }
 
+#install chrome 
+_install-chrome()
+{
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb /tmp/chrome.deb
+    sudo dpkg -i /tmp/chrome.deb
+    rm -rf /tmp/chrome.deb
+}
+
 ws-install-linux-home-env()
 {
     sudo apt-get update
@@ -25,5 +33,6 @@ ws-install-linux-home-env()
     
     _install-snap
     _install-vscode
+    _install-chrome
     _install-ffmpeg
 }
