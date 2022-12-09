@@ -1,7 +1,20 @@
+
+# Workspace tools
+. $HOME/.config/workspace/base/utils/.aliases
+
+# Git tools
 . $HOME/.config/workspace/base/git/.aliases
+
+# Fuzzy finder tools
 . $HOME/.config/workspace/base/fzf/.aliases
+
+# Coding tools and utilities
 . $HOME/.config/workspace/base/envs/.aliases
+
+# Terminal themes
 . $HOME/.config/workspace/base/oh-my-posh/.aliases
+
+# Task managers tools
 . $HOME/.config/workspace/base/tools/.aliases
 
 ### Set aliases
@@ -13,29 +26,11 @@ alias grep='grep --color=always'
 alias more='more --RAW-CONTROL-CHARS --chop-long-lines'
 alias less='less --RAW-CONTROL-CHARS --chop-long-lines --IGNORE-CASE'
 
-### functions ######
-cheat() { curl cheat.sh/"$1" ; }
-
-## Workspace functions #####
-function ws-update() {
-    cd $HOME/.config/workspace
-    git pull
-    cd -
-}
-
-function ws-code()
-{
-    code $HOME/.config/workspace
-}
-
-function wscd()
-{
-    cd $HOME/.config/workspace
-}
 
 function ws-setup(){
     echo "installin workspace dependencies..."
 
+    ws-install-utils
     ws-install-git
     ws-install-env
     ws-install-tools
@@ -45,31 +40,6 @@ function ws-setup(){
     echo "Done!"
 }
 
-## system utilities #####
-function cleantmp()
-{
-    _daystoleave=10
-    [[ ! -z "$1" ]] && _daystoleave=$1
-    sudo find /tmp -type f -atime +$_daystoleave -delete
-}
 
-function tmpbackup()
-{
-    mkdir -p $HOME/backups 
-    cp $1 $HOME/backups/$1 
-    local __size=$(wc -c $HOME/backups/$1 | awk '{print $1}')
 
-    echo "Backup of $1 created. Size: $__size"
-}
-
-function osinfo(){
-    if [[ "$_os" = "Darwin" ]]; then
-        echo "OS: Mac OS"
-        echo "Version: $(sw_vers -productVersion)"
-        echo "Build: $(sw_vers -buildVersion)"
-    elif [[ "$_os" = "Linux" ]]; then
-        echo "OS: Linux"
-        echo "Version: $(lsb_release -a)"
-    fi
-}
 

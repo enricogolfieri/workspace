@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#extending base/.aliases
+. $HOME/.config/workspace/base/.aliases
+
 #install snap 
 _install-snap()
 {
@@ -26,11 +29,12 @@ _install-chrome()
     rm -rf /tmp/chrome.deb
 }
 
-ws-install-linux-home-env()
+ws-setup-linux-home()
 {
     sudo apt-get update
     sudo apt-get upgrade 
     
+    ws-setup
     _install-snap
     _install-vscode
     _install-chrome

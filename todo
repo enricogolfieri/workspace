@@ -1,13 +1,6 @@
-
-remove macos folder 
-remove linux folder
-
-you can now just source bashrc for bash and zshrc in zsh indipendently on the os
-
 mlog:
     - lobster locally
     - DOWNLLAODS LOG FROM WS 
-    - uses mrlog for local test.log
 
 mtail (multiwatch)
 
@@ -18,6 +11,11 @@ mperf
     - test performance on local cluster
 
 mark-benvenuto extensions
+
+Note: for now you can exclude one module from being loaded by setting LOAD_<module_name>=0 in .bashrc 
+however, in the future, I might plan to exclude some modules from being installed. 
+In this case, the LOAD_<module_name> should be defined the utils/env.sh and therefore be accessed also by any module, which can prevent installation from starting the variable is not 1. In env.sh you can also introduce other variable for specific submodules LOAD_<submodule_name>, which could be excluded as well from PATH and installations.
+
 
 
 

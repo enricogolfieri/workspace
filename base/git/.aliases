@@ -1,3 +1,5 @@
+source $HOME/.config/workspace/base/utils/env.sh
+
 function _install_ssh()
 {
     if ! [ "$(command -v ssh)" ]; then

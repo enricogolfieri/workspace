@@ -2,7 +2,10 @@
 # Source server_bashrc.sh
 source /home/ubuntu/mongodb-mongo-master/server-workflow-tool/server_bashrc.sh
 
-### Load environment settings, aliases and utility functions
+### Load aliases
+. $HOME/.config/workspace/base/.aliases
+
+### Load environment settings
 . $HOME/.config/workspace/base/.profile.bash
 
 ### Load repoenvs utilities & always enable mongo environment

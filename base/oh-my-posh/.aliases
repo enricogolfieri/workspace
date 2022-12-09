@@ -1,3 +1,5 @@
+source $HOME/.config/workspace/base/utils/env.sh
+
 function _install_meslo_font()
 {
     if [[ ! -f "/usr/share/fonts/PowerlineSymbols.otf" ]] 

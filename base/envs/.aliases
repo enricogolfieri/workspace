@@ -1,71 +1,33 @@
 
 __sys_python_version="3.9.2"
 
-### Compute _os variable
-_os="Linux";
-
-case `uname` in
-    Darwin)
-        _os="Darwin"
-    ;;
-    Linux)
-        _os="Linux"
-    ;;
-    *)
-        echo "[ENV] Unsupported OS, impossible to setup"
-        exit 1            
-    ;;
-esac
-
-## Install curl if not installed
-function _install_curl()
-{
-    if ! [ "$(command -v curl)" ]; then
-        if  [[ "$_os" = "Linux" ]] ; then
-            sudo apt-get install curl
-        elif  [[ "$_os" = "Darwin" ]]; then
-            brew install curl
-        fi
-    fi
-}
-
-## Install wget if not installed
-function _install_wget()
-{
-    if ! [ "$(command -v wget)" ]; then
-        if  [[ "$_os" = "Linux" ]] ; then
-            sudo apt-get install wget
-        elif  [[ "$_os" = "Darwin" ]]; then
-            brew install wget
-        fi
-    fi
-}
+. $HOME/.config/workspace/base/utils/env.sh
 
 ## python ####
 function _install_conda()
 {
     # Install conda
     if ! [ "$(command -v conda)" ]; then
-        if  [[ "$_os" = "Linux" ]] ; then
-            wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
-        elif  [[ "$_os" = "Darwin" ]]; then
-            wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O /tmp/miniconda.sh
-        else
-            echo "[install_conda] Unsupported OS"
-            return
-        fi
+        case $_os in
+            Linux)
+                wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
+            ;;
+            Darwin)
+                wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O /tmp/miniconda.sh
+            ;;
+        esac
+
         bash /tmp/miniconda.sh -b -p $HOME/miniconda
         rm /tmp/miniconda.sh
+        ### init conda, the following command write scripts into your shell init file automatically
+        export PATH="$HOME/miniconda/bin:$PATH"
+        conda init
+
+        # disable init of env "base"
+        conda config --set auto_activate_base false
     else
         echo "[install_conda] Conda already installed"
     fi
-
-    ### init conda, the following command write scripts into your shell init file automatically
-    export PATH="$HOME/miniconda/bin:$PATH"
-    conda init
-
-    # disable init of env "base"
-    conda config --set auto_activate_base false
 }
 
 function _install_pyenv()
@@ -87,7 +49,6 @@ function _install_pyenv()
 ## Rust ####
 function _install_cargo()
 {
-    _install_curl
     if ! [ "$(command -v cargo)" ]; then
         curl https://sh.rustup.rs -sSf | sh
     fi

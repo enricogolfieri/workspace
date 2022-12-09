@@ -1,4 +1,6 @@
 
+source $HOME/.config/workspace/base/utils/env.sh
+
 function _install_ncdu()
 {
     if [[ "$_os" = "Linux" ]]; then
@@ -21,8 +23,18 @@ function _install_bpytop()
     fi
 }
 
+function _install_htop()
+{
+    if [[ "$_os" = "Linux" ]]; then
+        sudo apt install htop
+    elif [[ "$_os" = "Darwin" ]]; then
+        brew install htop
+    fi
+}
+
 function ws-install-tools()
 {
     _install_ncdu
     _install_bpytop
+    _install_htop
 }
