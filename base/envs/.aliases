@@ -62,7 +62,7 @@ function _install_cpp_env()
             sudo apt-get install -y cmake
             sudo apt-get install -y build-essential
             sudo apt-get install -y ninja-build
-            sudo apt install clang lldb lld
+            sudo apt install -y clang lldb lld
             sudo apt-get install -y ccache
         elif  [[ "$_os" = "Darwin" ]]; then
             brew install cmake
@@ -179,7 +179,7 @@ cd ()
 # activate python env
 function _activate_venv()
 {
-    . .venv/bin/activate
+    ./.venv/bin/activate
 }
 
 # create a new python virtual environment local to the current directory

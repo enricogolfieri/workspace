@@ -15,7 +15,7 @@ source $HOME/.config/workspace/linux/.bashrc
 reload terminal and run
 
 `
-workspace-setup
+ws-setup
 `
 
 reload terminal 
@@ -45,20 +45,15 @@ ws-setup
 reload terminal 
 
 # MongoDb 
-To work on mongodb, add to .bashrc 
+Local compilation on macos or linux:
+    1. follow steps above for your local machine
+    2. run 'mongoenv' (once every shell)
+    3. on macos install xcode 
+Note: when you build locally, you will use the version of ninja, ccache, gcc, python etc installed in your system. There is no guarantee this will actually work.
 
-```
-source ./config/workspace/repoenvs/mongo/.bashrc
-```
-
-install 
-
-```
-sudo apt install ninja 
-sudo apt install ccache 
-```
-
-clone mongodbtoolchain in /opt/
-
+Compilation on a mongodb virtual machine:
+    1. include to .bashrc `source $HOME/.config/workspace/mongovm/.bashrc`
+    2. install workspace utilities `ws-setup`
+    3. install mongo utilities `mongo-setup`
 
 

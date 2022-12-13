@@ -3,18 +3,6 @@
 #extending base/.aliases
 . $HOME/.config/workspace/base/.aliases
 
-#install snap 
-_install-snap()
-{
-    sudo apt-get install snapd
-}
-
-#install vscode
-_install-vscode()
-{
-    sudo snap install --classic code
-}
-
 #install ffmpeg
 _install-ffmpeg()
 {
@@ -35,8 +23,6 @@ ws-setup-linux-home()
     sudo apt-get upgrade 
     
     ws-setup
-    _install-snap
-    _install-vscode
     _install-chrome
     _install-ffmpeg
 }

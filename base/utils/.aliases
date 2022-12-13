@@ -24,10 +24,32 @@ function _install_wget()
     fi
 }
 
+function _install_snap()
+{
+    if ! [ "$(command -v snap)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install snapd
+        fi
+    fi
+}
+
+function _install_vscode()
+{
+    if ! [ "$(command -v code)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo snap install --classic code
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install --cask visual-studio-code
+        fi
+    fi
+}
+
 function ws-install-utils()
 {
     _install_curl
     _install_wget
+    _install_snap
+    _install_vscode
 }
 
 ### Utils ####
