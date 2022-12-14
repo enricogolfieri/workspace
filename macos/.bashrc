@@ -1,3 +1,6 @@
+
+export PATH=/opt/homebrew/bin:$PATH
+
 ### Load aliases
 . $HOME/.config/workspace/base/.aliases
 

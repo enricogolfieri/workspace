@@ -24,18 +24,24 @@ function _install_nerd_font()
         rm -rf /tmp/nerd-fonts.zip
         rm -rf /tmp/nerd-fonts
         cd $HOME/.local/share/fonts/NerdFonts
-        fc-cache -fv
+        if [[ "$_os" = "Linux" ]] ; then
+            sudo fc-cache -fv
+        fi
         cd -
     fi
 }
 
 function _install_oh_my_posh()
 {
-    if [ ! -d "/usr/local/bin/oh-my-posh" ] 
-    then
-        sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
-        sudo chmod +x /usr/local/bin/oh-my-posh
-    fi
+    if  [[ "$_os" = "Linux" ]] ; then
+        if [ ! -d "/usr/local/bin/oh-my-posh" ] 
+        then
+            sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+            sudo chmod +x /usr/local/bin/oh-my-posh
+        fi       
+    elif  [[ "$_os" = "Darwin" ]]; then
+        brew install jandedobbeleer/oh-my-posh/oh-my-posh
+    fi  
 
     if [ ! -d "$HOME/.poshthemes" ] 
     then
