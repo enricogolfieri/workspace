@@ -6,6 +6,12 @@ then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+### Add conda if it exists
+if [ -d "$HOME/miniconda/bin" ]
+then
+    export PATH="$HOME/miniconda/bin:$PATH"
+fi
+
 ### Add pyenv if exists 
 if [ -d "$HOME/.pyenv/bin" ]
 then
@@ -13,9 +19,6 @@ then
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init -)"
 fi
-
-### Add conda
-export PATH="$HOME/miniconda/bin:$PATH"
 
 ### Add nvm
 _load_nvm
