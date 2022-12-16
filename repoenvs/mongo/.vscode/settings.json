@@ -148,8 +148,8 @@
     },
     "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.default.cStandard": "c17",
-    "C_Cpp.formatting": "Disabled",
-    "C_Cpp.errorSquiggles": "Disabled",
+    "C_Cpp.formatting": "disabled",
+    "C_Cpp.errorSquiggles": "disabled",
     "cSpell.words": [
         "BSON",
         "BSONOBJ",
@@ -189,6 +189,6 @@
     "[python]": {
         "editor.defaultFormatter": "xaver.clang-format"
     },
-    "clang-format.executable": "/opt/mongodbtoolchain/v3/bin/clang-format",
+    "clang-format.executable": "/opt/mongodbtoolchain/v4/bin/clang-format",
     "editor.formatOnSave": true
 }

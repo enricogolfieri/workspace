@@ -24,11 +24,32 @@ function _install_wget()
     fi
 }
 
+#install xclip if not installed
+function _install_xclip()
+{
+    if ! [ "$(command -v xclip)" ]; then
+        if  [[ "$_os" = "Linux" ]] ; then
+            sudo apt-get install xclip
+        elif  [[ "$_os" = "Darwin" ]]; then
+            brew install xclip
+        fi
+    fi
+}
+
 function _install_snap()
 {
     if ! [ "$(command -v snap)" ]; then
         if  [[ "$_os" = "Linux" ]] ; then
             sudo apt-get install snapd
+        fi
+    fi
+}
+
+function _install_brew()
+{
+    if ! [ "$(command -v brew)" ]; then
+        if  [[ "$_os" = "Darwin" ]]; then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
     fi
 }
@@ -48,8 +69,10 @@ function ws-install-utils()
 {
     _install_curl
     _install_wget
+    _install_xclip
     _install_snap
-    _install_vscode
+    _install_brew
+    _install_vscoded
 }
 
 ### Utils ####

@@ -1,4 +1,4 @@
-### Load aliases
+## Load aliases
 . $HOME/.config/workspace/base/.aliases
 
 ## C/C++ ####
@@ -6,3 +6,17 @@
 _install_cpp_env(){ :; }
 _install_pyenv(){ :; }
 _install_conda(){ :; }
+
+function ws-install-toolchain()
+{
+    curl -o toolchain_installer.sh http://mongodbtoolchain.build.10gen.cc/installer.sh
+    bash toolchain_installer.sh
+    rm -rf ./toolchain_installer.sh
+}
+
+function ws-setup-mongovm()
+{
+    ws-install-toolchain
+    ws-setup
+    mongo-setup
+}

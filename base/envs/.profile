@@ -7,7 +7,7 @@ then
 fi
 
 ### Add pyenv if exists 
-if [ -d "$HOME/.pyenv/bin" ]
+if [ -d "$HOME/.pyenv/" ]
 then
     export PYENV_ROOT="$HOME/.pyenv"
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"

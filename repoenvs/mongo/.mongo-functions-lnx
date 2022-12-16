@@ -43,8 +43,7 @@ mongo-prepare ()
 		;;
 	esac 
 
-	cp $HOME/.config/workspace/repoenvs/mongo/.vscode/ .
-	pip install 'mtools[all]'
+	cp -r $HOME/.config/workspace/repoenvs/mongo/.vscode/ .
 	)
 
 }
@@ -93,8 +92,7 @@ mongo-build ()
 
 	[[ ${__format} == 1 ]] && ${__cmd_prefix} mongo-format ${__mongo_branch};
 
-	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | v6.0 | v6.1 | master)
+	if [[ ${__isv44plus} == true ]]; then
 			[[ -f build.ninja ]] || __mongo-configure-ninja $@;
 			[[ -f compile_commands.json ]] || __mongo-configure-compilation-db $@;
 			${__cmd_prefix} ninja \
@@ -102,8 +100,7 @@ mongo-build ()
 					generated-sources \
 					install-${__target} \
 					${__args[@]}
-		;;
-		v4.0 | v4.2)
+	else
 			[[ -f compile_commands.json ]] || __mongo-configure-compilation-db $@;
 			__mongo-check-venv;
 			${__cmd_prefix} ./buildscripts/scons.py \
@@ -113,12 +110,8 @@ mongo-build ()
 					generated-sources \
 					${__target} \
 					${__args[@]}
-		;;
-		*)
-			echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
-			return 1
-		;;
-	esac )
+	fi
+	)
 }
 
 # Runs the unit tests.
@@ -133,7 +126,7 @@ mongo-unit()
 		then
 			${__cmd_prefix} mrlog -c -e ninja -- -f build.ninja -j12 +${1}
 		else
-			${__cmd_prefix} mrlog -c -e python -- buildscripts/resmoke.py run --jobs=12 --suite=unittests
+			${__cmd_prefix} mrlog -c -e ${MONGO_VENV_DIRNAME}/bin/python3 -- buildscripts/resmoke.py run --jobs=12 --suite=unittests
 		fi
 	)
 }
@@ -154,23 +147,17 @@ mongo-clean ()
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
 
-	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | v6.0 | v6.1 | master)
+	if [[ ${__isv44plus} == true ]]; then
 			${__cmd_prefix} ninja -t clean;
 			${__cmd_prefix} ccache -c
-		;;
-		v4.0 | v4.2)
+	else
 			__mongo-check-venv;
 			${__cmd_prefix} ./buildscripts/scons.py \
 					--variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
 					--clean \
 					${__target}
-		;;
-		*)
-			echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
-			return 1
-		;;
-	esac )
+	fi
+	)
 }
 
 # Formats the source code according to the conversion adopted by all development
@@ -186,18 +173,12 @@ mongo-format ()
 	__mongo-check-venv;
 	__mongo-parse-args $@;
 
-	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | v6.0 | v6.1 | master)
-			${__cmd_prefix} ./buildscripts/clang_format.py format-my
-		;;
-		v4.0 | v4.2)
-			${__cmd_prefix} ./buildscripts/clang_format.py format
-		;;
-		*)
-			echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
-			return 1
-		;;
-	esac )
+	if [[ ${__isv44plus} == true ]]; then
+		${__cmd_prefix} ./buildscripts/clang_format.py format-my
+	else
+		${__cmd_prefix} ./buildscripts/clang_format.py format
+	fi
+	)
 }
 
 
@@ -231,7 +212,7 @@ mongo-test-locally ()
 	${__cmd_prefix} ./buildscripts/resmoke.py run \
 			--storageEngine=wiredTiger \
 			--storageEngineCacheSizeGB=0.5 \
-			--mongodSetParameters='{logComponentVerbosity: {verbosity: 2}}' \
+			--mongodSetParameters='{logComponentVerbosity: {verbosity: 3}}' \
 			--jobs=${__tasks} \
 			--log=file \
 			${__args[@]} 
@@ -355,7 +336,7 @@ mongo-debug ()
 ###
 
 MONGO_VENV_DIRNAME=${MONGO_VENV_DIRNAME:-'.venv'}
-MONGO_TOOLCHAIN_VER=${MONGO_TOOLCHAIN_VER:-'v3'}
+MONGO_TOOLCHAIN_VER=${MONGO_TOOLCHAIN_VER:-'v4'}
 
 ###
 ### Internal functions
@@ -398,6 +379,7 @@ __mongo-parse-args ()
 
 	__cmd_prefix=;
 	__mongo_branch=master;
+	__isv44plus=true;
 	__toolchain=clang;
 	__build_mode='--opt=off --dbg=on';
 	__link_model='--link-model=dynamic';
@@ -418,6 +400,8 @@ __mongo-parse-args ()
 				shift
 			;;
 			--v6.3)
+				#extract version from $1
+				__mongo_branch= 
 				__mongo_branch=v6.3;
 				shift
 			;;
@@ -433,10 +417,6 @@ __mongo-parse-args ()
 				__mongo_branch=v6.0;
 				shift
 			;;
-			--v5.3)
-				__mongo_branch=v5.3;
-				shift
-			;;
 			--v5.0)
 				__mongo_branch=v5.0;
 				shift
@@ -447,10 +427,12 @@ __mongo-parse-args ()
 			;;
 			--v4.2)
 				__mongo_branch=v4.2;
+				__isv44plus=false;
 				shift
 			;;
 			--v4.0)
 				__mongo_branch=v4.0;
+				__isv44plus=false;
 				shift
 			;;
 			--clang)
@@ -511,12 +493,6 @@ __mongo-parse-args ()
 			;;
 		esac;
 	done;
-
-	# if [[ ${__mongo_branch} != master && ${__mongo_branch} != v5.0 && ${__mongo_branch} != v4.4 && ${__mongo_branch} != v4.2 && ${__mongo_branch} != v4.0 ]]; then
-	# 	echo "WARNING: ${__mongo_branch} is not a Git origin branch" 1>&2;
-	# 	read -p "Do you want to use the master branch as a reference? [y/N] ";
-	# 	[[ ${REPLY} =~ (y|Y) ]] && __mongo_branch=master || return 2;
-	# fi
 }
 
 __mongo-configure-ninja ()
@@ -526,8 +502,7 @@ __mongo-configure-ninja ()
 	__mongo-check-venv;
 	__mongo-parse-args $@;
 
-	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | v6.0 | master)
+	if [[ ${__isv44plus} == true ]]; then
 			${__cmd_prefix} ./buildscripts/scons.py \
 					--modules=$__modules --variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
 					${__build_mode} \
@@ -536,12 +511,8 @@ __mongo-configure-ninja ()
 					ICECC=icecc \
 					CCACHE=ccache \
 					${__args[@]}
-		;;
-		# *)
-		# 	echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
-		# 	return 1
-		# ;;
-	esac )
+	fi 
+	)
 }
 
 __mongo-configure-compilation-db ()
@@ -550,24 +521,18 @@ __mongo-configure-compilation-db ()
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
 
-	case ${__mongo_branch} in
-		v4.4 | v5.0 | v5.3 | v6.0 | master)
+	if [[ ${__isv44plus} == true ]]; then
 			${__cmd_prefix} ninja \
 					compiledb \
 					${__args[@]}
-		;;
-		v4.0 | v4.2)
-			__mongo-check-venv;
-			${__cmd_prefix} ./buildscripts/scons.py \
-					--variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
-					${__build_mode} \
-					ICECC=icecc \
-					compiledb \
-					${__args[@]}
-		;;
-		*)
-			echo "ERROR: ${__mongo_branch} branch is not supported by ${FUNCNAME[0]}" 1>&2;
-			return 1
-		;;
-	esac )
+	else
+		__mongo-check-venv;
+		${__cmd_prefix} ./buildscripts/scons.py \
+				--variables-files=etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars \
+				${__build_mode} \
+				ICECC=icecc \
+				compiledb \
+				${__args[@]}
+	fi
+	)
 }
