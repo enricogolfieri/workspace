@@ -1,0 +1,6 @@
+
+. $HOME/.config/workspace/envs/base/utils/env.sh
+
+. $HOME/.config/workspace/envs/mongo/.mongo-functions
+
+. $HOME/.config/workspace/envs/mongo/.mongo-utils

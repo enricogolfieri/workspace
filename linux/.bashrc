@@ -6,10 +6,7 @@ alias sudo='sudo '
 ### Load Linux utilities
 . $HOME/.config/workspace/linux/.aliases
 
-### Load environment settings
-. $HOME/.config/workspace/base/.profile.bash
-
-### Load repoenvs utilities
-. $HOME/.config/workspace/repoenvs/.aliases
+### Activate base environment
+activate-base-bash
 
 

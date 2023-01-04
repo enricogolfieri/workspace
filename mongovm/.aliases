@@ -1,5 +1,5 @@
 ## Load aliases
-. $HOME/.config/workspace/base/.aliases
+. $HOME/.config/workspace/envs/.aliases
 
 ## C/C++ ####
 # Not needed since we are using /opt/mongodbtoolchain

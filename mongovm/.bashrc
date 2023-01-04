@@ -1,12 +1,11 @@
-### Load aliases
-. $HOME/.config/workspace/mongovm/.aliases
+### Load environment aliases
+. $HOME/.config/workspace/envs/.aliases
 
-### Load environment settings
-. $HOME/.config/workspace/base/.profile.bash
+### Activate base environment
+activate-base-bash
 
-### Load repoenvs utilities & always enable mongo environment
-. $HOME/.config/workspace/repoenvs/.aliases
-mongoenv
+### Always enable mongo-env
+activate-mongo
 
 ### Set general environment settings
 export LC_ALL="C"

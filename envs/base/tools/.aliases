@@ -1,0 +1,40 @@
+
+source $HOME/.config/workspace/envs/base/utils/env.sh
+
+function _install_ncdu()
+{
+    if [[ -n "$_is_linux" ]]; then
+        sudo apt install ncdu
+    elif [[ -n "$_is_macos" ]]; then
+        brew install ncdu
+    else
+        echo "[install_ncdu] Unsupported OS"
+    fi
+}
+
+function _install_bpytop()
+{
+    if [[ -n "$_is_linux" ]]; then
+        sudo snap install bpytop
+    elif [[ -n "$_is_macos" ]]; then
+        brew install bpytop
+    else
+        echo "[install_bpytop] Unsupported OS"
+    fi
+}
+
+function _install_htop()
+{
+    if [[ -n "$_is_linux" ]]; then
+        sudo apt install htop
+    elif [[ -n "$_is_macos" ]]; then
+        brew install htop
+    fi
+}
+
+function ws-install-tools()
+{
+    _install_ncdu
+    _install_bpytop
+    _install_htop
+}
