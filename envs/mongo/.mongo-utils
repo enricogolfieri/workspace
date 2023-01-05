@@ -103,7 +103,7 @@ mongo-setup()
     #install icecc-sundae
     if [[ -n "$_is_macos" ]]; then
         brew install icecream-sundae
-    if [[ -n "$_is_ubuntu" ]]; then
+    elif [[ -n "$_is_ubuntu" ]]; then
         sudo apt-get install icecream-sundae
     fi
 
