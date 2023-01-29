@@ -12,8 +12,11 @@ then
     eval "$(pyenv init -)"
 fi
 
-### Add conda
-export PATH="$HOME/miniconda/bin:$PATH"
+### Add conda if it exists
+if [ -d "$HOME/miniconda/bin" ]
+then
+    export PATH="$HOME/miniconda/bin:$PATH"
+fi
 
 ### Add nvm (I think this is not needed because nvm installation already adds it to .bashrc)
 if [[ -n "$_is_macos" ]]; then
