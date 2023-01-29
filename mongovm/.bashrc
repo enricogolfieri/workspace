@@ -14,6 +14,8 @@ if [ -d /opt/go ]; then
     export GOROOT=/opt/go
 fi
 
+export PATH=$HOME/cli_bin:${PATH}
+
 # JIRA Username
 export JIRA_USERNAME=enrico.golfieri@mongodb.com
 

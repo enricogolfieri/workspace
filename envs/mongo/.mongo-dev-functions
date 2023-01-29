@@ -5,6 +5,9 @@
 #
 # Options:
 #   - Branch: --master (default), --v5.3, --v5.0, --v4.4, --v4.2, --v4.0
+
+alias resmoke='python ./buildscripts/resmoke.py'
+
 mongo-prepare ()
 {
 	( set -e;
@@ -16,14 +19,6 @@ mongo-prepare ()
 		echo "WARNING: All uncommitted changes and unversioned files will be lost";
 		read -p "Are you sure you want to proceed? [y/N] ";
 		[[ ${REPLY} =~ (y|Y) ]] || return 0;
-	fi
-
-	#add enterprise module 
-	echo "modules $__modules"
-	if [ $__modules == "enterprise" ]; then
-		${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
-		${__cmd_prefix} mkdir -p src/mongo/db/modules/
-		${__cmd_prefix} git clone git@github.com:10gen/mongo-enterprise-modules.git src/mongo/db/modules/enterprise
 	fi
 
 	[[ -n ${VIRTUAL_ENV} ]] && ${__cmd_prefix} deactivate;
@@ -43,7 +38,14 @@ mongo-prepare ()
 		;;
 	esac 
 
-	cp -r $HOME/.config/workspace/envs/mongo/.vscode/ .
+	#install db-contrib-tools
+	python3 -m pip install pipx
+	python3 -m pipx ensurepath
+	python3 -m pipx install db-contrib-tool
+	python3 -m pipx upgrade db-contrib-tool
+	
+	#copy vs code settings
+	[ -d  "$HOME/.config/workspace/envs/mongo/.vscode/" ] || cp -r $HOME/.config/workspace/envs/mongo/.vscode/ .
 	)
 
 }
@@ -68,9 +70,29 @@ mongo-configure ()
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
 
+	#add enterprise module 
+	echo "modules $__modules"
+	if [ $__modules == "enterprise" ]; then
+		${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
+		${__cmd_prefix} mkdir -p src/mongo/db/modules/
+		${__cmd_prefix} git clone git@github.com:10gen/mongo-enterprise-modules.git src/mongo/db/modules/enterprise
+	fi
+
 	__mongo-configure-ninja $@;
 	__mongo-configure-compilation-db $@ )
 }
+
+#downloag last LTS and last continuous version of mongo to enable multiversion local testing
+mongo-enable-multiversion()
+{
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-parse-args $@;
+
+	${__cmd_prefix} . ${MONGO_VENV_DIRNAME}/bin/activate;
+	${__cmd_prefix} db-contrib-tool setup-repro-env --linkDir ./build/install/bin/  --installLastLTS --installLastContinuous )
+}
+
 
 # Builds all the executables. If the `build.ninja` or `compile_commands.json`
 # file is missing (e.g. at first run), it is automatically generated. Source
@@ -219,8 +241,6 @@ mongo-test-locally ()
 	return ${testresult}
 			
 	)
-	
-
 }
 
 # Creates a new Evergreen path where it is possible to select the specific
@@ -233,7 +253,7 @@ mongo-test-remotely ()
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
-
+	
 	if [ -z "${__args[0]}" ]; then
 		msg=$(git log -n 1 --pretty=%B | head -n 1);
 		if [[ ${__cmd_prefix} != echo ]]; then
@@ -249,19 +269,23 @@ mongo-test-remotely ()
 				--skip_confirm \
 				--description "$(git branch --show-current) ${msg}" \
 				${__args[@]} 
-
-		[ -z "$__modules"] && echo "COPY THE ID OF THE PATCH AND RUN: mongo-test-remotely --$__modules <patch_id>"
+		[ -n "$__modules" ] && echo "COPY THE ID OF THE PATCH AND RUN: mongo-test-remotely --$__modules <patch_id>"
 	else
 		if [ $__modules == "enterprise" ]; then
-			[ -d ./src/mongo/db/modules/enterprise ] || "echo 'Enterprise module not found" && return 1;
+			[ -d ./src/mongo/db/modules/enterprise ] || ("echo 'Enterprise module not found" && return 1);
 			cd ./src/mongo/db/modules/enterprise
 			${__cmd_prefix} evergreen patch-set-module -m enterprise -i ${__args[0]}
 			cd - 
+		else
+			echo "You must specify a valid module when using a patch id, module specified: $__modules"
 		fi
 	fi
 	)
 }
 
+#Note: this function could be just added as part of mongo-test-remotely
+#However, since the --project option changes, it would become more complex. 
+#Therefore, I decided to keep it separate.
 mongo-workload()
 {
 	( set -e;
@@ -297,10 +321,10 @@ mongo-merge ()
 		[ -z "$__modules" ] || __pause=" --pause";
 		${__cmd_prefix} evergreen commit-queue merge --project mongodb-mongo-${__mongo_branch} ${__args[@]} $__pause
 
-		[ -z "$__modules" ] && echo "COPY THE ID OF THE PATCH AND RUN: mongo-merge --$__modules <patch_id>"
+		[ -n "$__modules" ] && echo "COPY THE ID OF THE PATCH AND RUN: mongo-merge --$__modules <patch_id>"
 	else 
 		if [ $__modules == "enterprise" ]; then
-			[ -d ./src/mongo/db/modules/enterprise ] || echo "Enterprise module not found" && return 1;
+			[ -d ./src/mongo/db/modules/enterprise ] || ( echo "Enterprise module not found" && return 1 );
 			${__cmd_prefix} cd ./src/mongo/db/modules/enterprise
 			${__cmd_prefix} evergreen commit-queue set-module --id ${__args[0]} -m enterprise 
 			${__cmd_prefix} evergreen commit-queue merge --resume ${__args[0]}
@@ -325,6 +349,7 @@ mongo-debug ()
 	echo __format=${__format};
 	echo __target=${__target};
 	echo __tasks=${__tasks};
+	echo __modules=${__modules};
 	echo "MONGO_VARIABLE_PATH=${MONGO_VARIABLE_PATH}"
 	echo "ICECC_VAR=${ICECC_VAR}"
 	echo "CCACHE_VAR=${CCACHE_VAR}"
@@ -427,40 +452,13 @@ __mongo-parse-args ()
 				__mongo_branch=master;
 				shift
 			;;
-			--v6.3)
-				#extract version from $1
-				__mongo_branch= 
-				__mongo_branch=v6.3;
-				shift
-			;;
-			--v6.2)
-				__mongo_branch=v6.2;
-				shift
-			;;
-			--v6.1)
-				__mongo_branch=v6.1;
-				shift
-			;;
-			--v6.0)
-				__mongo_branch=v6.0;
-				shift
-			;;
-			--v5.0)
-				__mongo_branch=v5.0;
-				shift
-			;;
-			--v4.4)
-				__mongo_branch=v4.4;
-				shift
-			;;
-			--v4.2)
-				__mongo_branch=v4.2;
-				__isv44plus=false;
+			--v*)
+				__mongo_branch=${1#*--}
 				shift
 			;;
 			--v4.0)
-				__mongo_branch=v4.0;
 				__isv44plus=false;
+				__mongo_branch=v4.0;
 				shift
 			;;
 			--clang)
@@ -473,6 +471,14 @@ __mongo-parse-args ()
 			;;
 			--debug)
 				__build_mode='--opt=off --dbg=on';
+				shift
+			;;
+			--sanitize-address)
+				__build_mode='--opt=on --dbg=on --sanitize=address --allocator=system';
+				shift
+			;;
+			--sanitize-thread)
+				__build_mode='--opt=on --dbg=on --sanitize=thread';
 				shift
 			;;
 			--release)

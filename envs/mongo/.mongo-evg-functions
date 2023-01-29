@@ -1,6 +1,3 @@
-
-alias icecc-check="icecream-sundae -s iceccd.production.build.10gen.cc"
-
 function mongo-get-failing-tests() {
     local _patch_id="$1"
     local _api_key=$(grep "api_key:" ~/.evergreen.yml | cut -d':' -f2 | sed 's/^[[:space:]]*//')
@@ -54,7 +51,7 @@ function mongo-group-failing-tests() {
         echo "Usage: ${FUNCNAME[0]} <patch_id>" >&2 && return 1
     fi
 
-    get_failing_tests "${_patch_id}" \
+    mongo-get-failing-tests "${_patch_id}" \
         | sort \
         | awk '{if ((exists[$1]++) == 1) {print        \
           "'"${_color_red}"'"    $1 "\n  "             \
@@ -62,55 +59,4 @@ function mongo-group-failing-tests() {
           " / "                                        \
           "'"${_color_yellow}"'" $3 "'"${_color_end}"'"\
           }}'
-}
-
-#download $1 log link into your workstation and then to your laptop
-mongo-download-evg-logs() {
-    _workstation="mongo-ws"
-    _logs_url=$1
-	_logs_folder="$HOME/tmp"
-
-    _filename=${_logs_url##*/}
-
-    ssh ${_workstation} "cd $_logs_folder; wget -q -O ${_filename} $1"
-    if [ $? -ne 0 ]; then
-         return 1;
-    fi;
-
-    scp -C ${_workstation}:${_logs_folder}/${_filename} .
-	open .
-}
-
-#setups your working station with the required tools to work with mongo
-mongo-setup()
-{	
-	command -v npm >/dev/null 2>&1 || { echo >&2 "I require npm but it's not installed.  Aborting."; return 1; }
-	command -v cargo >/dev/null 2>&1 || { echo >&2 "I require cargo but it's not installed.  Aborting."; return 1; }
-
-	mkdir -p $HOME/mongo-tools
-	
-	#install lobster
-	git clone https://github.com/evergreen-ci/lobster.git $HOME/mongo-tools/lobster
-	cd $HOME/mongo-tools/lobster
-	npm install
-	npm build
-
-	#install mrlog 
-	git clone https://github.com/markbenvenuto/mrlog.git $HOME/mongo-tools/mrlog
-	cd $HOME/mongo-tools/mrlog
-	cargo install --path .
-
-    #install icecc-sundae
-    if [[ -n "$_is_macos" ]]; then
-        brew install icecream-sundae
-    elif [[ -n "$_is_ubuntu" ]]; then
-        sudo apt-get install icecream-sundae
-    fi
-
-	#install mark-benvenuto extension
-	git clone git@github.com:markbenvenuto/mongodev.git $HOME/mongo-tools/mongodev
-	cd $HOME/mongo-tools/mongodev
-	npm install && npm run compile
-	[ -d "$HOME/.vscode/extensions" ] && ln -s ``pwd`` $HOME/.vscode/extensions/markbenvenuto.mongodev-0.0.1;
-	[ -d "$HOME/.vscode-server/extensions" ] && ln -s ``pwd`` $HOME/.vscode-server/extensions/markbenvenuto.mongodev-0.0.1;
 }
