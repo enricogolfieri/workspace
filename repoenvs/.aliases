@@ -1,5 +1,0 @@
-# load the mongo environment
-function mongoenv() {
-    . $HOME/.config/workspace/repoenvs/mongo/.aliases
-    . $HOME/.config/workspace/repoenvs/mongo/.profile
-}

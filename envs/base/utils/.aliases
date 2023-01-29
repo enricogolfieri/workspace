@@ -1,0 +1,127 @@
+## Install curl if not installed
+source $HOME/.config/workspace/envs/base/utils/env.sh
+
+function _install_curl()
+{
+    if ! [ "$(command -v curl)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            sudo apt-get install curl
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install curl
+        fi
+    fi
+}
+
+## Install wget if not installed
+function _install_wget()
+{
+    if ! [ "$(command -v wget)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            sudo apt-get install wget
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install wget
+        fi
+    fi
+}
+
+#install xclip if not installed
+function _install_xclip()
+{
+    if ! [ "$(command -v xclip)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            sudo apt-get install xclip
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install xclip
+        fi
+    fi
+}
+
+function _install_snap()
+{
+    if ! [ "$(command -v snap)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            sudo apt-get install snapd
+        fi
+    fi
+}
+
+function _install_brew()
+{
+    if ! [ "$(command -v brew)" ]; then
+        if  [[ -n "$_is_macos" ]]; then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+    fi
+}
+
+function _install_vscode()
+{
+    if ! [ "$(command -v code)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            sudo snap install --classic code
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install --cask visual-studio-code
+        fi
+    fi
+}
+
+function ws-install-utils()
+{
+    _install_curl
+    _install_wget
+    _install_xclip
+    _install_snap
+    _install_brew
+    _install_vscoded
+}
+
+### Utils ####
+
+cheat() { curl cheat.sh/"$1" ; }
+
+function osinfo(){
+    if [[ -n "$_is_macos" ]]; then
+        echo "OS: Mac OS"
+        echo "Version: $(sw_vers -productVersion)"
+        echo "Build: $(sw_vers -buildVersion)"
+    elif [[ -n "$_is_linux" ]]; then
+        echo "OS: Linux"
+        echo "Version: $(lsb_release -a)"
+    fi
+}
+
+## system utilities #####
+function ws-cleantmp()
+{
+    _daystoleave=10
+    [[ ! -z "$1" ]] && _daystoleave=$1
+    sudo find /tmp -type f -atime +$_daystoleave -delete
+}
+
+function ws-tmpbackup()
+{
+    mkdir -p $HOME/backups 
+    cp $1 $HOME/backups/$1 
+    local __size=$(wc -c $HOME/backups/$1 | awk '{print $1}')
+
+    echo "Backup of $1 created. Size: $__size"
+}
+
+## Workspace functions #####
+function ws-update() {
+    cd $HOME/.config/workspace
+    git pull
+    cd -
+}
+
+function ws-code()
+{
+    code $HOME/.config/workspace
+}
+
+function wscd()
+{
+    cd $HOME/.config/workspace
+}
+
+

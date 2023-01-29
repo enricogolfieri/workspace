@@ -1,12 +1,11 @@
-### Load aliases
-. $HOME/.config/workspace/mongovm/.aliases
+### Load environment aliases
+. $HOME/.config/workspace/envs/.aliases
 
-### Load environment settings
-. $HOME/.config/workspace/base/.profile.bash
+### Activate base environment
+activate-base-bash
 
-### Load repoenvs utilities & always enable mongo environment
-. $HOME/.config/workspace/repoenvs/.aliases
-mongoenv
+### Always enable mongo-env
+activate-mongo
 
 ### Set general environment settings
 export LC_ALL="C"
@@ -14,6 +13,8 @@ if [ -d /opt/go ]; then
     export PATH=/opt/go/bin:$PATH
     export GOROOT=/opt/go
 fi
+
+export PATH=$HOME/cli_bin:${PATH}
 
 # JIRA Username
 export JIRA_USERNAME=enrico.golfieri@mongodb.com

@@ -1,0 +1,45 @@
+
+# Workspace tools
+. $HOME/.config/workspace/envs/base/utils/.aliases
+
+# Git tools
+. $HOME/.config/workspace/envs/base/git/.aliases
+
+# Fuzzy finder tools
+. $HOME/.config/workspace/envs/base/fzf/.aliases
+
+# Coding tools and utilities
+. $HOME/.config/workspace/envs/base/toolchain/.aliases
+
+# Terminal themes
+. $HOME/.config/workspace/envs/base/oh-my-posh/.aliases
+
+# Task managers tools
+. $HOME/.config/workspace/envs/base/tools/.aliases
+
+### Set aliases
+alias ls='ls -h --color=auto'
+alias ll='ls -l'
+alias la='ls -la'
+alias rm='rm -i'
+alias grep='grep --color=always'
+alias more='more --RAW-CONTROL-CHARS --chop-long-lines'
+alias less='less --RAW-CONTROL-CHARS --chop-long-lines --IGNORE-CASE'
+
+
+function ws-setup(){
+    echo "installin workspace dependencies..."
+
+    ws-install-utils
+    ws-install-git
+    ws-install-env
+    ws-install-tools
+    ws-install-fzf
+    ws-install-oh_my_posh    
+
+    echo "Done!"
+}
+
+
+
+
