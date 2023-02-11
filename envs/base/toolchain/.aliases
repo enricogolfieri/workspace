@@ -171,7 +171,7 @@ cd ()
 		# directory then deactivate the virtual environment.
 		PARENT_DIR=$(dirname ${VIRTUAL_ENV})
 		if [[ ${PWD}/ != ${PARENT_DIR}/* ]]; then
-			deactivate
+			. .venv/bin/deactivate
 		fi
 	fi
 }
@@ -179,7 +179,7 @@ cd ()
 # activate python env
 function _activate_venv()
 {
-    ./.venv/bin/activate
+    source ./.venv/bin/activate
 }
 
 # create a new python virtual environment local to the current directory
@@ -188,16 +188,21 @@ function vsetup()
     _pyversion=$1
     [ -z "$1" ] && _pyversion=$__sys_python3_version
     
-    pyenv shell $_pyversion ||
-    echo "$_pyversion not found, ready to install..." &&
-    pyenv install $_pyversion && pyenv shell $_pyversion ||
-    echo "pyenv shell $_pyversion failed" && return 1;
+    #delete if exists
+    [[ -d "./.venv" ]] && rm -rf "./.venv";
 
-    python -m venv ./.venv || echo "Failed to create virtual environment" && return 1;
+    pyenv shell $_pyversion ||
+    ( (echo "$_pyversion not found, ready to install..." &&
+     pyenv install $_pyversion && pyenv shell $_pyversion) ||
+    (echo "pyenv shell $_pyversion failed" && return 1) );
+
+    python -m venv ./.venv || (echo "Failed to create virtual environment" && return 1);
+    
 
     #install requirements if exists
     if [ -f "requirements.txt" ]; then
         _activate_venv
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
     fi
 }
@@ -205,6 +210,7 @@ function vsetup()
 # create a new conda virtual environment and activate it
 function vsetup-conda()
 {
+    conda env activate base 
     conda env create -f ./environment.yml
     
     #install requirements if exists
