@@ -10,10 +10,29 @@ function activate-base-zsh() {
     . $HOME/.config/workspace/envs/base/.profile.zsh
 }
 
+function activate-docker-ubuntu18()
+{
+    docker build --tag chiara18 - < $HOME/.config/workspace/linux/DockerFileU18
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara18
+}
+
+function activate-docker-ubuntu20()
+{
+    docker build --tag chiara20 - < $HOME/.config/workspace/linux/DockerFileU20
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
+}
+
+alias runlinda='activate-docker-ubuntu18'
+alias runchiara='activate-docker-ubuntu20'
+
 # activate the mongo environment 
-function activate-mongo() {
+function activate-mongodev() {
     . $HOME/.config/workspace/envs/mongo/.aliases
     . $HOME/.config/workspace/envs/mongo/.profile
+}
+
+function activate-mongodev-docker() {
+    docker buid -t u18/giulietta:v1 -f $HOME/.config/workspace/mongovm/DockerFile ~
 }
 
 

@@ -1,7 +1,6 @@
 
 __sys_python3_version="3.9.2"
 
-. $HOME/.config/workspace/envs/base/utils/env.sh
 
 ## python ####
 function _install_conda()

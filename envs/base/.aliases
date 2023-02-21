@@ -1,4 +1,6 @@
 
+source $HOME/.config/workspace/envs/base/utils/env.sh
+
 # Workspace tools
 . $HOME/.config/workspace/envs/base/utils/.aliases
 
@@ -16,6 +18,9 @@
 
 # Task managers tools
 . $HOME/.config/workspace/envs/base/tools/.aliases
+
+# Docker tools
+. $HOME/.config/workspace/envs/base/docker/.aliases
 
 ### Set aliases
 alias ls='ls -h --color=auto'
@@ -36,10 +41,8 @@ function ws-setup(){
     ws-install-tools
     ws-install-fzf
     ws-install-oh_my_posh    
+    ws-install-docker
 
     echo "Done!"
 }
-
-
-
 

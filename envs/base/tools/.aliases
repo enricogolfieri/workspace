@@ -1,5 +1,4 @@
 
-source $HOME/.config/workspace/envs/base/utils/env.sh
 
 function _install_ncdu()
 {

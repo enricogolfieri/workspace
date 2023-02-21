@@ -72,8 +72,19 @@ function ws-install-utils()
     _install_xclip
     _install_snap
     _install_brew
-    _install_vscoded
+    _install_vscode
 }
+
+function ws-test-utils()
+{
+    echo "Testing curl $(which curl)"
+    echo "Testing wget $(which wget)"
+    echo "Testing xclip $(which xclip)"
+    echo "Testing snap $(which snap)"
+    echo "Testing brew $(which brew)"
+    echo "Testing vscode $(which code)"
+}
+
 
 ### Utils ####
 
