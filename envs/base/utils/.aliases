@@ -72,7 +72,7 @@ function ws-install-utils()
     _install_xclip
     _install_snap
     _install_brew
-    _install_vscoded
+    _install_vscode
 }
 
 ### Utils ####

@@ -1,11 +1,19 @@
 ### Load environment aliases
 . $HOME/.config/workspace/envs/.aliases
+. $HOME/.config/workspace/mongovm/.aliases
 
 ### Activate base environment
 activate-base-bash
 
 ### Always enable mongo-env
 activate-mongo
+
+## C/C++ ####
+# Not needed since we are using /opt/mongodbtoolchain
+_install_cpp_env(){ :; }
+_install_pyenv(){ :; }
+_install_conda(){ :; }
+
 
 ### Set general environment settings
 export LC_ALL="C"

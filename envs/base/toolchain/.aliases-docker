@@ -1,0 +1,50 @@
+#!/bin/bash 
+
+#install docker
+_install-docker()
+{
+    [ "$(command -v docker)" ] && echo "[install docker] docker already installed" && return
+
+    if [[ -n "$_is_linux" ]]; then
+        sudo apt-get update
+        sudo apt-get install \
+            apt-transport-https \
+            ca-certificates \
+            curl \
+            gnupg \
+            lsb-release
+
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+        echo \
+        "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+        $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+        sudo apt-get update
+        sudo apt-get install docker-ce docker-ce-cli containerd.io    
+    elif [[ -n "$_is_macos" ]]; then
+        brew install docker
+    else
+        echo "[install_docker] Unsupported OS"
+    fi
+}
+
+#install docker-compose
+_install-docker-compose()
+{
+    [ "$(command -v docker-compose)"] && echo "[install_docker-compose] docker-compose already installed" && return
+
+    if [[ -n "$_is_linux" ]]; then
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+    elif [[ -n "$_is_macos" ]]; then
+        brew install docker-compose
+    else
+        echo "[install_docker-compose] Unsupported OS"
+    fi
+}
+
+alias dc='docker-compose'
+
+
+    

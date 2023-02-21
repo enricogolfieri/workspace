@@ -1,12 +1,12 @@
-#always load the base envinronment aliases
-. $HOME/.config/workspace/envs/base/.aliases
 
 # activate the base environment
 function activate-base-bash() {
+    . $HOME/.config/workspace/envs/base/.aliases
     . $HOME/.config/workspace/envs/base/.profile.bash
 }
 
 function activate-base-zsh() {
+    . $HOME/.config/workspace/envs/base/.aliases
     . $HOME/.config/workspace/envs/base/.profile.zsh
 }
 
@@ -16,6 +16,30 @@ function activate-mongo() {
     . $HOME/.config/workspace/envs/mongo/.profile
 }
 
+# activate the imaginary environment 
+function activate-imaginary() {
+    . $HOME/.config/workspace/envs/imaginary/.aliases
+    . $HOME/.config/workspace/envs/imaginary/.profile
+}
+
+# activate the imaginary environment docker
+function activate-imaginary-docker() {
+    _img_workdir_docker="$HOME/imaginary/docker"
+    mk -p "$_img_workdir_docker"
+
+    docker build -t imaginary < ./imaginary/Dockerfile
+
+    docker run -it --gpus all --rm -v $_img_workdir_docker:/root/imaginary \
+                                   -v $HOME/.config/workspace:/root/.config/workspace \
+                                   -v $HOME/.ssh:/root/.ssh \ 
+                                   -v $HOME/.gitconfig:/root/.gitconfig imaginary \
+                                   -v $HOME/.cache/huggingface:/root/.cache/huggingface \
+                                   -v $HOME/.cache/torch:/root/.cache/torch \
+                                   imaginairy /bin/bash
+
+# you really want to map the cache or you end up wasting a lot of time and space redownloading the model weights
+docker run -it  
+}
 
 
 
