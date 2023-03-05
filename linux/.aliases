@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#extending base/.aliases
-. $HOME/.config/workspace/envs/.aliases
+source $HOME/.config/workspace/envs/.aliases
 
 #install ffmpeg
 _install-ffmpeg()

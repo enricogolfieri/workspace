@@ -45,4 +45,3 @@ function ws-setup(){
 
     echo "Done!"
 }
-

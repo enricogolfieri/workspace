@@ -1,19 +1,19 @@
-#always load the base envinronment aliases
-. $HOME/.config/workspace/envs/base/.aliases
 
 # activate the base environment
 function activate-base-bash() {
+    . $HOME/.config/workspace/envs/base/.aliases
     . $HOME/.config/workspace/envs/base/.profile.bash
 }
 
 function activate-base-zsh() {
+    . $HOME/.config/workspace/envs/base/.aliases
     . $HOME/.config/workspace/envs/base/.profile.zsh
 }
 
 function activate-docker-ubuntu18()
 {
-    docker build --tag chiara18 - < $HOME/.config/workspace/linux/DockerFileU18
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara18
+    docker build --tag linda18 - < $HOME/.config/workspace/linux/DockerFileU18
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
 }
 
 function activate-docker-ubuntu20()
@@ -34,6 +34,29 @@ function activate-mongodev() {
 function activate-mongodev-docker() {
     docker buid -t u18/giulietta:v1 -f $HOME/.config/workspace/mongovm/DockerFile ~
 }
+
+# activate the imaginary environment 
+function activate-imaginary() {
+    . $HOME/.config/workspace/envs/imaginary/.aliases
+    . $HOME/.config/workspace/envs/imaginary/.profile
+}
+
+# activate the imaginary environment docker
+function activate-imaginary-docker() {
+    . $HOME/.config/workspace/envs/imaginary/.aliases
+
+    docker build -t imaginary - < $HOME/.config/workspace/envs/imaginary/Dockerfile
+
+    docker run -it --gpus all --rm -v $_img_workdir:/root/imaginary/local \
+                                   -v $HOME/.config/workspace:/root/.config/workspace \
+                                   -v $HOME/.ssh:/root/.ssh -v $HOME/.gitconfig:/root/.gitconfig \
+                                   -v $HOME/.cache/huggingface:/root/.cache/huggingface \
+                                   -v $HOME/.cache/torch:/root/.cache/torch \
+                                   imaginary /bin/bash
+ 
+}
+
+alias runimaginary='activate-imaginary-docker'
 
 
 
