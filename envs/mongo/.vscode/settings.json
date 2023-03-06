@@ -12,8 +12,8 @@
         "build.ninja": true,
         "compile_commands.json": true,
         "resmoke.ini": true,
-        ".cache" : true ,
-        ".mypy_cache" : true 
+        ".cache": true,
+        ".mypy_cache": true
     },
     "files.watcherExclude": {
         "buildscripts/": true,
@@ -30,7 +30,7 @@
         "resmoke.ini": true
     },
     "search.exclude": {
-        "buildscripts/": true,
+        "buildscripts/": false,
         "debian/": true,
         "distsrc/": true,
         "etc/": true,
@@ -146,49 +146,51 @@
         "queue": "cpp",
         "stack": "cpp"
     },
-    "C_Cpp.default.cppStandard": "c++20",
-    "C_Cpp.default.cStandard": "c17",
-    "C_Cpp.formatting": "disabled",
-    "C_Cpp.errorSquiggles": "disabled",
-    "cSpell.words": [
-        "BSON",
-        "BSONOBJ",
-        "dassert",
-        "DLEVEL",
-        "fassert",
-        "FCVP",
-        "jstests",
-        "logd",
-        "LOGV",
-        "multiversion",
-        "Noops",
-        "Oplog",
-        "optimes",
-        "sharded",
-        "shardsvr",
-        "stmts",
-        "tassert",
-        "Txns",
-        "uassert",
-        "uasserted",
-        "Unreplicated",
-        "UNSHARDED",
-        "upserted",
-        "wuow"
+    "clangd.arguments": [
+        "--query-driver=/opt/mongodbtoolchain/v4/bin/clang++",
+        "--header-insertion=never",
+        "-j=4"
     ],
+    "clangd.checkUpdates": true,
+    "clang-format.executable": "/opt/mongodbtoolchain/v4/bin/clang-format",
+    "clang-tidy.executable": "/opt/mongodbtoolchain/v4/bin/clang-tidy",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": [
+        "javascript"
+    ],
+    "files.associations": {
+        "SConstruct": "python",
+        "SConscript": "python",
+        "*.idl": "yaml",
+    },
+    "files.insertFinalNewline": true,
+    "js/ts.implicitProjectConfig.target": "ES2020",
+    "python.autoComplete.extraPaths": [
+        "/opt/mongodbtoolchain/v4/share/gcc-11.3.0/python",
+        "src/third_party/scons-3.1.2/scons-local-3.1.2"
+    ],
+    "python.defaultInterpreterPath": "python3-venv/bin/python",
+    "python.formatting.yapfPath": ".venv/bin/yapf",
+    "python.formatting.provider": "yapf",
     "python.linting.pylintEnabled": true,
+    "python.analysis.extraPaths": [
+        "/opt/mongodbtoolchain/v4/share/gcc-11.3.0/python",
+        "src/third_party/scons-3.1.2/scons-local-3.1.2"
+    ],
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "python3-venv/bin/mypy",
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.formatOnSave": true,
+    },
     "[cpp]": {
-        "editor.defaultFormatter": "xaver.clang-format"
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.formatOnSave": true,
     },
     "[javascript]": {
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[yaml]": {
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[python]": {
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "clang-format.executable": "/opt/mongodbtoolchain/v4/bin/clang-format",
-    "editor.formatOnSave": true
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.formatOnSave": true,
+    }
 }
