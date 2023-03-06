@@ -1,12 +1,8 @@
 
 
-. $HOME/.config/workspace/envs/base/utils/env.sh
 
 ## Python ####
 . $HOME/.config/workspace/envs/base/toolchain/.aliases-python
-
-## Docker ####
-. $HOME/.config/workspace/envs/base/toolchain/.aliases-docker
 
 ## Rust ####
 function _install_cargo()
@@ -24,7 +20,7 @@ function _install_cpp_env()
             sudo apt-get install -y cmake
             sudo apt-get install -y build-essential
             sudo apt-get install -y ninja-build
-            sudo apt install -y clang lldb lld
+            sudo apt install -y clang lldb lld llvm
             sudo apt-get install -y ccache
         elif  [[ -n "$_is_macos" ]]; then
             brew install cmake

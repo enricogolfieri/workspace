@@ -1,5 +1,4 @@
 #loads utility checks
-source $HOME/.config/workspace/envs/base/utils/env.sh
 __bat_version="v0.21.0"
 
 ## Utility installer ####

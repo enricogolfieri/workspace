@@ -28,6 +28,8 @@ if [[ $_shell_type == "-zsh" ]]; then
     _is_zsh=1
 elif [[ $_shell_type == "/bin/zsh" ]]; then
     _is_zsh=1
+elif [[ $_shell_type == "zsh" ]]; then
+    _is_zsh=1
 elif [[ $_shell_type == "bash" ]]; then
     _is_bash=1
 elif [[ $_shell_type == "/bin/bash" ]]; then

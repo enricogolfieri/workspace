@@ -6,6 +6,22 @@ _setup_workdir()
     mkdir -p "$_img_workdir"
 }
 
+_setup_docker_nvidia()
+{
+    sudo rm -rf /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    sudo rm -rf /etc/apt/sources.list.d/nvidia-docker.list
+    sudo rm -rf /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+    
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+    sudo nvidia-ctk runtime configure --runtime=docker
+    sudo systemctl restart docker
+}
+
 _setup_env()
 {
     _pyversion='3.10.6'
@@ -18,16 +34,65 @@ _setup_env()
      pyenv install $_pyversion && pyenv shell $_pyversion) ||
     (echo "pyenv shell $_pyversion failed" && return 1) );
 
-    python -m venv "$_img_workdir/.venv" || (echo "Failed to create virtual environment" && return 1);
+    python3 -m venv "$_img_workdir/.venv" || (echo "Failed to create virtual environment" && return 1);
+
+    imgx-activate || (echo "Failed to activate virtual environment" && return 1);
+    pip install --upgrade pip || (echo "Failed to upgrade pip" && return 1);
+    pip install imaginairy || (echo "Failed to install imaginairy" && return 1);
 }
 
-ws-install-imaginary()
+
+imgx-activate()
+{
+    source "$_img_workdir/.venv/bin/activate"
+}
+
+imgx-code()
+{
+    cd "$_img_workdir" 
+    imgx-activate
+    code .
+}
+
+imgx-setup()
 {
     [ -d "$_img_workdir" ] && echo "Imaginary workdir already exists, skipping..." && return 0;
 
     _setup_workdir
     _setup_env
+    cd "$_img_workdir"
+    imagine "a forest"; 
+    imagine --model sd21v "a forest"
 }
 
+imgx-download()
+{
+    echo "To implement"
+}
 
+imgx()
+{
+    local _cmd=$1
+    shift
+    case $_cmd in
+        activate)
+            imgx-activate
+        ;;
+        code)
+            imgx-code
+        ;;
+        setup)
+            imgx-setup
+        ;;
+        setup-nvidia)
+            _setup_docker_nvidia
+        ;;
+        download)
+            imgx-download
+        ;;
+        *)
+            imagine --output "$_img_workdir" "$@"
+        ;;
+    esac
+}
 

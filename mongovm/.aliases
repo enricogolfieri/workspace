@@ -1,3 +1,4 @@
+. ~/.config/workspace/envs/.aliases
 
 function ws-install-toolchain()
 {

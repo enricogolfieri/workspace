@@ -10,6 +10,21 @@ function activate-base-zsh() {
     . $HOME/.config/workspace/envs/base/.profile.zsh
 }
 
+function activate-docker-ubuntu18()
+{
+    docker build --tag linda18 - < $HOME/.config/workspace/envs/base/DockerFileU18
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
+}
+
+function activate-docker-ubuntu20()
+{
+    docker build --tag chiara20 - < $HOME/.config/workspace/envs/base/DockerFileU20
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
+}
+
+alias runlinda='activate-docker-ubuntu18'
+alias runchiara='activate-docker-ubuntu20'
+
 # activate the mongo environment 
 function activate-mongo() {
     . $HOME/.config/workspace/envs/mongo/.aliases
@@ -24,22 +39,21 @@ function activate-imaginary() {
 
 # activate the imaginary environment docker
 function activate-imaginary-docker() {
-    _img_workdir_docker="$HOME/imaginary/docker"
-    mk -p "$_img_workdir_docker"
+    . $HOME/.config/workspace/envs/imaginary/.aliases
 
-    docker build -t imaginary < ./imaginary/Dockerfile
+    docker build -t imaginary - < $HOME/.config/workspace/envs/imaginary/Dockerfile
 
-    docker run -it --gpus all --rm -v $_img_workdir_docker:/root/imaginary \
+    docker run -it --gpus all --rm -v $_img_workdir:/root/imaginary/local \
                                    -v $HOME/.config/workspace:/root/.config/workspace \
-                                   -v $HOME/.ssh:/root/.ssh \ 
-                                   -v $HOME/.gitconfig:/root/.gitconfig imaginary \
+                                   -v $HOME/.ssh:/root/.ssh -v $HOME/.gitconfig:/root/.gitconfig \
                                    -v $HOME/.cache/huggingface:/root/.cache/huggingface \
                                    -v $HOME/.cache/torch:/root/.cache/torch \
-                                   imaginairy /bin/bash
-
-# you really want to map the cache or you end up wasting a lot of time and space redownloading the model weights
-docker run -it  
+                                   imaginary /bin/bash
+ 
 }
+
+alias runimaginary='activate-imaginary-docker'
+
 
 
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source $HOME/.config/workspace/envs/.aliases
+
 #install ffmpeg
 _install-ffmpeg()
 {

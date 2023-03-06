@@ -24,6 +24,18 @@ function _install_wget()
     fi
 }
 
+# Install dependencies if not installed
+function _install_deps()
+{
+    if ! [ "$(command -v zlib)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            sudo apt-get install zlib1g-dev libbz2-dev openssl libssl-dev
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install zlib openssl
+        fi
+    fi
+}
+
 #install xclip if not installed
 function _install_xclip()
 {
@@ -67,6 +79,7 @@ function _install_vscode()
 
 function ws-install-utils()
 {
+    _install_deps
     _install_curl
     _install_wget
     _install_xclip
@@ -74,6 +87,17 @@ function ws-install-utils()
     _install_brew
     _install_vscode
 }
+
+function ws-test-utils()
+{
+    echo "Testing curl $(which curl)"
+    echo "Testing wget $(which wget)"
+    echo "Testing xclip $(which xclip)"
+    echo "Testing snap $(which snap)"
+    echo "Testing brew $(which brew)"
+    echo "Testing vscode $(which code)"
+}
+
 
 ### Utils ####
 
