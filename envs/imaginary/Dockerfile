@@ -9,4 +9,4 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
 RUN pip install imaginairy
 RUN imagine --help
 
-RUN echo "alias load='source /root/.config/workspace/imaginary/.aliases && echo imaginary environment activated'" >> /root/.bashrc
+RUN echo "alias load='source /root/.config/workspace/envs/imaginary/.aliases && echo imaginary environment activated'" >> /root/.bashrc

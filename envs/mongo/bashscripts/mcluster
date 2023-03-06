@@ -29,18 +29,6 @@ clean() {
   $__cmd_prefix rm -rf $__dir
 }
 
-load-sales()
-{
-	__enable_python_env
-	__load_file "sales/init.js"
-}
-
-load-bigstring()
-{
-	__enable_python_env
-	__load_file "bigstring/init.js"
-}
-
 launch()
 {
 	__enable_python_env
@@ -150,22 +138,15 @@ __launch()
 	$__cmd_prefix mlaunch $@ --dir $__dir 
 }
 
-__load_file()
-{
-	$__cmd_prefix mongo --eval "load('$HOME/.config/workspace/envs/mongo/queries/$1)"
-}
-
 __init()
 {
 	echo "ready to init..."
-	clean 
 	if [ -n "$__watch" ]; then
 		__launch init --mongos 2 $@ 
 		$__cmd_prefix mtails watch 
 	else
 		__launch init $@ 
 	fi
-	__load_file "utils.js"
 }
 
 __enable_python_env()
@@ -192,7 +173,7 @@ __parse_args()
 	[[ -z ${__parsed_args} ]] && __parsed_args=true || return 0;
 
 	__cmd_prefix=;
-	__dir="./cdata/"
+	__dir="~/.mcluster/cdata/"
 	__cmd=;
 	__port=27017;
 	__watch=;

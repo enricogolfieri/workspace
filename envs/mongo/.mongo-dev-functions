@@ -8,12 +8,41 @@
 
 alias resmoke='python ./buildscripts/resmoke.py'
 
+mongo-new-branch()
+{
+
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-parse-args $@;
+
+	__new_branch=$1
+	__description=$2
+
+	[[ -z ${__new_branch} ]] && echo "new branch name is required" && return 1;
+	[[ -z ${__description} ]] && echo "branch description is required" && return 1;
+
+	${__cmd_prefix} git checkout  ${__mongo_branch} || ( echo "error occured while moving to ${__mongo_branch}, please fix the error fist and try again" && return 1 );
+	${__cmd_prefix} git pull origin ${__mongo_branch} || ( echo "error occured while pulling from ${__mongo_branch}, please fix the error fist and try again" && return 1 );
+	${__cmd_prefix} git checkout -b ${__new_branch} || ( echo "error occured while creating new branch ${__new_branch}, please fix the error fist and try again" && return 1 );
+
+	${__cmd_prefix} __set_branch_description "$__description";
+
+	if [ "${__mongo_branch}" != "$MONGO_WORKDIR_BRANCH" ]; then
+		${__cmd_prefix} mongo-prepare
+		${__cmd_prefix} mongo-configure	
+	fi
+
+	${__cmd_prefix} mongo-build
+
+	)
+
+}
+
 mongo-prepare ()
 {
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
-	echo 
 
 	if [[ ${__cmd_prefix} != echo ]]; then
 		echo "WARNING: All uncommitted changes and unversioned files will be lost";
@@ -39,13 +68,11 @@ mongo-prepare ()
 	esac 
 
 	#install db-contrib-tools
-	python3 -m pip install pipx
-	python3 -m pipx ensurepath
-	python3 -m pipx install db-contrib-tool
-	python3 -m pipx upgrade db-contrib-tool
+	${MONGO_VENV_DIRNAME}/bin/python3  -m pip install pipx
+	${MONGO_VENV_DIRNAME}/bin/python3  -m pipx ensurepath
+	${MONGO_VENV_DIRNAME}/bin/python3  -m pipx install db-contrib-tool
+	${MONGO_VENV_DIRNAME}/bin/python3  -m pipx upgrade db-contrib-tool
 	
-	#copy vs code settings
-	[ -d  "$HOME/.config/workspace/envs/mongo/.vscode/" ] || cp -r $HOME/.config/workspace/envs/mongo/.vscode/ .
 	)
 
 }
@@ -70,6 +97,8 @@ mongo-configure ()
 	__mongo-check-wrkdir;
 	__mongo-parse-args $@;
 
+	__set_branch_value $__mongo_branch;
+	
 	#add enterprise module 
 	echo "modules $__modules"
 	if [ $__modules == "enterprise" ]; then
@@ -127,6 +156,12 @@ mongo-build ()
 	)
 }
 
+mongo-reset-vscode-settings()
+{
+	#copy vs code settings
+	cp -r $HOME/.config/workspace/envs/mongo/.vscode/ .
+}
+
 # Runs the unit tests.
 mongo-unit()
 {
@@ -141,6 +176,19 @@ mongo-unit()
 		else
 			${__cmd_prefix} mrlog -c -e ${MONGO_VENV_DIRNAME}/bin/python3 -- buildscripts/resmoke.py run --jobs=12 --suite=unittests
 		fi
+	)
+}
+
+# Runs the benchmark test 
+mongo-benchmark()
+{
+	__mongo-parse-args $@;
+	( set -e;
+		[ -z "$1" ] && echo "Usage: mongo-benchmark <benchmark_name>" && return 1
+		${__cmd_prefix} ninja -j400 ./build/install/bin/$1 && ./build/install/bin/$1 --benchmark_out_format=csv --benchmark_out="./$1.csv"
+
+		#open csv if visual studio code terminal is used
+		[[ "$TERM_PROGRAM" == "vscode" ]] && ${__cmd_prefix} code -r ./$1.csv
 	)
 }
 
@@ -198,7 +246,8 @@ mongo-lint-check ()
 	( set -e;
 	__mongo-check-wrkdir;
 	__mongo-check-venv;
-	__mongo_variable_path
+	__mongo-parse-args $@;
+	__mongo_variable_path;
 
 	${__cmd_prefix} ./buildscripts/scons.py --variables-files=$MONGO_VARIABLE_PATH lint
 	)
@@ -255,7 +304,8 @@ mongo-test-remotely ()
 	__mongo-parse-args $@;
 	
 	if [ -z "${__args[0]}" ]; then
-		msg=$(git log -n 1 --pretty=%B | head -n 1);
+		__load_branch_description
+		msg=$__description
 		if [[ ${__cmd_prefix} != echo ]]; then
 			echo ${msg};
 			read -p "Do you want change the title of this Evergreen patch? [y/N] ";
@@ -316,9 +366,9 @@ mongo-merge ()
 	__mongo-parse-args $@;
 		
 	if [ -z "${__args[0]}" ]; then
-
-		__pause;
-		[ -z "$__modules" ] || __pause=" --pause";
+		echo "ciao"
+		__pause=;
+		[ -n "$__modules" ] && __pause=" --pause";
 		${__cmd_prefix} evergreen commit-queue merge --project mongodb-mongo-${__mongo_branch} ${__args[@]} $__pause
 
 		[ -n "$__modules" ] && echo "COPY THE ID OF THE PATCH AND RUN: mongo-merge --$__modules <patch_id>"
@@ -335,14 +385,32 @@ mongo-merge ()
 	)
 }
 
+mongo-set-branch()
+{
+	( set -e;
+	__mongo-check-wrkdir;
+	__mongo-parse-args $@;
+	
+	__load_branch_value
+	echo "mongo-branch-value, before: ${MONGO_WORKDIR_BRANCH}"
+
+	__set_branch_value $__mongo_branch
+
+	# show it to the user
+	echo "mongo-branch-value, after: ${MONGO_WORKDIR_BRANCH}"
+
+	)
+}
+
 mongo-debug ()
 {
 	( set -e;
 	__mongo-parse-args $@;
 	__mongo_variable_path 
-
+	__load_branch_value
 	echo __cmd_prefix=${__cmd_prefix};
 	echo __mongo_branch=${__mongo_branch};
+	echo __isv44plus=${__isv44plus};
 	echo __toolchain=${__toolchain};
 	echo __build_mode=${__build_mode};
 	echo __link_model=${__link_model};
@@ -351,6 +419,7 @@ mongo-debug ()
 	echo __tasks=${__tasks};
 	echo __modules=${__modules};
 	echo "MONGO_VARIABLE_PATH=${MONGO_VARIABLE_PATH}"
+	echo "MONGO_WORKDIR_BRANCH=${MONGO_WORKDIR_BRANCH}"
 	echo "ICECC_VAR=${ICECC_VAR}"
 	echo "CCACHE_VAR=${CCACHE_VAR}"
     echo "JOBS=${JOBS}"
@@ -364,7 +433,6 @@ mongo-debug ()
 ###
 
 MONGO_VENV_DIRNAME=${MONGO_VENV_DIRNAME:-'.venv'}
-MONGO_TOOLCHAIN_VER=${MONGO_TOOLCHAIN_VER:-'v4'}
 ICECC_VAR="ICECC=icecc"
 CCACHE_VAR="CCACHE=ccache"
 JOBS=400
@@ -382,7 +450,23 @@ fi
 ###
 
 __mongo_variable_path ()
-{
+{	
+	MONGO_TOOLCHAIN_VER="v4"
+	case ${__mongo_branch} in
+		v4.0)
+			MONGO_TOOLCHAIN_VER="v2";;
+		v4.2)
+			MONGO_TOOLCHAIN_VER="v3";;
+		v4.4)
+			MONGO_TOOLCHAIN_VER="v3";;
+		v5.0)
+			MONGO_TOOLCHAIN_VER="v3";;
+		v6.0)
+			MONGO_TOOLCHAIN_VER="v3";;
+		*)
+			MONGO_TOOLCHAIN_VER="v4";;
+	esac
+
 	MONGO_VARIABLE_PATH=${MONGO_VARIABLE_PATH:-"etc/scons/mongodbtoolchain_${MONGO_TOOLCHAIN_VER}_${__toolchain}.vars"}
 	if [ -n "$_is_macos" ]; then
 		MONGO_VARIABLE_PATH="etc/scons/xcode_macosx.vars"
@@ -426,7 +510,8 @@ __mongo-parse-args ()
 	[[ -z ${__parsed_args} ]] && __parsed_args=true || return 0;
 
 	__cmd_prefix=;
-	__mongo_branch=master;
+	__load_branch_value
+	__mongo_branch=$MONGO_WORKDIR_BRANCH;
 	__isv44plus=true;
 	__toolchain=clang;
 	__build_mode='--opt=off --dbg=on';
@@ -452,13 +537,27 @@ __mongo-parse-args ()
 				__mongo_branch=master;
 				shift
 			;;
-			--v*)
-				__mongo_branch=${1#*--}
+			--v3.*) # v3.6, v3.6.3, etc
+				echo "ERROR: v3.x is not supported anymore"
+				return 1
 				shift
 			;;
 			--v4.0)
 				__isv44plus=false;
 				__mongo_branch=v4.0;
+				shift
+			;;
+			--v4.2)
+				__isv44plus=false;
+				__mongo_branch=v4.2;
+				shift
+			;;
+			--v*)
+				__mongo_branch=${1#*--}
+				shift
+			;;
+			--master)
+				__mongo_branch=master;
 				shift
 			;;
 			--clang)
@@ -471,6 +570,10 @@ __mongo-parse-args ()
 			;;
 			--debug)
 				__build_mode='--opt=off --dbg=on';
+				shift
+			;;
+			--benchmark)
+				__build_mode='--opt=on --dbg=on';
 				shift
 			;;
 			--sanitize-address)
@@ -527,6 +630,46 @@ __mongo-parse-args ()
 			;;
 		esac;
 	done;
+}
+
+#add last folder to the path
+default_branch_file="./mongo-branch-value"
+__load_branch_value()
+{
+
+	# if we don't have a file, we choose master
+	if [ ! -f "$default_branch_file" ]; then
+		MONGO_WORKDIR_BRANCH="master"
+
+	# otherwise read the value from the file
+	else
+		MONGO_WORKDIR_BRANCH=$(cat "$default_branch_file")
+	fi
+}
+__set_branch_value()
+{
+	MONGO_WORKDIR_BRANCH=$1
+	# and save it for next time
+	echo "${MONGO_WORKDIR_BRANCH}" > "$default_branch_file"
+}
+
+description_file="./mongo-branch-description"
+__load_branch_description()
+{
+	# if we don't have a file, we choose master
+	if [ ! -f "$description_file" ]; then
+		__description="no description"
+
+	# otherwise read the value from the file
+	else
+		__description=$(cat "$description_file")
+	fi
+}
+
+__set_branch_description()
+{
+	__description=$1
+	echo "${__description}" > "$description_file"
 }
 
 __mongo-configure-ninja ()

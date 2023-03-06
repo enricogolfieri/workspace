@@ -26,13 +26,9 @@ alias runlinda='activate-docker-ubuntu18'
 alias runchiara='activate-docker-ubuntu20'
 
 # activate the mongo environment 
-function activate-mongodev() {
+function activate-mongo() {
     . $HOME/.config/workspace/envs/mongo/.aliases
     . $HOME/.config/workspace/envs/mongo/.profile
-}
-
-function activate-mongodev-docker() {
-    docker buid -t u18/giulietta:v1 -f $HOME/.config/workspace/mongovm/DockerFile ~
 }
 
 # activate the imaginary environment 

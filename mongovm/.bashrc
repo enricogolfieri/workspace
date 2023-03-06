@@ -1,5 +1,4 @@
 ### Load environment aliases
-. $HOME/.config/workspace/envs/.aliases
 . $HOME/.config/workspace/mongovm/.aliases
 
 ### Activate base environment
