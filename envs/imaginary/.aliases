@@ -1,0 +1,33 @@
+
+_img_workdir="$HOME/imaginary/local"
+
+_setup_workdir()
+{
+    mkdir -p "$_img_workdir"
+}
+
+_setup_env()
+{
+    _pyversion='3.10.6'
+    
+    #delete if exists
+    [[ -d "$_img_workdir/.venv" ]] && rm -rf "$_img_workdir/.venv";
+
+    pyenv shell $_pyversion ||
+    ( (echo "$_pyversion not found, ready to install..." &&
+     pyenv install $_pyversion && pyenv shell $_pyversion) ||
+    (echo "pyenv shell $_pyversion failed" && return 1) );
+
+    python -m venv "$_img_workdir/.venv" || (echo "Failed to create virtual environment" && return 1);
+}
+
+ws-install-imaginary()
+{
+    [ -d "$_img_workdir" ] && echo "Imaginary workdir already exists, skipping..." && return 0;
+
+    _setup_workdir
+    _setup_env
+}
+
+
+

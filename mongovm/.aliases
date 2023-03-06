@@ -1,11 +1,3 @@
-## Load aliases
-. $HOME/.config/workspace/envs/.aliases
-
-## C/C++ ####
-# Not needed since we are using /opt/mongodbtoolchain
-_install_cpp_env(){ :; }
-_install_pyenv(){ :; }
-_install_conda(){ :; }
 
 function ws-install-toolchain()
 {

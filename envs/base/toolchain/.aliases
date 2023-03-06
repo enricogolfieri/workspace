@@ -1,57 +1,19 @@
 
-__sys_python3_version="3.9.2"
 
 . $HOME/.config/workspace/envs/base/utils/env.sh
 
-## python ####
-function _install_conda()
-{
-    # Install conda
-    if ! [ "$(command -v conda)" ]; then
-        case $_os in
-            Linux)
-                wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
-            ;;
-            Darwin)
-                wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O /tmp/miniconda.sh
-            ;;
-        esac
+## Python ####
+. $HOME/.config/workspace/envs/base/toolchain/.aliases-python
 
-        bash /tmp/miniconda.sh -b -p $HOME/miniconda
-        rm /tmp/miniconda.sh
-        ### init conda, the following command write scripts into your shell init file automatically
-        export PATH="$HOME/miniconda/bin:$PATH"
-        conda init
-
-        # disable init of env "base"
-        conda config --set auto_activate_base false
-    else
-        echo "[install_conda] Conda already installed"
-    fi
-}
-
-function _install_pyenv()
-{
-    #install pyenv
-    if [ ! -d "$HOME/.pyenv" ] 
-    then
-        git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
-    fi
-
-    #setup python
-    export PYENV_ROOT="$HOME/.pyenv"
-    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-    pyenv install $__sys_python3_version
-    pyenv global $__sys_python3_version
-}
+## Docker ####
+. $HOME/.config/workspace/envs/base/toolchain/.aliases-docker
 
 ## Rust ####
 function _install_cargo()
 {
-    if ! [ "$(command -v cargo)" ]; then
-        curl https://sh.rustup.rs -sSf | sh
-    fi
+    [ "$(command -v cargo)" ] && echo "[install_cargo] cargo already installed" && return 0
+    
+    curl https://sh.rustup.rs -sSf | sh
 }
 
 ## C/C++ ####
@@ -70,6 +32,8 @@ function _install_cpp_env()
             brew install ccache
             #better install xcode manually
         fi
+    else
+        echo "[install_cpp_env] cmake already installed"
     fi
 }
 
@@ -86,6 +50,7 @@ function _load_nvm()
         [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     fi
 }
+
 function _install_nvm_nodejs()
 {
     #install nvm 
@@ -126,6 +91,8 @@ function ws-install-env()
     _install_pyenv
     _install_cargo
     _install_nvm_nodejs
+    _install_docker
+    _install_docker-compose
 }
 
 function ws-test-env()
@@ -151,69 +118,8 @@ function ws-test-env()
     ( [ "$(command -v ninja)" ] && echo "Ninja: $(ninja --version)" ) || echo "Ninja: NOT FOUND";
     ( [ "$(command -v ccache)" ] && echo "Ccache: $(ccache --version)" ) || echo "Ccache: NOT FOUND";
     ( [ "$(command -v cmake)" ] && echo "CMake: $(cmake --version)" ) || echo "CMake: NOT FOUND";
-}
 
-## Utility python ####
-#redifining cd to automatically activate python inside .venv
-cd ()
-{
-	builtin cd $@
-
-	# Check there is no virtual environment activated.
-	if [[ -z ${VIRTUAL_ENV} ]]; then
-		# If the .venv directory is found then activate the virtual
-		# environment.
-		if [[ -d ./.venv ]]; then
-			. .venv/bin/activate
-		fi
-	else
-		# If the current directory does not belong to earlier VIRTUAL_ENV
-		# directory then deactivate the virtual environment.
-		PARENT_DIR=$(dirname ${VIRTUAL_ENV})
-		if [[ ${PWD}/ != ${PARENT_DIR}/* ]]; then
-			deactivate
-		fi
-	fi
-}
-
-# activate python env
-function _activate_venv()
-{
-    ./.venv/bin/activate
-}
-
-# create a new python virtual environment local to the current directory
-function vsetup()
-{   
-    _pyversion=$1
-    [ -z "$1" ] && _pyversion=$__sys_python3_version
-    
-    pyenv shell $_pyversion ||
-    echo "$_pyversion not found, ready to install..." &&
-    pyenv install $_pyversion && pyenv shell $_pyversion ||
-    echo "pyenv shell $_pyversion failed" && return 1;
-
-    python -m venv ./.venv || echo "Failed to create virtual environment" && return 1;
-
-    #install requirements if exists
-    if [ -f "requirements.txt" ]; then
-        _activate_venv
-        pip install -r requirements.txt
-    fi
-}
-
-# create a new conda virtual environment and activate it
-function vsetup-conda()
-{
-    conda env create -f ./environment.yml
-    
-    #install requirements if exists
-    local _envname=$(head -n 1 environment.yml | cut -d' ' -f2)
-    if [ -f "requirements.txt" ]; then
-        conda activate $_envname
-        pip install -r requirements.txt 
-    fi
-
-    #activate conda env
-    conda activate $_envname
+    #Docker
+    ( [ "$(command -v docker)" ] && echo "Docker: $(docker --version)" ) || echo "Docker: NOT FOUND";
+    ( [ "$(command -v docker-compose)" ] && echo "Docker-compose: $(docker-compose --version)" ) || echo "Docker-compose: NOT FOUND";
 }

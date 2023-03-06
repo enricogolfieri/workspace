@@ -24,11 +24,15 @@ fi
 
 _shell_type=$(ps -o comm= -p $$)
 
-if [[ $_shell_type == "zsh" ]]; then
+if [[ $_shell_type == "-zsh" ]]; then
+    _is_zsh=1
+elif [[ $_shell_type == "/bin/zsh" ]]; then
     _is_zsh=1
 elif [[ $_shell_type == "bash" ]]; then
     _is_bash=1
+elif [[ $_shell_type == "/bin/bash" ]]; then
+    _is_bash=1
 else
-    echo "[ENV] Unsupported shell, impossible to setup"
+    echo "[ENV] Unsupported shell, no guarantee the environment will work"
     return 1
 fi
