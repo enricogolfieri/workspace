@@ -12,13 +12,13 @@ function activate-base-zsh() {
 
 function activate-docker-ubuntu18()
 {
-    docker build --tag linda18 - < $HOME/.config/workspace/linux/DockerFileU18
+    docker build --tag linda18 - < $HOME/.config/workspace/envs/base/DockerFileU18
     docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
 }
 
 function activate-docker-ubuntu20()
 {
-    docker build --tag chiara20 - < $HOME/.config/workspace/linux/DockerFileU20
+    docker build --tag chiara20 - < $HOME/.config/workspace/envs/base/DockerFileU20
     docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
 }
 
