@@ -3,4 +3,4 @@ FROM ubuntu:20.04
 RUN apt-get update && \
       apt-get -y install sudo
 
-RUN echo "alias load='source $HOME/.config/workspace/envs/base/.aliases' && activate-base-bash" >> /root/.bashrc
+RUN echo "alias load='source $HOME/.config/workspace/envs/.aliases && activate-base-bash'" >> /root/.bashrc

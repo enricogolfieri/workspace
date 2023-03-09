@@ -1,29 +1,41 @@
+load_brew
+
 ### Add cargo bin if it exists
 if [ -d "$HOME/.cargo/bin" ]
 then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
-### Add conda if it exists
-if [ -d "$HOME/miniconda/bin" ]
-then
-    export PATH="$HOME/miniconda/bin:$PATH"
-fi
-
 ### Add pyenv if exists 
-if [ -d "$HOME/.pyenv/" ]
-then
+if [ -d "$HOME/.pyenv" ]; then
+    #setup python
     export PYENV_ROOT="$HOME/.pyenv"
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init -)"
 fi
 
 ### Add nvm (I think this is not needed because nvm installation already adds it to .bashrc)
-if [[ -n "$_is_macos" ]]; then
-    export NVM_DIR="$HOME/.nvm"
+if [ -d $HOME/.nvm ]; then
     source $(brew --prefix nvm)/nvm.sh
-else
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
+
+### fzf 
+export FZF_DEFAULT_COMMAND='fd --type f --color=never --hidden'
+export FZF_DEFAULT_OPTS='--no-height --color=bg+:#343d46,gutter:-1,pointer:#ff3c3c,info:#0dbc79,hl:#0dbc79,hl+:#23d18b'
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
+
+export FZF_ALT_C_COMMAND='fd --type d . --color=never --hidden'
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
+
+### git 
+[ -n $_is_bash ] && . $wsbase_path/toolchain/git-prompt.sh && . $wsbase_path/toolchain/git-completion.sh
+[ -n $_is_zsh ] && . $wsbase_path/toolchain/git-completion.zsh
+
+
+
+
+
+
+

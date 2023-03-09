@@ -1,8 +1,0 @@
-
-. $HOME/.config/workspace/envs/base/utils/env.sh
-
-. $HOME/.config/workspace/envs/mongo/.mongo-dev-functions
-
-. $HOME/.config/workspace/envs/mongo/.mongo-tools
-
-. $HOME/.config/workspace/envs/mongo/.mongo-evg-functions

@@ -1,5 +1,5 @@
 ### Load environment aliases
-. $HOME/.config/workspace/mongovm/.aliases
+. $HOME/.config/workspace/envs/.aliases
 
 ### Activate base environment
 activate-base-bash
@@ -7,12 +7,17 @@ activate-base-bash
 ### Always enable mongo-env
 activate-mongo
 
-## C/C++ ####
-# Not needed since we are using /opt/mongodbtoolchain
-_install_cpp_env(){ :; }
-_install_pyenv(){ :; }
-_install_conda(){ :; }
+function ws-setup-mongovm()
+{
+    ws-setup
+    mongo-setup-tools
+    mongo-setup-toolchain
+}
 
+# Not needed since we are using /opt/mongodbtoolchain
+function _install_pyenv(){
+    echo "_install_pyenv not implemented for mongovm" 
+}
 
 ### Set general environment settings
 export LC_ALL="C"
@@ -31,5 +36,3 @@ export PATH="/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoo
 
 export PATH=/opt/mongodbtoolchain/v4/bin:${PATH}
 alias ninja=/opt/mongodbtoolchain/v4/bin/ninja
-
-

@@ -1,0 +1,22 @@
+### Compute _os variable
+__sys_python3_version="3.10.6"
+
+_os="Linux";
+case `uname` in
+    Darwin)
+        _os="Darwin"
+        _is_macos=1
+    ;;
+    Linux)
+        _os="Linux"
+        _is_linux=1
+    ;;
+    *)
+        echo "[ENV] Unsupported OS, impossible to setup"
+        return 1            
+    ;;
+esac
+
+if [[ $(uname -m) == 'arm64' ]]; then
+  _is_arm=1
+fi

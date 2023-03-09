@@ -1,47 +1,9 @@
 
-source $HOME/.config/workspace/envs/base/utils/env.sh
+ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+wsbase_path=$(dirname "$ABSOLUTE_PATH")
 
-# Workspace tools
-. $HOME/.config/workspace/envs/base/utils/.aliases
+. $wsbase_path/.config-workspace
 
-# Git tools
-. $HOME/.config/workspace/envs/base/git/.aliases
+. $wsbase_path/toolchain/.aliases
 
-# Fuzzy finder tools
-. $HOME/.config/workspace/envs/base/fzf/.aliases
-
-# Coding tools and utilities
-. $HOME/.config/workspace/envs/base/toolchain/.aliases
-
-# Terminal themes
-. $HOME/.config/workspace/envs/base/oh-my-posh/.aliases
-
-# Task managers tools
-. $HOME/.config/workspace/envs/base/tools/.aliases
-
-# Docker tools
-. $HOME/.config/workspace/envs/base/docker/.aliases
-
-### Set aliases
-alias ls='ls -h --color=auto'
-alias ll='ls -l'
-alias la='ls -la'
-alias rm='rm -i'
-alias grep='grep --color=always'
-alias more='more --RAW-CONTROL-CHARS --chop-long-lines'
-alias less='less --RAW-CONTROL-CHARS --chop-long-lines --IGNORE-CASE'
-
-
-function ws-setup(){
-    echo "installin workspace dependencies..."
-
-    ws-install-utils
-    ws-install-git
-    ws-install-env
-    ws-install-tools
-    ws-install-fzf
-    ws-install-oh_my_posh    
-    ws-install-docker
-
-    echo "Done!"
-}
+. $wsbase_path/oh-my-posh/.aliases

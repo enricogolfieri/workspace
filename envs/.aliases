@@ -12,24 +12,37 @@ function activate-base-zsh() {
 
 function activate-docker-ubuntu18()
 {
-    docker build --tag linda18 - < $HOME/.config/workspace/envs/base/DockerFileU18
+    docker build --tag linda18 - < $wsbase_path/DockerFileU18
     docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
 }
 
 function activate-docker-ubuntu20()
 {
-    docker build --tag chiara20 - < $HOME/.config/workspace/envs/base/DockerFileU20
+    docker build --tag chiara20 - < $wsbase_path/DockerFileU20
     docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
 }
 
 alias runlinda='activate-docker-ubuntu18'
 alias runchiara='activate-docker-ubuntu20'
 
-# activate the mongo environment 
-function activate-mongo() {
-    . $HOME/.config/workspace/envs/mongo/.aliases
-    . $HOME/.config/workspace/envs/mongo/.profile
+function activate-mongo()
+{
+    if [ ! -d "$HOME/.config/workspace-mongo" ]; then
+        git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo --branch v1.0-devel
+    fi
+    . $HOME/.config/workspace-mongo/.aliases
+    mongo-activate
 }
+
+function rungiulietta()
+{
+    if [ ! -d "$HOME/.config/workspace-mongo" ]; then
+        git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo --branch v1.0-devel
+    fi
+    . $HOME/.config/workspace-mongo/.aliases
+    rungiulietta
+}
+
 
 # activate the imaginary environment 
 function activate-imaginary() {
@@ -49,8 +62,9 @@ function activate-imaginary-docker() {
                                    -v $HOME/.cache/huggingface:/root/.cache/huggingface \
                                    -v $HOME/.cache/torch:/root/.cache/torch \
                                    imaginary /bin/bash
- 
 }
+alias runimaginary='activate-imaginary-docker'
+
 
 alias runimaginary='activate-imaginary-docker'
 
