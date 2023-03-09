@@ -66,6 +66,9 @@ function activate-imaginary-docker() {
 alias runimaginary='activate-imaginary-docker'
 
 
+alias runimaginary='activate-imaginary-docker'
+
+
 
 
 

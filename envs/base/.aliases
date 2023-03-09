@@ -7,12 +7,3 @@ wsbase_path=$(dirname "$ABSOLUTE_PATH")
 . $wsbase_path/toolchain/.aliases
 
 . $wsbase_path/oh-my-posh/.aliases
-
-# activate the base environment
-function activate-base-bash() {
-    . $HOME/.config/workspace/envs/base/.profile.bash
-}
-
-function activate-base-zsh() {
-    . $HOME/.config/workspace/envs/base/.profile.zsh
-}
