@@ -30,8 +30,7 @@ export FZF_ALT_C_COMMAND='fd --type d . --color=never --hidden'
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
 
 ### git 
-[ -n $_is_bash ] && . $wsbase_path/toolchain/git-prompt.sh && . $wsbase_path/toolchain/git-completion.sh
-[ -n $_is_zsh ] && . $wsbase_path/toolchain/git-completion.zsh
+[[  -n $_is_bash ]] && . $wsbase_path/toolchain/git-prompt.sh && . $wsbase_path/toolchain/git-completion.sh
 
 
 
