@@ -1,0 +1,39 @@
+function ws-generate-rsa-key()
+{
+    echo "Please enter your email address: "
+    read email
+    ssh-keygen -t rsa -b 4096 -C $email
+
+    # Start the ssh-agent in the background
+    eval "$(ssh-agent -s)"
+
+    # Add your SSH private key to the ssh-agent
+    ssh-add ~/.ssh/id_rsa
+
+    # Copy the SSH key to your clipboard
+    xclip -sel clip < ~/.ssh/id_rsa.pub
+    echo "Note: SSH public key copied to clipboard"
+
+    if [[ -n "$_is_macos" ]]; then
+        echo "You are on a Mac. Please update ~/.ssh/config (create if does not exist) with the following:"
+        echo "Host *.github.com
+                AddKeysToAgent yes
+                UseKeychain yes
+                IdentityFile ~/.ssh/id_rsa"
+        echo "if you chose not to add a passphrase to your key:"
+        echo "Host *.github.com
+              IgnoreUnknown UseKeychain"
+    fi
+}
+
+## Configure git email and name
+function ws-git-configure()
+{
+    echo "Please enter your git email address: "
+    read email
+    echo "Please enter your git name: "
+    read name
+    git config --global user.email $email
+    git config --global user.name $name
+}
+
