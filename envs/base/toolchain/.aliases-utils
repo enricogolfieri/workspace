@@ -31,7 +31,7 @@ function ws-cleantmp()
 }
 
 ## Workspace functions #####
-function ws-update() {
+function ws-update-base() {
     cd $HOME/.config/workspace
     git pull
     cd -

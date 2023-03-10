@@ -69,6 +69,15 @@ function activate-imaginary-docker() {
 }
 alias runimaginary='activate-imaginary-docker'
 
+function ws-update()
+{
+    _cd=$(pwd)
+    cd $HOME/.config/workspace
+    git pull
+    cd $HOME/.config/workspace-mongo
+    git pull
+    cd $_cd
+}
 
 
 
