@@ -14,7 +14,7 @@ alias vactivate="ws-venv-activate"
 function ws-venv-setup()
 {   
     _pyversion=$1
-    [ -z "$1" ] && echo "Usage: vsetup <python version (3.x.x)>" && return 1
+    [ -z "$1" ] && echo "Usage: vsetup <python version (3.x.x)> [requirements-file-name]" && return 1
     
     #delete if exists
     [[ -d "./.venv" ]] && rm -rf "./.venv";
@@ -27,7 +27,8 @@ function ws-venv-setup()
     python -m venv ./.venv || (echo "Failed to create virtual environment" && return 1);
 
     #install requirements if exists
-    if [ -f "requirements.txt" ]; then
+    $requiments_file_name=${2:-"requirements.txt"}
+    if [[ -f "$requiments_file_name" ]]; then
         source ./.venv/bin/activate \
         && python -m pip install --upgrade pip && \
         pip install -r requirements.txt
@@ -35,6 +36,50 @@ function ws-venv-setup()
 }
 alias vsetup="ws-venv-setup"
 alias vsetup-default="ws-venv-setup $__sys_python3_version"
+
+# CONVERT a classic python virtual environment setup to a poetry project
+function ws-poetry-setup()
+{
+    _pyversion=$1
+    [[ -z "$1" ]] && echo "Usage: psetup <python version (3.x.x)> [requirements-file-name]" && return 1
+    
+    [[ -f ./pyproject.toml ]] && echo "Poetry already setup" && return 0
+    
+    #test environment is already setup
+    poetry run python && echo "Poetry already setup" && return 0
+
+    #delete if exists
+    [[ -d "./.venv" ]] && rm -rf "./.venv";
+
+    pname=$(basename $(pwd))
+    poetry init --name=$pname --python=$_pyversion -n 
+    $requiments_file_name=${2:-"requirements.txt"}
+    cat $requiments_file_name | xargs poetry add
+}
+alias psetup="ws-poetry-setup"
+alias psetup-default="ws-poetry-setup $__sys_python3_version"
+alias pp="poetry run python"
+
+# CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory
+function ws-venv-git()
+{     
+    _repo_url=$1
+    _pyversion=$2
+    _requiments_file_name=${3:-"requirements.txt"}
+    [[ $# -lt 2 ]] && echo "Usage: vgit <repo-url> <python version (3.x.x)> [requirements-file-name]" && return 1
+
+    git clone $_repo_url
+    cd $(basename $_repo_url .git)
+    ws-poetry-setup $_pyversion $_requiments_file_name
+}
+alias vgit="ws-venv-git"
+function vgit-default()
+{
+    _repo_url=$1
+    _pyversion=$__sys_python3_version
+    _requiments_file_name=${2:-"requirements.txt"}
+    ws-venv-git $_repo_url $__sys_python3_version $_requiments_file_name
+}
 
 ## Utility python ####
 #redifining cd to automatically activate python inside .venv

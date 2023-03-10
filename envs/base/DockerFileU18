@@ -1,8 +1,0 @@
-#run docker image with base environment loaded
-FROM ubuntu:18.04
-RUN apt-get update && \
-      apt-get -y install sudo
-
-RUN echo "alias load='source $HOME/.config/workspace/envs/.aliases && activate-base-bash'" >> /root/.bashrc
-
-

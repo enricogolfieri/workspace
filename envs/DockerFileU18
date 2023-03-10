@@ -1,0 +1,15 @@
+#run docker image with base environment loaded
+FROM ubuntu:18.04
+RUN apt-get update && \
+      apt-get install -y git curl build-essential sudo
+#install brew
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+#link brew
+RUN eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+
+#utility
+RUN echo "alias load='source $HOME/.config/workspace/envs/.aliases && activate-base-bash'" >> /root/.bashrc
+
+

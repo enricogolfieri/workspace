@@ -16,6 +16,8 @@ function ws-setup()
 
     #python
     _install_pyenv
+    brew install poetry
+    
     #nodejs
     _install_nvm_nodejs
     #rust
