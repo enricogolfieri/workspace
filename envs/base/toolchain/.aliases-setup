@@ -36,11 +36,12 @@ function ws-setup()
 ### Loaders ####
 function load_brew()
 {
-    if [[ -n _is_linux ]]; then
-    [ -d "/home/linuxbrew/" ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    elif [[ -n _is_macos ]]; then
-    [ -d "/opt/homebrew/" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+    if [[ -n $_is_linux ]]; then
+        [[ -d "/home/linuxbrew/" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    elif [[ -n $_is_macos ]]; then
+        [[ -d "/opt/homebrew/" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        echo "ERROR load brew"
     fi
 }
 

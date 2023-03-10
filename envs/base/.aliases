@@ -1,6 +1,5 @@
 
-ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
-wsbase_path=$(dirname "$ABSOLUTE_PATH")
+wsbase_path=$HOME/.config/workspace/envs/base
 
 . $wsbase_path/.config-workspace
 
