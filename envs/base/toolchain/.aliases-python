@@ -11,7 +11,7 @@ function ws-venv-activate()
 alias vactivate="ws-venv-activate"
 
 # create a new python virtual environment local to the current directory
-function ws-venv-setup()
+function ws-venv-from-requirements()
 {   
     _pyversion=$1
     [ -z "$1" ] && echo "Usage: vsetup <python version (3.x.x)> [requirements-file-name]" && return 1
@@ -34,34 +34,13 @@ function ws-venv-setup()
         pip install -r requirements.txt
     fi
 }
-alias vsetup="ws-venv-setup"
-alias vsetup-default="ws-venv-setup $__sys_python3_version"
 
-# CONVERT a classic python virtual environment setup to a poetry project
-function ws-poetry-setup()
-{
-    _pyversion=$1
-    [[ -z "$1" ]] && echo "Usage: psetup <python version (3.x.x)> [requirements-file-name]" && return 1
-    
-    [[ -f ./pyproject.toml ]] && echo "Poetry already setup" && return 0
-    
-    #test environment is already setup
-    poetry run python && echo "Poetry already setup" && return 0
+alias vsetup="ws-venv-from-requirements"
+alias vsetup-default="ws-venv-from-requirements $__sys_python3_version"
 
-    #delete if exists
-    [[ -d "./.venv" ]] && rm -rf "./.venv";
-
-    pname=$(basename $(pwd))
-    poetry init --name=$pname --python=$_pyversion -n 
-    $requiments_file_name=${2:-"requirements.txt"}
-    cat $requiments_file_name | xargs poetry add
-}
-alias psetup="ws-poetry-setup"
-alias psetup-default="ws-poetry-setup $__sys_python3_version"
-alias pp="poetry run python"
 
 # CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory
-function ws-venv-git()
+function ws-venv-from-git()
 {     
     _repo_url=$1
     _pyversion=$2
@@ -70,15 +49,15 @@ function ws-venv-git()
 
     git clone $_repo_url
     cd $(basename $_repo_url .git)
-    ws-poetry-setup $_pyversion $_requiments_file_name
+    vsetup $_pyversion $_requiments_file_name
 }
-alias vgit="ws-venv-git"
+alias vgit="ws-venv-from-git"
 function vgit-default()
 {
     _repo_url=$1
     _pyversion=$__sys_python3_version
     _requiments_file_name=${2:-"requirements.txt"}
-    ws-venv-git $_repo_url $__sys_python3_version $_requiments_file_name
+    ws-venv-from-git $_repo_url $__sys_python3_version $_requiments_file_name
 }
 
 ## Utility python ####
