@@ -25,7 +25,8 @@ function activate-docker-ubuntu20()
 alias runlinda='activate-docker-ubuntu18'
 alias runchiara='activate-docker-ubuntu20'
 
-function _load_mongo_repo()
+
+function mongo()
 {
     if [ ! -d "$HOME/.config/workspace-mongo" ]; then
         git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo --branch v1.0-devel
@@ -33,41 +34,23 @@ function _load_mongo_repo()
     if [ ! -d "$HOME/.config/workspace/envs/mongo" ]; then
         ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
     fi
-}
-function activate-mongo()
-{
-    _load_mongo_repo
+
     . $HOME/.config/workspace/envs/mongo/.aliases
     mongo-activate
 }
 
-function rungiulietta()
-{
-    _load_mongo_repo
-    . $HOME/.config/workspace/envs/mongo/.aliases
-    rungiulietta
-}
-
-
-# activate the imaginary environment 
-function activate-imaginary() {
-    . $HOME/.config/workspace/envs/imaginary/.aliases
-    . $HOME/.config/workspace/envs/imaginary/.profile
-}
-
 # activate the imaginary environment docker
-function activate-imaginary-docker() {
+function imgx() {
     . $HOME/.config/workspace/envs/imaginary/.aliases
 
-    docker build -t imaginary - < $HOME/.config/workspace/envs/imaginary/Dockerfile && \
-    docker run -it --gpus all --rm -v $_img_workdir:/root/imaginary/local \
-                                   -v $HOME/.config/workspace:/root/.config/workspace \
-                                   -v $HOME/.ssh:/root/.ssh -v $HOME/.gitconfig:/root/.gitconfig \
-                                   -v $HOME/.cache/huggingface:/root/.cache/huggingface \
-                                   -v $HOME/.cache/torch:/root/.cache/torch \
-                                   imaginary /bin/bash
+    imgx run
 }
-alias runimaginary='activate-imaginary-docker'
+
+function imgxd() {
+    . $HOME/.config/workspace/envs/imaginary/.aliases
+
+    imgx rund
+}
 
 function ws-update()
 {
