@@ -1,3 +1,4 @@
+PATH="/usr/bin:usr/bin/env:/bin"
 ### Load environment aliases
 . $HOME/.config/workspace/envs/.aliases
 
@@ -32,7 +33,8 @@ export PATH=$HOME/cli_bin:${PATH}
 export JIRA_USERNAME=enrico.golfieri@mongodb.com
 
 # pipx config
-export PATH="/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/opt/go/bin:/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/opt/mongodbtoolchain/gdb/bin:/opt/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/node/bin:/opt/node/bin:/home/ubuntu/cli_bin:/opt/node/bin:/opt/node/bin:/opt/node/bin:/opt/node/bin:/home/ubuntu/cli_bin:/opt/node/bin:/home/ubuntu/.local/bin:/home/ubuntu/.local/bin:${PATH}"
+export PATH="/opt/undodb5/bin:/opt/cmake/bin:/opt/rtags-2.38/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/ubuntu/cli_bin:/opt/node/bin:/home/ubuntu/.local/bin:${PATH}"
 
-export PATH=/opt/mongodbtoolchain/v4/bin:${PATH}
-alias ninja=/opt/mongodbtoolchain/v4/bin/ninja
+# MongoDB Toolchain
+export PATH="/opt/mongodbtoolchain/v4/bin:${PATH}"
+

@@ -145,7 +145,10 @@ gstash() {
 # fshow - show git commit
 gshow() {
   local commits commit
-  commits=$(git log --pretty="%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s" --date=short) &&
+  _summary=;
+  [[ -n "$1" ]] && _summary="--summary -- $1";
+
+  commits=$(git log --pretty="%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s" --date=short $_summary) &&
   commit=$(echo "$commits" | fzf --ansi --no-sort --reverse --tiebreak=index --preview-window=right:60% --preview="git show --color=always {1}") &&
   git show --color=always $(echo "$commit" | awk '{print $1}')
 }
