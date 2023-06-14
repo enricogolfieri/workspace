@@ -6,7 +6,7 @@ PATH="/usr/bin:usr/bin/env:/bin"
 activate-base-bash
 
 ### Always enable mongo-env
-activate-mongo
+mongo
 
 function ws-setup-mongovm()
 {
