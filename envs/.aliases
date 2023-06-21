@@ -58,6 +58,13 @@ function imgxd() {
     imgx rund
 }
 
+function reload()
+{
+    . $HOME/.config/workspace/envs/base/.aliases
+    . $HOME/.config/workspace/envs/mongo/.aliases
+    . $HOME/.config/workspace/envs/imaginary/.aliases
+}
+
 function ws-update()
 {
     _cd=$(pwd)

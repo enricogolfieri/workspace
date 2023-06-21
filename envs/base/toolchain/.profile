@@ -8,6 +8,9 @@ fi
 
 ### Add pyenv if exists 
 if [ -d "$HOME/.pyenv" ]; then
+    export LDFLAGS="-Wl,-rpath,$(brew --prefix openssl)/lib"
+    export CPPFLAGS="-I$(brew --prefix openssl)/include"
+    export CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl)"
     #setup python
     export PYENV_ROOT="$HOME/.pyenv"
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
@@ -30,7 +33,8 @@ export FZF_ALT_C_COMMAND='fd --type d . --color=never --hidden'
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -50'"
 
 ### git 
-[[  -n $_is_bash ]] && . $wsbase_path/toolchain/git-prompt.sh && . $wsbase_path/toolchain/git-completion.sh
+[[  -n $_is_bash ]] && . $wsbase_path/toolchain/git-prompt.sh && . $wsbase_path/toolchain/git-completion.sh && PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+[[  -n $_is_zsh ]] && . $wsbase_path/toolchain/git-prompt.sh && $wsbase_path/toolchain/git-completion.zsh && setopt PROMPT_SUBST ; PS1='[%n@%m %c$(__git_ps1 " (%s)")]\$ '
 
 
 
