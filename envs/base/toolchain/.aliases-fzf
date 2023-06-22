@@ -1,18 +1,18 @@
-# fd - cd to selected directory
-fd() {
+# fcd - cd to selected directory
+fcd() {
   local dir
   dir=$(find ${1:-.} -path '*/\.*' -prune \
                   -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
 
-# fda - fd including hidden directories
+# fda - fcd including hidden directories
 fda() {
   local dir
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
-# fdr - fd to selected parent directory
+# fdr - fcd to selected parent directory
 fdr() {
   local declare dirs=()
   get_parent_dirs() {
@@ -27,7 +27,7 @@ fdr() {
   cd "$DIR"
 }
 
-# fd - fd from anywhere
+# fcd - fcd from anywhere
 # ex: cf word1 word2 ... (even part of a file name)
 # zsh autoload function
 fde() {
@@ -46,7 +46,7 @@ fde() {
   fi
 }
 
-# fdf - fd into the directory of the selected file
+# fdf - fcd into the directory of the selected file
 fdf() {
    local file
    local dir
@@ -145,7 +145,10 @@ gstash() {
 # fshow - show git commit
 gshow() {
   local commits commit
-  commits=$(git log --pretty="%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s" --date=short) &&
+  _summary=;
+  [[ -n "$1" ]] && _summary="--summary -- $1";
+
+  commits=$(git log --pretty="%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s" --date=short $_summary) &&
   commit=$(echo "$commits" | fzf --ansi --no-sort --reverse --tiebreak=index --preview-window=right:60% --preview="git show --color=always {1}") &&
   git show --color=always $(echo "$commit" | awk '{print $1}')
 }

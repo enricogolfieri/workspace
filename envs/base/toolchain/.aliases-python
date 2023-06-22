@@ -1,21 +1,33 @@
 
 ## python ####
-
+# explain python aliases
+function ws-python-help()
+{
+    echo "python aliases: "
+    echo "<x> mandatory argument"
+    echo "[x] optional argument, uses default value if not specified"
+    echo "  vact: activate python env"
+    echo "  vset: [python version (3.x.x)] [requirements-file-name] create a new python virtual environment local to the current directory"
+    echo "  venv: [python version (3.x.x)] [requirements-file-name] activate python env if exist otherwise create it"
+    echo "  vgit: <repo-url> [python version (3.x.x)] [requirements-file-name] CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory"
+}
 # activate python env
-function ws-venv-activate()
+function vact()
 {
     if [ -d "./.venv" ]; then
         source ./.venv/bin/activate
+    else
+        echo "No .venv directory found"
     fi
 }
-alias vactivate="ws-venv-activate"
 
 # create a new python virtual environment local to the current directory
-function ws-venv-from-requirements()
+function vset()
 {   
-    _pyversion=$1
-    [ -z "$1" ] && echo "Usage: vsetup <python version (3.x.x)> [requirements-file-name]" && return 1
-    
+    _pyversion=${1:-$__sys_python3_version}
+    #print usage if first argument is help
+    [ "$1" = "--help" ] && echo "Usage: vset <python version (3.x.x)> [requirements-file-name]" && return 0
+        
     #delete if exists
     [[ -d "./.venv" ]] && rm -rf "./.venv";
 
@@ -24,40 +36,46 @@ function ws-venv-from-requirements()
      pyenv install $_pyversion && pyenv shell $_pyversion) ||
     (echo "pyenv shell $_pyversion failed" && return 1) );
 
-    python -m venv ./.venv || (echo "Failed to create virtual environment" && return 1);
+    python3 -m venv ./.venv || (echo "Failed to create virtual environment" && return 1);
 
     #install requirements if exists
     $requiments_file_name=${2:-"requirements.txt"}
     if [[ -f "$requiments_file_name" ]]; then
         source ./.venv/bin/activate \
-        && python -m pip install --upgrade pip && \
+        && python3 -m pip install --upgrade pip && \
         pip install -r requirements.txt
     fi
 }
 
-alias vsetup="ws-venv-from-requirements"
-alias vsetup-default="ws-venv-from-requirements $__sys_python3_version"
-
-
-# CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory
-function ws-venv-from-git()
-{     
-    _repo_url=$1
-    _pyversion=$2
-    _requiments_file_name=${3:-"requirements.txt"}
-    [[ $# -lt 2 ]] && echo "Usage: vgit <repo-url> <python version (3.x.x)> [requirements-file-name]" && return 1
-
-    git clone $_repo_url
-    cd $(basename $_repo_url .git)
-    vsetup $_pyversion $_requiments_file_name
-}
-alias vgit="ws-venv-from-git"
-function vgit-default()
+function venv()
 {
-    _repo_url=$1
-    _pyversion=$__sys_python3_version
-    _requiments_file_name=${2:-"requirements.txt"}
-    ws-venv-from-git $_repo_url $__sys_python3_version $_requiments_file_name
+    #activate if exist otherwise create it 
+    if [ -d "./.venv" ]; then
+        source ./.venv/bin/activate
+    else
+        if [ -z "$1" ]; then
+            vset-default $@
+        else
+            vset $@
+        fi
+    fi
+}
+
+
+# vgit: CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory
+function vgit()
+{
+    [ "$1" = "--help" ] && echo "Usage: vgit <repo-url> [python version (3.x.x)] [requirements-file-name]" && return 0
+
+    if [ -z "$1" ]; then
+        echo "Usage: vgit <repo-url> [python version (3.x.x)] [requirements-file-name]"
+        return 1
+    else
+        _repo_url=$1
+        _pyversion=${2:-$__sys_python3_version}
+        _requiments_file_name=${3:-"requirements.txt"}
+        ws-venv-from-git $_repo_url $_pyversion $_requiments_file_name
+    fi
 }
 
 ## Utility python ####

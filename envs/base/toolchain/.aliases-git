@@ -35,5 +35,10 @@ function ws-git-configure()
     read name
     git config --global user.email $email
     git config --global user.name $name
+    git config --global core.excludesfile ~/.gitignore
+
+    touch ~/.gitignore
+    echo ".venv" >> ~/.gitignore
+    echo ".vscode" >> ~/.gitignore
 }
 
