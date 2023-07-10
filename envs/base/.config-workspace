@@ -1,5 +1,5 @@
 ### Compute _os variable
-__sys_python3_version="3.10.6"
+__sys_python3_version="3.11.2"
 
 _os="Linux";
 case `uname` in
