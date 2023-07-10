@@ -53,11 +53,7 @@ function venv()
     if [ -d "./.venv" ]; then
         source ./.venv/bin/activate
     else
-        if [ -z "$1" ]; then
-            vset-default $@
-        else
-            vset $@
-        fi
+        vset $@
     fi
 }
 
