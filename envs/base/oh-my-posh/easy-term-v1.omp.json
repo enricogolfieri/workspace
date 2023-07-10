@@ -78,12 +78,6 @@
         "segments": [
           {
             "foreground": "#81ff91",
-            "style": "diamond",
-            "template": "<#cc7eda> \u007C </><#7eb8da>RAM:</> {{ (div ((sub .PhysicalTotalMemory .PhysicalFreeMemory)|float64) 1000000000.0) }}/{{ (div .PhysicalTotalMemory 1000000000.0) }}GB",
-            "type": "sysinfo"
-          },
-          {
-            "foreground": "#81ff91",
             "properties": {
               "fetch_version": true
             },
