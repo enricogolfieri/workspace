@@ -1,33 +1,56 @@
-# fcd - cd to selected directory
-fcd() {
+# list all the aliases in the current file with their description
+ws-fzf-help()
+{
+    echo "  fdd: fuzzy cd"
+    echo "  fda: fuzzy cd to ls -a"
+    echo "  fdp: fuzzy cd to ls -a to parent directory"
+    echo "  fde: fuzzy cd from anywhere"
+    echo "  fif : fuzzy find in files"
+    echo "  fdf: fdc including hidden files and directories"
+    echo "  fdr: fdc including hidden files and directories, searching from root"
+    echo "  gco: fuzzy git checkout" 
+    echo "  gcop: fuzzy git checkout with preview"
+    echo "  gcos: fuzzy git checkout sorted by most recent commit"
+    echo "  fbrew : fuzzy brew install"
+    echo "  fbrewu : fuzzy brew uninstall"
+    echo "  fcask : fuzzy brew cask install"
+    echo "  fcasku : fuzzy brew cask uninstall"
+}
+
+#ws-fzf-help with fuzzy search
+function fhelp()
+{
+    ws-fzf-help-relevant | fzf
+}
+
+
+ws-fzf-help-short()
+{
+    echo "  fda: fuzzy cd -a"
+    echo "  fdf: go to the directory of the selected file"
+    echo "  fif : fuzzy find in files"
+    echo "  gco: fuzzy git checkout" f
+    echo "  gcop: fuzzy git checkout with preview"
+    echo "  fbrew : fuzzy brew install"
+    echo "  fcask : fuzzy brew cask install"
+}
+
+# fdd - cd to selected directory
+fdd() {
   local dir
   dir=$(find ${1:-.} -path '*/\.*' -prune \
                   -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
 
-# fda - fcd including hidden directories
+# fda - fdc including hidden directories
 fda() {
   local dir
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
-# fdr - fcd to selected parent directory
-fdr() {
-  local declare dirs=()
-  get_parent_dirs() {
-    if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi
-    if [[ "${1}" == '/' ]]; then
-      for _dir in "${dirs[@]}"; do echo $_dir; done
-    else
-      get_parent_dirs $(dirname "$1")
-    fi
-  }
-  local DIR=$(get_parent_dirs $(realpath "${1:-$PWD}") | fzf-tmux --tac)
-  cd "$DIR"
-}
 
-# fcd - fcd from anywhere
+# fdc - fdc from anywhere
 # ex: cf word1 word2 ... (even part of a file name)
 # zsh autoload function
 fde() {
@@ -46,11 +69,19 @@ fde() {
   fi
 }
 
-# fdf - fcd into the directory of the selected file
+# fdf - fdc into the directory of the selected file
 fdf() {
    local file
    local dir
    file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+# fdr - fdc including hidden files and directories, searching from root
+fdr() {
+  local dir
+  dir=$(find / -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
 }
 
 
@@ -63,25 +94,7 @@ fif() {
 
 ### Git ###
 
-# fbr - checkout git branch (including remote branches)
-gbr() {
-  local branches branch
-  branches=$(git branch --all | grep -v HEAD) &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
-}
-
-# fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
-gbrs() {
-  local branches branch
-  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
-}
-
-# fco - checkout git branch/tag
+# gco - checkout git branch/tag
 gco() {
   local tags branches target
   branches=$(
@@ -97,8 +110,16 @@ gco() {
   git checkout $(awk '{print $2}' <<<"$target" )
 }
 
+# gbrs - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+gcos() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
 
-# fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
+# gcop - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
 gcop() {
   local tags branches target
   branches=$(
@@ -157,3 +178,62 @@ gshow() {
 fman() {
     man -k . | fzf --prompt='Man> ' | awk '{print $1}' | xargs -r man
 }
+
+### brew ###
+FB_FORMULA_PREVIEW='HOMEBREW_COLOR=true brew info {}'
+FB_FORMULA_BIND="ctrl-space:execute-silent(brew home {})"
+FB_CASK_PREVIEW='HOMEBREW_COLOR=true brew info --cask {}'
+FB_CASK_BIND="ctrl-space:execute-silent(brew home --cask {})"
+
+function fbrew() {
+    local inst=$(brew formulae | fzf --query="$1" -m --preview $FB_FORMULA_PREVIEW --bind $FB_FORMULA_BIND)
+
+    if [[ $inst ]]; then
+        for prog in $(echo $inst); 
+        do
+          brew install $prog; 
+        done
+    fi
+}
+
+function fbrewu() {
+    local uninst=$(brew leaves | fzf --query="$1" -m --preview $FB_FORMULA_PREVIEW --bind $FB_FORMULA_BIND)
+
+    if [[ $uninst ]]; then
+        for prog in $(echo $uninst);
+        do 
+          brew uninstall $prog; 
+        done
+    fi
+}
+
+function fcask() {
+    local inst=$(brew casks | fzf --query="$1" -m --preview $FB_CASK_PREVIEW --bind $FB_CASK_BIND)
+
+    if [[ $inst ]]; then
+        for prog in $(echo $inst); 
+          do
+            brew install --cask $prog; 
+          done
+    fi
+}
+
+function fcasku() {
+    local inst=$(brew list --cask | fzf --query="$1" -m --preview $FB_CASK_PREVIEW --bind $FB_CASK_BIND)
+
+    if [[ $inst ]]; then
+        for prog in $(echo $inst); 
+        do 
+          brew uninstall --cask $prog; 
+        done
+    fi
+}
+
+function fzf-history() {
+  history | fzf +s --tac | sed 's/ *[0-9]* *//'
+}
+
+alias hf='fzf-history'
+
+
+

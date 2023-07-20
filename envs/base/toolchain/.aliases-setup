@@ -22,7 +22,9 @@ function ws-setup()
     #rust
     brew install rust 
     #fzf 
-    brew install fzf bat fd 
+    brew install fzf bat fd ripgrep
+    echo -e "yes\nyes\nno" | $HOMEBREW_PREFIX/opt/fzf/install
+
     #docker
     brew install docker docker-compose
     #utils 

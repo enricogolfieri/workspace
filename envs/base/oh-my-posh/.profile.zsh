@@ -1,4 +1,6 @@
 ### Set Style
+[[ -n $NO_LOAD_OMP ]] && return 1;
+
 if [[ "$(command -v oh-my-posh)" ]]
 then
     export CLICOLOR=1

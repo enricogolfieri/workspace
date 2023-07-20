@@ -1,36 +1,9 @@
 
+wsbase_path=$HOME/.config/workspace/envs/base
+
 # activate the base environment
-function activate-base-bash() {
-    . $HOME/.config/workspace/envs/base/.aliases
-    . $HOME/.config/workspace/envs/base/.profile.bash
-}
-
-function activate-base-zsh() {
-    . $HOME/.config/workspace/envs/base/.aliases
-    . $HOME/.config/workspace/envs/base/.profile.zsh
-}
-
-function activate-docker-ubuntu18()
-{
-    docker build --tag linda18 - < $HOME/.config/workspace/envs/DockerFileU18 && \
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
-}
-
-function activate-docker-ubuntu20()
-{
-    docker build --tag chiara20 - < $HOME/.config/workspace/envs/DockerFileU20 && \
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
-}
-
-function activate-docker-ubuntu22()
-{
-    docker build --tag serena22 - < $HOME/.config/workspace/envs/DockerFileU22 && \
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace serena22
-}
-
-alias runlinda='activate-docker-ubuntu18'
-alias runchiara='activate-docker-ubuntu20'
-alias runserena='activate-docker-ubuntu22'
+alias activate-base-bash="source $HOME/.config/workspace/envs/base/.profile.bash"
+alias activate-base-zsh="source $HOME/.config/workspace/envs/base/.profile.zsh"
 
 function mongo()
 {

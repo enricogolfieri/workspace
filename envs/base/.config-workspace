@@ -19,4 +19,5 @@ esac
 
 if [[ $(uname -m) == 'arm64' ]]; then
   _is_arm=1
+  [ -n -_is_linux ] && _is_arm_linux=1
 fi

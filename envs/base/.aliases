@@ -1,8 +1,0 @@
-
-wsbase_path=$HOME/.config/workspace/envs/base
-
-. $wsbase_path/.config-workspace
-
-. $wsbase_path/toolchain/.aliases
-
-. $wsbase_path/oh-my-posh/.aliases

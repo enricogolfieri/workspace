@@ -1,0 +1,21 @@
+function run-docker-ubuntu18()
+{
+    docker build --tag linda18 - < $HOME/.config/workspace/envs/base/containers/DockerFileU18 && \
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
+}
+
+function run-docker-ubuntu20()
+{
+    docker build --tag chiara20 - < $HOME/.config/workspace/envs/base/containers/DockerFileU20 && \
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
+}
+
+function run-docker-ubuntu22()
+{
+    docker build --tag serena22 - < $HOME/.config/workspace/envs/base/containers/DockerFileU22 && \
+    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace serena22
+}
+
+alias runlinda='run-docker-ubuntu18'
+alias runchiara='run-docker-ubuntu20'
+alias runserena='run-docker-ubuntu22'
