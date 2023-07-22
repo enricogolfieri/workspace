@@ -70,18 +70,15 @@ _fzf_comprun() {
   esac
 }
 
-fzf_history_widget() {
-    local selected_command
-    selected_command=$(history | fzf +s +m --tac | awk '{print $2}')
-    [[ -n "$selected_command" ]] && READLINE_LINE="$selected_command"
-}
-
 if [[ -n $_is_bash ]]; then
+    fzf_history_widget() {
+        local selected_command
+        selected_command=$(history | fzf +s +m --tac | awk '{print $2}')
+        [[ -n "$selected_command" ]] && READLINE_LINE="$selected_command"
+    }
     # Replace <Shift+Tab-Escape-Sequence> with the actual escape sequence you obtained in step 1
-    shift_tab_escape_sequence='^[[Z'
-
     # Bind the function to Shift+Tab
-    bind -x '"'"$shift_tab_escape_sequence"'": fzf_history_widget'
+    bind -x '"\e[Z": fzf_history_widget'
 fi
 
 if [[ -n $_is_zsh ]]; then

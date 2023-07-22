@@ -1,61 +1,59 @@
 
-_img_workdir="$HOME/imaginary/local"
+_img_workdir="$HOME/.imaginary/local"
 _model="openjourney-v4"
 
-imgx()
-{
-    local _cmd=$1
-    shift
-    case $_cmd in
-        code)
-            imgx-code
-        ;;
-        setup)
-            imgx-setup
-        ;;
-        select)
-            imgx-select
-        ;;
-        update)
-            imgx-update
-        ;;
-        setup-nvidia)
-            _setup_docker_nvidia
-        ;;
-        download)
-            instaloader profile $1;
-            shift;
-            rm -rf $1/*.txt;
-            rm -rf $1/*.tz
-        ;;
-        run)
-            imgx-activate-locally
-        ;;
-        rund)
-            imgx-run-docker
-        ;;
-        server)
-            imgx-server
-        ;;
-        imagine)
-            _img=$(ls $_img_workdir/selected | head -n 1)
-            _img_cmd=""
-            [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
-            imagine  --model $_model $_img_cmd --output "$_img_workdir/result" "$@"
-        ;;
-        control-canny)
-            _img=$(ls $_img_workdir/selected | head -n 1)
-            _img_cmd=""
-            [ -z "$_img" ] || _img_cmd="--control-image $_img_workdir/selected/$_img"
-            imagine --model $_model $_img_cmd  control-mode canny --output "$_img_workdir/result" "$@" 
-        ;;
-        swap-face)
-            _img=$(ls $_img_workdir/selected | head -n 1)
-            _img_cmd=""
-            [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
-            imagine --model $_model $_img_cmd --mask-prompt "NOT face" --mask-mode keep --init-image-strength .2 --fix-faces --output "$_img_workdir/result" $1
-    esac
-}
+local _cmd=$1
+shift
+case $_cmd in
+    code)
+        imgx-code
+    ;;
+    setup)
+        imgx-setup
+    ;;
+    select)
+        imgx-select
+    ;;
+    update)
+        imgx-update
+    ;;
+    setup-nvidia)
+        _setup_docker_nvidia
+    ;;
+    download)
+        instaloader profile $1;
+        shift;
+        rm -rf $1/*.txt;
+        rm -rf $1/*.tz
+    ;;
+    run)
+        imgx-activate-locally
+    ;;
+    rund)
+        imgx-run-docker
+    ;;
+    server)
+        imgx-server
+    ;;
+    imagine)
+        _img=$(ls $_img_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
+        imagine  --model $_model $_img_cmd --output "$_img_workdir/result" "$@"
+    ;;
+    control-canny)
+        _img=$(ls $_img_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--control-image $_img_workdir/selected/$_img"
+        imagine --model $_model $_img_cmd  control-mode canny --output "$_img_workdir/result" "$@" 
+    ;;
+    swap-face)
+        _img=$(ls $_img_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
+        imagine --model $_model $_img_cmd --mask-prompt "NOT face" --mask-mode keep --init-image-strength .2 --fix-faces --output "$_img_workdir/result" $1
+esac
+
 
 imgx-run-docker()
 {

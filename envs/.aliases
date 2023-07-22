@@ -18,26 +18,6 @@ function mongo()
     mongo-activate
 }
 
-# activate the imaginary environment docker
-function imgx() {
-    . $HOME/.config/workspace/envs/imaginary/.aliases
-
-    imgx run
-}
-
-function imgxd() {
-    . $HOME/.config/workspace/envs/imaginary/.aliases
-
-    imgx rund
-}
-
-function reload()
-{
-    . $HOME/.config/workspace/envs/base/.aliases
-    . $HOME/.config/workspace/envs/mongo/.aliases
-    . $HOME/.config/workspace/envs/imaginary/.aliases
-}
-
 function ws-update()
 {
     _cd=$(pwd)
