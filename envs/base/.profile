@@ -22,8 +22,21 @@ if [ -d $HOME/.nvm ]; then
     source $(brew --prefix nvm)/nvm.sh
 fi
 
-### git 
-[[  -n $_is_bash ]] && . $wsbase_path/toolchain/git-prompt.sh && . $wsbase_path/toolchain/git-completion.sh && PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+## Load completion module
+. $wsbase_path/completion/.profile
+## Load oh-my-posh module
+. $wsbase_path/oh-my-posh/.profile
+## Load imaginary
+. $wsbase_path/imaginary/.profile
+
+### Do not put duplicate lines or lines starting with space in the history
+export HISTCONTROL=ignoreboth
+
+### Silence zsh message as default shell
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+### Append to the history file (do not overwrite it)
+[[ -n $_is_bash ]] && shopt -s histappend
 
 ### fzf
 [[ -f ~/.fzf.bash ]] && [[ -n $_is_bash ]]  && source ~/.fzf.bash

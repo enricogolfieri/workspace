@@ -1,9 +1,3 @@
-
-
-
-## Python ####
-. $HOME/.config/workspace/envs/base/toolchain/.aliases-python
-
 function ws-setup()
 {    
     #package managers

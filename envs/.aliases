@@ -1,21 +1,28 @@
 
-wsbase_path=$HOME/.config/workspace/envs/base
 
 # activate the base environment
-alias activate-base-bash="source $HOME/.config/workspace/envs/base/.profile.bash"
-alias activate-base-zsh="source $HOME/.config/workspace/envs/base/.profile.zsh"
+wsbase_path=$HOME/.config/workspace/envs/base
+
+. $wsbase_path/.aliases
 
 function mongo()
 {
     if [ ! -d "$HOME/.config/workspace-mongo" ]; then
+        #ask if you want to install it
+        echo "MongoDB environment not found. Do you want to install it? [y/n]"
+        read answer
+        if [ "$answer" != "${answer#[Yy]}" ] ;then
+            echo "Installing MongoDB environment..."
+        else
+            echo "MongoDB environment not installed."
+            return
+        fi
         git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo --branch v1.0-devel
+        if [ ! -d "$HOME/.config/workspace/envs/mongo" ]; then
+            ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
+        fi
     fi
-    if [ ! -d "$HOME/.config/workspace/envs/mongo" ]; then
-        ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
-    fi
-
-    . $HOME/.config/workspace/envs/mongo/.aliases
-    mongo-activate
+    [[ -d $HOME/.config/workspace/envs/mongo ]] && . $HOME/.config/workspace/envs/mongo/.aliases && mongo-activate
 }
 
 function ws-update()

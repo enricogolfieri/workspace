@@ -1,0 +1,10 @@
+_imgx_workdir="$HOME/.imgx/"
+_imaginairy_code="$_imgx_workdir/imaginairy"
+#alias imagine=$_imaginairy_code/.venv/bin/imagine
+#alias instaloader=$_imaginairy_code/.venv/bin/instaloader
+#alias aimg=$_imaginairy_code/.venv/bin/aimg
+
+function imaginairy-example()
+{
+    imagine --model sd21v "a forest"
+}

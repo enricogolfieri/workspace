@@ -1,0 +1,29 @@
+
+
+load_aliases()
+{   
+    . $wsbase_path/.config-workspace
+    . $wsbase_path/.aliases-setup
+    . $wsbase_path/.aliases-python
+    . $wsbase_path/.aliases-docker
+    . $wsbase_path/.aliases-git 
+    . $wsbase_path/.aliases-fzf 
+    . $wsbase_path/.aliases-utils
+    . $wsbase_path/oh-my-posh/.aliases
+    . $wsbase_path/containers/.aliases
+    . $wsbase_path/imaginary/.aliases
+}
+
+activate-base-bash()
+{
+    _is_bash=1
+    load_aliases
+    . $wsbase_path/.profile
+}
+
+activate-base-zsh()
+{
+    _is_zsh=1
+    load_aliases
+    . $wsbase_path/.profile
+}

@@ -1,3 +1,2 @@
-
-export PATH="$wsbase_path"/imaginary/imgx:$PATH
+PATH="$wsbase_path"/imaginary/:$PATH
 

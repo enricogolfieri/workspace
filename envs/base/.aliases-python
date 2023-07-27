@@ -16,8 +16,10 @@ function vact()
 {
     if [ -d "./.venv" ]; then
         source ./.venv/bin/activate
+    elif [ -f "./.python-version"]
+        pyenv activate $(cat ./.python-version)
     else
-        echo "No .venv directory found"
+        return 1
     fi
 }
 
@@ -51,11 +53,7 @@ function vset()
 function venv()
 {
     #activate if exist otherwise create it 
-    if [ -d "./.venv" ]; then
-        source ./.venv/bin/activate
-    else
-        vset $@
-    fi
+    vact || vset $@
 }
 
 

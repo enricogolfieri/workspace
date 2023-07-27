@@ -1,8 +1,0 @@
-
-
-. $wsbase_path/toolchain/.aliases-setup
-. $wsbase_path/toolchain/.aliases-python
-. $wsbase_path/toolchain/.aliases-docker
-. $wsbase_path/toolchain/.aliases-git 
-. $wsbase_path/toolchain/.aliases-fzf 
-. $wsbase_path/toolchain/.aliases-utils
