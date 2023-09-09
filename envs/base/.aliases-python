@@ -11,16 +11,13 @@ function ws-python-help()
     echo "  venv: [python version (3.x.x)] [requirements-file-name] activate python env if exist otherwise create it"
     echo "  vgit: <repo-url> [python version (3.x.x)] [requirements-file-name] CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory"
 }
+
 # activate python env
 function vact()
 {
-    if [ -d "./.venv" ]; then
-        source ./.venv/bin/activate
-    elif [ -f "./.python-version"]
-        pyenv activate $(cat ./.python-version)
-    else
-        return 1
-    fi
+    [[ -d "./.venv" ]] && source ./.venv/bin/activate && return 0
+    [[ -f "./.python-version" ]] && pyenv activate $(cat ./.python-version) && return 0
+    return 1
 }
 
 # create a new python virtual environment local to the current directory

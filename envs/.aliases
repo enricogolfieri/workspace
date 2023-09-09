@@ -1,9 +1,8 @@
 
 
 # activate the base environment
-wsbase_path=$HOME/.config/workspace/envs/base
 
-. $wsbase_path/.aliases
+. $HOME/.config/workspace/envs/base/.aliases
 
 function mongo()
 {
