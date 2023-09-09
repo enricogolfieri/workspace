@@ -1,8 +1,8 @@
 #bash
-[[  -n $_is_bash ]] && . $wsbase_path/completion/git-prompt.sh && . $wsbase_path/completion/git-completion.sh && PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+[[ -n "$_is_bash" ]] && . $wsbase_path/completion/git-prompt.sh && . $wsbase_path/completion/git-completion.sh && PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 
 #zsh
-if [ -n $_is_zsh ]; then
+if [ -n "$_is_zsh" ]; then
     autoload -U compinit promptinit 2>&1
 
     promptinit

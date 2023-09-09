@@ -1,8 +1,5 @@
 function ws-setup()
 {    
-    _cask=;
-    [[ -n "$_is_macos" ]] && _cask="--cask"
-
     #package managers
     _install_brew
     _install_snap
@@ -23,8 +20,8 @@ function ws-setup()
     echo -e "yes\nyes\nno" | $HOMEBREW_PREFIX/opt/fzf/install
 
     #docker
-    brew install $_cask docker
-    brew install ocker-compose
+    _install_docker
+    brew install docker-compose
     #utils 
     brew install zlib wget curl xclip htop ncdu bpytop tmux nano
     #vscode
@@ -114,6 +111,18 @@ function _install_vscode()
             sudo snap install --classic code
         elif  [[ -n "$_is_macos" ]]; then
             brew install --cask visual-studio-code
+        fi
+    fi
+}
+
+function _install_docker()
+{
+    if ! [ "$(command -v docker)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io 
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install --cask docker 
         fi
     fi
 }
