@@ -1,68 +1,28 @@
 
+
 # activate the base environment
-function activate-base-bash() {
-    . $HOME/.config/workspace/envs/base/.aliases
-    . $HOME/.config/workspace/envs/base/.profile.bash
-}
+wsbase_path=$HOME/.config/workspace/envs/base
 
-function activate-base-zsh() {
-    . $HOME/.config/workspace/envs/base/.aliases
-    . $HOME/.config/workspace/envs/base/.profile.zsh
-}
+. $wsbase_path/.aliases
 
-function activate-docker-ubuntu18()
-{
-    docker build --tag linda18 - < $HOME/.config/workspace/envs/DockerFileU18 && \
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace linda18
-}
-
-function activate-docker-ubuntu20()
-{
-    docker build --tag chiara20 - < $HOME/.config/workspace/envs/DockerFileU20 && \
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace chiara20
-}
-
-function activate-docker-ubuntu22()
-{
-    docker build --tag serena22 - < $HOME/.config/workspace/envs/DockerFileU22 && \
-    docker run -it --rm -v $HOME/.config/workspace:/root/.config/workspace serena22
-}
-
-alias runlinda='activate-docker-ubuntu18'
-alias runchiara='activate-docker-ubuntu20'
-alias runserena='activate-docker-ubuntu22'
-
-function mongo()
+function activate-mongo()
 {
     if [ ! -d "$HOME/.config/workspace-mongo" ]; then
+        #ask if you want to install it
+        echo "MongoDB environment not found. Do you want to install it? [y/n]"
+        read answer
+        if [ "$answer" != "${answer#[Yy]}" ] ;then
+            echo "Installing MongoDB environment..."
+        else
+            echo "MongoDB environment not installed."
+            return
+        fi
         git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo --branch v1.0-devel
+        if [ ! -d "$HOME/.config/workspace/envs/mongo" ]; then
+            ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
+        fi
     fi
-    if [ ! -d "$HOME/.config/workspace/envs/mongo" ]; then
-        ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
-    fi
-
-    . $HOME/.config/workspace/envs/mongo/.aliases
-    mongo-activate
-}
-
-# activate the imaginary environment docker
-function imgx() {
-    . $HOME/.config/workspace/envs/imaginary/.aliases
-
-    imgx run
-}
-
-function imgxd() {
-    . $HOME/.config/workspace/envs/imaginary/.aliases
-
-    imgx rund
-}
-
-function reload()
-{
-    . $HOME/.config/workspace/envs/base/.aliases
-    . $HOME/.config/workspace/envs/mongo/.aliases
-    . $HOME/.config/workspace/envs/imaginary/.aliases
+    [[ -d $HOME/.config/workspace/envs/mongo ]] && . $HOME/.config/workspace/envs/mongo/.aliases && mongo-activate
 }
 
 function ws-update()
