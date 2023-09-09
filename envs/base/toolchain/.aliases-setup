@@ -24,7 +24,8 @@ function ws-setup()
     #fzf 
     brew install fzf bat fd 
     #docker
-    brew install docker docker-compose
+    _install_docker
+    brew install docker-compose
     #utils 
     brew install zlib wget curl xclip htop ncdu bpytop tmux nano
     #vscode
@@ -117,6 +118,17 @@ function _install_vscode()
     fi
 }
 
+function _install_docker()
+{
+    if ! [ "$(command -v docker)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io 
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install --cask docker 
+        fi
+    fi
+}
 function ws-test-env()
 {
     echo "OS: $_os"
