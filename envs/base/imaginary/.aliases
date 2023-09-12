@@ -1,10 +1,95 @@
-_imgx_workdir="$HOME/.imgx/"
-_imaginairy_code="$_imgx_workdir/imaginairy"
-#alias imagine=$_imaginairy_code/.venv/bin/imagine
-#alias instaloader=$_imaginairy_code/.venv/bin/instaloader
-#alias aimg=$_imaginairy_code/.venv/bin/aimg
+#!/bin/bash
 
-function imaginairy-example()
+DATAX_DATA="$HOME/data"
+_imgx_workdir="$DATAX_DATA/.imgx/"
+_imgx_workdir_docker="/root/data/.imgx/"
+_imgx_docker="imaginary"
+
+alias instaloader="$DATAX_DATA/.venv/bin/instaloader"
+
+function datax-setup()
 {
-    imagine --model sd21v "a forest"
+    mkdir -p $DATAX_DATA
+
+    cd $DATAX_DATA
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    venv 3.10.10 || return 1;
+    vact 
+    #install  instaloader
+    pip install instaloader || (echo "Failed to install instaloader" && return 1);
+    cd -
 }
+
+function datax-select()
+{
+    ls -a $DATAX_DATA/instagram | grep -v "^\.$" | grep -v "^\.\.$" | fzf --preview 'cat $DATAX_DATA/instagram/{}/*.txt'
+    echo "saving $1 to $_imgx_workdir/selected"
+    mkdir -p "$_imgx_workdir"/selected
+    rm -rf "$_imgx_workdir"/selected/*
+    cp $1 "$_imgx_workdir"/selected
+}
+
+function instaloader-profile()
+{
+    [[ -z "$1" ]] && echo "Please provide a profile url" && return 1;
+    #extract name from url
+    _name=$(echo $1 | sed 's/https:\/\/www.instagram.com\///g')
+    [[ -z "$_name" ]] && echo "Failed to extract name from url" && return 1;
+
+    echo "Downloading profile $_name"
+
+    instaloader profile $_name --dirname-pattern "$DATAX_DATA/instagram/$_name"
+
+    rm -rf $DATAX_DATA/instagram/$_name/*.txt;
+    rm -rf $DATAX_DATA/instagram/$_name/*.xz;
+    rm -rf $DATAX_DATA/instagram/$_name/*.tz;
+}
+
+function datax-startup()
+{
+    _gpu='--gpus all'
+    [[ -n $_is_macos ]] && _gpu=;
+
+    docker build -t imaginary - < $HOME/.config/workspace/envs/base/imaginary/Dockerfile && \
+    docker run -it $_gpu --rm --name $_imgx_docker -v $DATAX_DATA:/root/data/ -v $HOME/.ssh:/root/.ssh \
+                                   -v $HOME/.gitconfig:/root/.gitconfig \
+                                   -v $HOME/.config/workspace:/root/.config/workspace \
+                                   -v $HOME/.cache/huggingface:/root/.cache/huggingface \
+                                   -v $HOME/.cache/torch:/root/.cache/torch \
+                                   -p 8000:8000 imaginary /bin/bash;
+}
+
+function imgx-server()
+{
+    #run docker container if not already running
+    docker ps | grep $_imgx_docker || imgx
+    docker exec -it $_imgx_docker /bin/bash -c "aimg server"
+}
+
+function imgx-imagine()
+{
+    _img=$(ls $_imgx_workdir/selected | head -n 1)
+    init_image=""
+    [ -z "$_img" ] || init_image="--init-image $_imgx_workdir_docker/selected/$_img"
+    #run on docker
+    docker exec -it $_imgx_docker /bin/bash -c "cd /root/data/ && imagine --model sd21v $init_image --outdir $_imgx_workdir_docker $@"
+}
+
+function datax-imgxtest()
+{
+    _img=$(ls $_imgx_workdir/selected | head -n 1)
+    _img_cmd=""
+    [ -z "$_img" ] || _img_cmd="--init-image $_imgx_workdir/selected/$_img"
+    echo "img_cmd: $_img_cmd"
+    docker exec -it $_imgx_docker /bin/bash -c "cd /root/data/ && imagine --model $_model $_img_cmd --mask-prompt "NOT clothes" --mask-mode keep --init-image-strength 0.6 --fix-faces --output $_imgx_workdir/result" $1
+}
+
+function datax-control-canny()
+{
+    _img=$(ls $_imgx_workdir/selected | head -n 1)
+    _img_cmd=""
+    [ -z "$_img" ] || _img_cmd="--control-image $_imgx_workdir/selected/$_img"
+    docker exec -it $_imgx_docker /bin/bash -c "cd /root/data/ && imagine --model $_model $_img_cmd  control-mode canny --output $_imgx_workdir/result $@" 
+}
+ 

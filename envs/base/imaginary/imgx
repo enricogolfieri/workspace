@@ -1,109 +1,16 @@
+#!/bin/bash
 
-_img_workdir="$HOME/.imaginary/local"
-_model="openjourney-v4"
+IMGX_DATA="$HOME/data"
+. $HOME/.config/workspace/envs/base/imaginary/.aliases
 
-local _cmd=$1
-shift
-case $_cmd in
-    code)
-        imgx-code
-    ;;
-    setup)
-        imgx-setup
-    ;;
-    select)
-        imgx-select
-    ;;
-    update)
-        imgx-update
-    ;;
-    setup-nvidia)
-        _setup_docker_nvidia
-    ;;
-    download)
-        instaloader profile $1;
-        shift;
-        rm -rf $1/*.txt;
-        rm -rf $1/*.tz
-    ;;
-    run)
-        imgx-activate-locally
-    ;;
-    rund)
-        imgx-run-docker
-    ;;
-    server)
-        imgx-server
-    ;;
-    imagine)
-        _img=$(ls $_img_workdir/selected | head -n 1)
-        _img_cmd=""
-        [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
-        imagine  --model $_model $_img_cmd --output "$_img_workdir/result" "$@"
-    ;;
-    control-canny)
-        _img=$(ls $_img_workdir/selected | head -n 1)
-        _img_cmd=""
-        [ -z "$_img" ] || _img_cmd="--control-image $_img_workdir/selected/$_img"
-        imagine --model $_model $_img_cmd  control-mode canny --output "$_img_workdir/result" "$@" 
-    ;;
-    swap-face)
-        _img=$(ls $_img_workdir/selected | head -n 1)
-        _img_cmd=""
-        [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
-        imagine --model $_model $_img_cmd --mask-prompt "NOT face" --mask-mode keep --init-image-strength .2 --fix-faces --output "$_img_workdir/result" $1
-esac
-
-
-imgx-run-docker()
+imaginairy_docker()
 {
     docker build -t imaginary - < $HOME/.config/workspace/envs/imaginary/Dockerfile && \
-    docker run -it --gpus all --rm -v $_img_workdir:/root/imaginary/local \
+    docker run -it --gpus all --rm -v $IMGX_DATA:/root/data/ \
                                    -v $HOME/.config/workspace:/root/.config/workspace \
                                    -v $HOME/.ssh:/root/.ssh -v $HOME/.gitconfig:/root/.gitconfig \
                                    -v $HOME/.cache/huggingface:/root/.cache/huggingface \
-                                   -v $HOME/.cache/torch:/root/.cache/torch \
-                                   imaginary /bin/bash
-}
-
-imgx-activate-locally()
-{
-    source "$_img_workdir/.venv/bin/activate"
-}
-
-imgx-code()
-{
-    cd "$_img_workdir" 
-    code .
-}
-
-imgx-setup()
-{
-    [ -d "$_img_workdir" ] && echo "Imaginary workdir already exists, skipping..." && return 0;
-
-    mkdir -p "$_img_workdir"
-    _setup_env
-    cd "$_img_workdir"
-    imagine "a forest"; 
-    imagine --model sd21v "a forest"
-}
-
-imgx-download()
-{
-    echo "To implement"
-}
-
-imgx-server()
-{
-    aimg server &
-    sleep 2
-    open http://localhost:8000
-}
-
-imgx-select()
-{
-    mkdir -p "$_img_workdir"/selected
-    cd $1 "$_img_workdir"/selected/
+                                   -v $HOME/.cache/torch:/root/.cache/torch imaginary /bin/bash
 }
 
 _setup_docker_nvidia()
@@ -125,25 +32,97 @@ _setup_docker_nvidia()
 
 _setup_env()
 {
-    _pyversion='3.10.6'
-    
-    #delete if exists
-    [[ -d "$_img_workdir/.venv" ]] && rm -rf "$_img_workdir/.venv";
-
-    ws-venv-from-requirements $_pyversion
-
-    imgx-activate-locally || (echo "Failed to activate virtual environment" && return 1);
-    pip install --upgrade pip || (echo "Failed to upgrade pip" && return 1);
+    git clone "https://github.com/enricogolfieri/imaginAIry.git" $_imaginairy_code
+    make init 
+ 
+    #install  instaloader
     pip install instaloader || (echo "Failed to install instaloader" && return 1);
-    git clone https://github.com/enricogolfieri/imaginAIry.git && cd imaginAIry
-    pip install .
 }
 
-imgx-update()
+_update_env()
 {
-    imgx-activate-locally
+    $_imaginairy_code/.venv/bin/activate
     pip install --upgrade pip
     pip install --upgrade imaginary
+    pip install --upgrade instaloader
 }
+
+#----- download
+#datax download --profile --face <name> <url>
+#datax instaloader <url>
+#datax info
+#----- setup/init
+#datax setup
+#datax setup-nvidia
+#datax imgxrun
+#datax imgxrun-docker
+#datax fsrun
+#datax fsrun-docker
+#----- utility
+#datax select </path/to/pic>
+#-------------
+#datax help
+#datax hello
+#datax 
+
+_cmd=$1
+shift
+case $_cmd in
+    hello)
+        echo "hello baby";
+    ;;
+    setup)
+        _setup_env
+    ;;
+    setup-nvidia)
+        _setup_docker_nvidia
+    ;;
+    activate-imaginairy)
+        $_imaginairy_code/.venv/bin/activate
+    ;;
+    update)
+        _update_env
+    ;;
+    instaloader-profile)
+        [[ -z "$1" ]] && echo "Please provide a profile url" && return 1;
+        #extract name from url
+        _name=$(echo $1 | sed 's/https:\/\/www.instagram.com\///g')
+        [[ -z "$_name" ]] && echo "Failed to extract name from url" && return 1;
+
+        instaloader profile $1 --dirname-pattern "$IMGX_DATA/instagram/$_name"
+        shift;
+        rm -rf $IMGX_DATA/instagram/$_name/*.txt;
+        rm -rf $IMGX_DATA/instagram/$_name/*.tz
+    ;;
+    imaginairy-docker)
+        imaginairy_docker
+    ;;
+    imaginairy)
+            aimg server &
+            sleep 2
+            open http://localhost:8000
+    ;;
+    select)
+        mkdir -p "$IMGX_DATA"/selected
+        cp $1 "$_img_workdir"/selected/
+    ;;
+    imagine)
+        _img=$(ls $IMGX_DATA/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--init-image $IMGX_DATA/selected/$_img"
+        imagine  --model $_model $_img_cmd --output "$_img_workdir/result" "$@"
+    ;;
+    control-canny)
+        _img=$(ls $_img_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--control-image $_img_workdir/selected/$_img"
+        imagine --model $_model $_img_cmd  control-mode canny --output "$_img_workdir/result" "$@" 
+    ;;
+    swap-face)
+        _img=$(ls $_img_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--init-image $_img_workdir/selected/$_img"
+        imagine --model $_model $_img_cmd --mask-prompt "NOT face" --mask-mode keep --init-image-strength .2 --fix-faces --output "$_img_workdir/result" $1
+esac
 
 

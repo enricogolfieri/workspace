@@ -1,11 +1,10 @@
 
 
 # activate the base environment
-wsbase_path=$HOME/.config/workspace/envs/base
 
-. $wsbase_path/.aliases
+. $HOME/.config/workspace/envs/base/.aliases
 
-function mongo()
+function activate-mongo()
 {
     if [ ! -d "$HOME/.config/workspace-mongo" ]; then
         #ask if you want to install it
