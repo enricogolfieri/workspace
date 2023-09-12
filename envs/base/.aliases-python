@@ -16,7 +16,7 @@ function vact()
 {
     if [ -d "./.venv" ]; then
         source ./.venv/bin/activate
-    elif [ -f "./.python-version"]
+    elif [ -f "./.python-version" ]; then
         pyenv activate $(cat ./.python-version)
     else
         return 1
