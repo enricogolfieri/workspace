@@ -1,0 +1,154 @@
+#!/bin/bash
+
+#----- download
+#datax download --profile --face <name> <url>
+#datax instaloader <url>
+#datax info
+#----- setup/init
+#datax setup
+#datax setup-nvidia
+#datax imgxrun
+#datax imgxrun-docker
+#datax fsrun
+#datax fsrun-docker
+#----- utility
+#datax select </path/to/pic>
+#-------------
+#datax help
+#datax hello
+#datax 
+
+
+DATAX_DATA="$HOME/data"
+_imgx_workdir="$DATAX_DATA/.imgx/"
+_imgx_workdir_docker="/root/data/.imgx/"
+_imgx_docker="imaginary"
+
+. $HOME/.config/workspace/envs/base/.aliases
+
+alias instaloader="$DATAX_DATA/.venv/bin/instaloader"
+
+load_aliases
+
+_activate_datax()
+{
+    pyenv activate datax || ( echo "Failed to activate imgx environment" && return 1;)
+    echo "imgx environment activated"
+    return 0;
+}
+
+_imaginairy_docker()
+{   
+    _gpu='--gpus all'
+    echo "hei $_is_macos";
+    [[ -n $_is_macos ]] && _gpu=;
+
+    docker build -t imaginary - < $HOME/.config/workspace/envs/base/imaginary/Dockerfile && \
+    docker run -it $_gpu --rm --name $_imgx_docker -v $DATAX_DATA:/root/data/ -v $HOME/.ssh:/root/.ssh \
+                                   -v $HOME/.gitconfig:/root/.gitconfig \
+                                   -v $HOME/.config/workspace:/root/.config/workspace \
+                                   -v $HOME/.cache/huggingface:/root/.cache/huggingface \
+                                   -v $HOME/.cache/torch:/root/.cache/torch \
+                                   -p 8000:8000 imaginary /bin/bash;
+}
+
+_setup_docker_nvidia()
+{
+    sudo rm -rf /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    sudo rm -rf /etc/apt/sources.list.d/nvidia-docker.list
+    sudo rm -rf /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+    
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+    sudo nvidia-ctk runtime configure --runtime=docker
+    sudo systemctl restart docker
+    sudo reboot
+}
+
+_setup_env()
+{
+    mkdir -p $DATAX_DATA
+
+    cd $DATAX_DATA
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+    venv 3.10.10 || return 1;
+    vact 
+    #install  instaloader
+    pip install instaloader || (echo "Failed to install instaloader" && return 1);
+    cd -
+}
+
+_update_env()
+{
+    _activate_datax || return 1;
+    pip install --upgrade pip
+    pip install --upgrade instaloader
+}
+
+_cmd=$1
+shift
+case $_cmd in
+    hello)
+        echo "hello baby";
+    ;;
+    setup)
+        _setup_env
+    ;;
+    setup-nvidia)
+        _setup_docker_nvidia
+    ;;
+    update)
+        _update_env
+    ;;
+    post)
+        [[ -z "$1" ]] && echo "Please a a post id" && return 1;
+        instaloader -- -$1;
+    ;;
+    profile)
+        [[ -z "$1" ]] && echo "Please provide a profile url" && return 1;
+        #extract name from url
+        _name=$(echo $1 | sed 's/https:\/\/www.instagram.com\///g')
+        [[ -z "$_name" ]] && echo "Failed to extract name from url" && return 1;
+
+        echo "Downloading profile $_name"
+
+        instaloader profile $_name --dirname-pattern "$DATAX_DATA/instagram/$_name"
+
+        rm -rf $DATAX_DATA/instagram/$_name/*.txt;
+        rm -rf $DATAX_DATA/instagram/$_name/*.xz;
+        rm -rf $DATAX_DATA/instagram/$_name/*.tz;
+    ;;
+    imgx)
+        _imaginairy_docker
+    ;;
+    select)
+        echo "saving $1 to $_imgx_workdir/selected"
+        mkdir -p "$_imgx_workdir"/selected
+        rm -rf "$_imgx_workdir"/selected/*
+        cp $1 "$_imgx_workdir"/selected
+    ;;
+    imagine)
+        _img=$(ls $_imgx_workdir/selected | head -n 1)
+        init_image=""
+        [ -z "$_img" ] || init_image="--init-image $_imgx_workdir_docker/selected/$_img"
+        #run on docker
+        docker exec -it $_imgx_docker /bin/bash -c "cd /root/data/ && imagine --model sd21v $init_image --outdir $_imgx_workdir_docker $@"
+    ;;
+    control-canny)
+        _img=$(ls $_imgx_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--control-image $_imgx_workdir/selected/$_img"
+        docker exec -it $_imgx_docker /bin/bash -c "cd /root/data/ && imagine --model $_model $_img_cmd  control-mode canny --output $_imgx_workdir/result $@" 
+    ;;
+    test)
+        _img=$(ls $_imgx_workdir/selected | head -n 1)
+        _img_cmd=""
+        [ -z "$_img" ] || _img_cmd="--init-image $_imgx_workdir/selected/$_img"
+        echo "img_cmd: $_img_cmd"
+        docker exec -it $_imgx_docker /bin/bash -c "cd /root/data/ && imagine --model $_model $_img_cmd --mask-prompt "NOT clothes" --mask-mode keep --init-image-strength 0.6 --fix-faces --output $_imgx_workdir/result" $1
+esac

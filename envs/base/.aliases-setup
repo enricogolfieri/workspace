@@ -22,7 +22,8 @@ function ws-setup()
     echo -e "yes\nyes\nno" | $HOMEBREW_PREFIX/opt/fzf/install
 
     #docker
-    brew install docker docker-compose
+    _install_docker
+    brew install docker-compose
     #utils 
     brew install zlib wget curl xclip htop ncdu bpytop tmux nano
     #vscode
@@ -100,11 +101,6 @@ function _install_pyenv()
 {
     #install pyenv
     [ "$(command -v pyenv)" ] && echo "[install_pyenv] Pyenv already installed" && return
-    
-    if [ ! -d "$HOME/.pyenv" ] 
-    then
-        git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv
-    fi
 
     if [[ -n "$_is_linux" ]] ; then
         sudo apt-get install -y make build-essential git libssl-dev zlib1g-dev libbz2-dev \
@@ -114,6 +110,11 @@ function _install_pyenv()
         brew install openssl readline sqlite3 xz zlib
     fi
 
+    if [ ! -d "$HOME/.pyenv" ] 
+    then
+        curl https://pyenv.run | bash
+    fi
+
     #setup python
     export PYENV_ROOT="$HOME/.pyenv"
     export LDFLAGS="-Wl,-rpath,$(brew --prefix openssl)/lib"
@@ -121,6 +122,7 @@ function _install_pyenv()
     export CONFIGURE_OPTS="--with-openssl=$(brew --prefix openssl)"
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
     pyenv install $__sys_python3_version
     pyenv global $__sys_python3_version
 }
@@ -132,6 +134,18 @@ function _install_vscode()
             sudo snap install --classic code
         elif  [[ -n "$_is_macos" ]]; then
             brew install --cask visual-studio-code
+        fi
+    fi
+}
+
+function _install_docker()
+{
+    if ! [ "$(command -v docker)" ]; then
+        if  [[ -n "$_is_linux" ]] ; then
+            for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io 
+        elif  [[ -n "$_is_macos" ]]; then
+            brew install --cask docker 
         fi
     fi
 }

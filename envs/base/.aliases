@@ -1,4 +1,5 @@
 
+wsbase_path=$HOME/.config/workspace/envs/base
 
 load_aliases()
 {   
@@ -16,14 +17,14 @@ load_aliases()
 
 activate-base-bash()
 {
-    _is_bash=1
+    _is_bash=1;
     load_aliases
     . $wsbase_path/.profile
 }
 
 activate-base-zsh()
 {
-    _is_zsh=1
+    _is_zsh=1;
     load_aliases
     . $wsbase_path/.profile
 }
