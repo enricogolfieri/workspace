@@ -1,7 +1,6 @@
 function _install_oh_my_posh()
 {
-
-    brew install jandedobbeleer/oh-my-posh/oh-my-posh
+    curl -s https://ohmyposh.dev/install.sh | bash -s
 
     if [ ! -d "$HOME/.poshthemes" ] 
     then

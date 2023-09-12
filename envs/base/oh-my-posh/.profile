@@ -1,5 +1,5 @@
 ### Set Style
-[[ -n $NO_LOAD_OMP ]] && return 1;
+[[ -n $NO_LOAD_OMP ]] && return 0;
 
 _shell=;
 [[ -n $_is_bash ]] && _shell="bash"

@@ -1,9 +1,11 @@
 function ws-setup()
 {    
-    #package managers
+    [[ -n $_is_arm_linux ]] && _ws_setup_linux_arm64 && return 0;
+
+    #package managers  
     _install_brew
     _install_snap
-    
+
     #basics
     brew install git gh
     brew install cmake ninja  ccache llvm 
@@ -28,10 +30,31 @@ function ws-setup()
 
 }
 
+function _ws_setup_linux_arm64()
+{
+    sudo apt install -y snapd git gh wget curl xclip htop ncdu bpytop tmux nano xclip build-essential bat fd-find ripgrep
+
+    _install_pyenv
+
+    #fzf
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+    
+    #cargo
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+    #docker
+    sudo snap install docker
+}
+
 ### Loaders ####
 function load_brew()
 {
     if [[ -n $_is_linux ]]; then
+        if [[ -n $_is_arm_linux ]]; then
+            function brew(){ 
+                return 0;
+            } #empty function 
+        fi 
         [[ -d "/home/linuxbrew/" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     elif [[ -n $_is_macos ]]; then
         [[ -d "/opt/homebrew/" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
