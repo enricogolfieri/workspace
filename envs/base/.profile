@@ -37,7 +37,15 @@ export HISTCONTROL=ignoreboth
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 ### Append to the history file (do not overwrite it)
-[[ -n $_is_bash ]] && shopt -s histappend
+if [[ -n $_is_bash ]] then; 
+  shopt -s histappend
+fi
+if [[ -n $_is_zsh ]] then;
+  HISTFILE=~/.zsh_history
+  HISTSIZE=10000
+  SAVEHIST=1000
+  setopt SHARE_HISTORY
+fi
 
 ### fzf
 [[ -f ~/.fzf.bash ]] && [[ -n $_is_bash ]]  && source ~/.fzf.bash
@@ -75,7 +83,6 @@ _fzf_compgen_dir() {
 _fzf_comprun() {
   local command=$1
   shift
-
   case "$command" in
     cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;

@@ -1,9 +1,9 @@
-PATH="/usr/bin:usr/bin/env:/bin:/usr/local/bin"
+PATH="/usr/bin:usr/bin/env:/bin"
 ### Load environment aliases
 . $HOME/.config/workspace/envs/.aliases
 
 ### Activate base environment
-activate-base-bash
+activate-base-zsh
 
 ### Always enable mongo-env
 mongo
@@ -20,4 +20,3 @@ function ws-setup-mongovm()
 function _install_pyenv(){
     echo "_install_pyenv not implemented for mongovm" 
 }
-

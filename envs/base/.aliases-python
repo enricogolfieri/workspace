@@ -57,16 +57,15 @@ function venv()
 # vgit: CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory
 function vgit()
 {
-    [ "$1" = "--help" ] && echo "Usage: vgit <repo-url> [python version (3.x.x)] [requirements-file-name]" && return 0
+    [ "$1" = "--help" ] && echo "Usage: vgit <repo-url> [python version (3.x.x)]" && return 0
 
     if [ -z "$1" ]; then
-        echo "Usage: vgit <repo-url> [python version (3.x.x)] [requirements-file-name]"
+        echo "Usage: vgit <repo-url> [python version (3.x.x)]"
         return 1
     else
         _repo_url=$1
         _pyversion=${2:-$__sys_python3_version}
-        _requiments_file_name=${3:-"requirements.txt"}
-        ws-venv-from-git $_repo_url $_pyversion $_requiments_file_name
+        git clone $_repo_url && cd $(basename $_repo_url .git) && vset $_pyversion
     fi
 }
 

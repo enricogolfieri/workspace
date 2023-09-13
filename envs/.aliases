@@ -16,7 +16,7 @@ function activate-mongo()
             echo "MongoDB environment not installed."
             return
         fi
-        git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo --branch v1.0-devel
+        git clone https://github.com/enricogolfieri/workspace-mongo.git $HOME/.config/workspace-mongo
         if [ ! -d "$HOME/.config/workspace/envs/mongo" ]; then
             ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
         fi
