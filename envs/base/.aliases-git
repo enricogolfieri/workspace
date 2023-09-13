@@ -26,6 +26,25 @@ function ws-generate-rsa-key()
     fi
 }
 
+function ws-auth-host()
+{
+    #add current pub key to authorized hosts on remote host
+    echo "Please enter the remote user: "
+    read remote_user
+    if [[ -z "$remote_user" ]]; then
+        echo "Remote user cannot be empty"
+        return
+    fi
+    echo "Please enter the remote host: "
+    read remote_host
+    if [[ -z "$remote_host" ]]; then
+        echo "Remote host cannot be empty"
+        return
+    fi
+
+    ssh-copy-id -i ~/.ssh/id_rsa.pub $remote_user@$remote_host
+}
+
 ## Configure git email and name
 function ws-git-configure()
 {

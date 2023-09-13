@@ -11,6 +11,9 @@ function ws-setup()
     #python
     _install_pyenv
     
+    brew install ssh 
+    brew install ssh-copy-id
+    
     #nodejs
     _install_nvm_nodejs
     #rust

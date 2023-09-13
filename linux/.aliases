@@ -15,12 +15,21 @@ _install-chrome()
     rm -rf /tmp/chrome.deb
 }
 
+#install ssh-server
+_install-ssh-server()
+{
+    sudo apt-get install openssh-server
+    sudo systemctl enable ssh
+    sudo systemctl start ssh
+}
+
 ws-setup-linux-home()
 {
     sudo apt-get update
     sudo apt-get upgrade 
     
     ws-setup
+    _install-ssh-server
     _install-chrome
     _install-ffmpeg
 }
