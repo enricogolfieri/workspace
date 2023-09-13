@@ -37,10 +37,10 @@ export HISTCONTROL=ignoreboth
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 ### Append to the history file (do not overwrite it)
-if [[ -n $_is_bash ]] then; 
+if [[ -n $_is_bash ]]; then
   shopt -s histappend
 fi
-if [[ -n $_is_zsh ]] then;
+if [[ -n $_is_zsh ]]; then
   HISTFILE=~/.zsh_history
   HISTSIZE=10000
   SAVEHIST=1000
