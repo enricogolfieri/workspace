@@ -1,4 +1,4 @@
-function _install_oh_my_posh()
+function install-oh-my-posh()
 {
     curl -s https://ohmyposh.dev/install.sh | bash -s
 
@@ -10,10 +10,12 @@ function _install_oh_my_posh()
         chmod u+rw $HOME/.poshthemes/*.json
         rm $HOME/.poshthemes/themes.zip
     fi
-}
-
-function ws-install-oh_my_posh()
-{
-    _install_oh_my_posh
     oh-my-posh font install Meslo
 }
+
+### Set Style
+if [[ "$(command -v oh-my-posh)" ]]
+then
+    export CLICOLOR=1
+    eval "$(oh-my-posh --init --shell zsh --config $WS_PLUGINS_PATH/oh-my-posh/easy-term-v1.omp.json)"
+fi

@@ -1,0 +1,41 @@
+services:
+  linda:
+    build:
+      context: .
+      dockerfile: DockerFileU18
+    command: [ 'load' ]
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]
+
+  chiara:
+    build:
+      context: .
+      dockerfile: DockerFile20
+    command: [ 'load' ]
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]
+  serena:
+    build:
+      context: .
+      dockerfile: DockerFile22
+    command: [ 'load' ]
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]

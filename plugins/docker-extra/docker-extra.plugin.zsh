@@ -27,14 +27,14 @@ function docker-mv-to-folder()
 function docker-build()
 {
     docker build -t $1 - < $(pwd)/Dockerfile && \
-    docker run -it --rm -v $(pwd):/root/$1 $1
+    docker run -it --rm -v $(pwd):/root/$1 $@ $1
 }
 
 #builds gpu and connects to docker image linking the current directory
 function docker-build-gpu()
 {
     docker build -t $1 - < $(pwd)/Dockerfile && \
-    docker run -it --gpus all -v $(pwd):/root/$1 $1
+    docker run -it --gpus all -v $(pwd):/root/$1 $@ $1 
 }
 
 #checks if docker is correctly installed

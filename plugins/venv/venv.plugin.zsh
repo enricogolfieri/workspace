@@ -1,17 +1,3 @@
-
-## python ####
-# explain python aliases
-function ws-python-help()
-{
-    echo "python aliases: "
-    echo "<x> mandatory argument"
-    echo "[x] optional argument, uses default value if not specified"
-    echo "  vact: activate python env"
-    echo "  vset: [python version (3.x.x)] [requirements-file-name] create a new python virtual environment local to the current directory"
-    echo "  venv: [python version (3.x.x)] [requirements-file-name] activate python env if exist otherwise create it"
-    echo "  vgit: <repo-url> [python version (3.x.x)] [requirements-file-name] CLONE AND CONVERT a git repo and create a python virtual environment local to the current directory"
-}
-
 # activate python env
 function vact()
 {
@@ -71,10 +57,8 @@ function vgit()
 
 ## Utility python ####
 #redifining cd to automatically activate python inside .venv
-cd ()
+_enable_venv_if_exists()
 {
-	builtin cd $@
-
 	# Check there is no virtual environment activated.
 	if [[ -z ${VIRTUAL_ENV} ]]; then
 		# If the .venv directory is found then activate the virtual
@@ -92,4 +76,5 @@ cd ()
 	fi
 }
 
+chpwd_functions=(${chpwd_functions[@]} "_enable_venv_if_exists")
 
