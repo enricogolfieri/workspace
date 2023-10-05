@@ -21,7 +21,7 @@ function activate-mongo()
             ln -s $HOME/.config/workspace-mongo $HOME/.config/workspace/envs/mongo
         fi
     fi
-    [[ -d $HOME/.config/workspace/envs/mongo ]] && . $HOME/.config/workspace/envs/mongo/.aliases && mongo-activate
+    [[ -d "$HOME/.config/workspace/envs/mongo" ]] && source $HOME/.config/workspace-mongo/workspace-mongo.plugin.zsh &&  mongo-dev-activate && mongo-vm-activate
 }
 
 function ws-update()

@@ -1,4 +1,5 @@
-PATH="/usr/bin:usr/bin/env:/bin"
+PATH="/usr/bin:usr/bin/env:/bin:/usr/local/bin"
+
 ### Load environment aliases
 . $HOME/.config/workspace/envs/.aliases
 
@@ -6,7 +7,7 @@ PATH="/usr/bin:usr/bin/env:/bin"
 activate-base-zsh
 
 ### Always enable mongo-env
-mongo
+activate-mongo
 
 function ws-setup-mongovm()
 {
