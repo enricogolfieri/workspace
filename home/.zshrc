@@ -21,14 +21,13 @@ function load()
     antigen bundle zsh-users/zsh-completions
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-syntax-highlighting
-
+    antigen bundle hschne/fzf-git
 
     # Syntax highlighting bundle.
     antigen bundle zsh-users/zsh-syntax-highlighting
 
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
-    antigen bundle $WS_PLUGINS_PATH/oh-my-posh
     antigen bundle $WS_PLUGINS_PATH/venv
     antigen bundle $WS_PLUGINS_PATH/remote
     antigen bundle $WS_PLUGINS_PATH/utils
@@ -36,11 +35,21 @@ function load()
     antigen bundle $WS_PLUGINS_PATH/containers
     antigen bundle $WS_PLUGINS_PATH/pyenv
 
+    #theme
+    antigen theme https://github.com/romkatv/powerlevel10k.git
+    antigen bundle $WS_PLUGINS_PATH/p10k
+
     # Load mongo
     antigen bundle enricogolfieri/workspace-mongo --branch=main
 
     # Tell Antigen that you're done.
     antigen apply
+
+    #Set-up history
+    HISTFILE=~/.zsh_history
+    HISTSIZE=100000
+    SAVEHIST=10000
+    setopt SHARE_HISTORY
 }
 
 function load-w-trace()
