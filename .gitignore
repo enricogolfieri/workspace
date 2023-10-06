@@ -1,1 +1,3 @@
 envs/mongo
+*/*.zwc
+workspace-mongo-main
