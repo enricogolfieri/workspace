@@ -1,7 +1,7 @@
 
 
 
-WS_PATH=$HOME/.workspace
+WS_PATH=$HOME/.config/workspace
 WS_PLUGINS_PATH=$WS_PATH/plugins
 function load()
 {
