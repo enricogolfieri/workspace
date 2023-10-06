@@ -8,18 +8,22 @@ function docker-fix-permission-denied()
     sudo chmod 666 /var/run/docker.sock
 }
 
-function docker-mv-to-folder()
+function docker-mv-to-user-space()
 {
-    local _folder=$1
+    local _folder="~/.docker"
     #ask if sure to move
     [[ -z $_folder ]] && echo "No folder specified" && return 0;
-    read -p "Are you sure you want to move dockeri installation? (Y/N): " confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
+    [[ -d $_folder ]] && echo "$_folder already exists" && return 1;
+    echo "Are you sure you want to move docker installation? (Y/N):"
+    read -r confirm 
+    [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
     echo "Moving docker installation to $_folder ..."
     mkdir -p $_folder
     #move
     sudo service docker stop
     sudo mv /var/lib/docker $_folder
     sudo ln -s $_folder /var/lib/docker
+    sudo chmod -R 0777 $_folder
     sudo service docker start
 }
 
@@ -78,6 +82,26 @@ function docker-setup-nvidia()
     sudo systemctl restart docker
     sudo reboot
 }
+
+function docker-full-reset()
+{
+   echo "Note, this will erease all your containers and images, continue? [y\Y]"
+       read -r confirm
+    [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
+   sudo rm -rf ~/.docker
+   sudo rm -rf /var/lib/docker
+   sudo rm -rf /etc/docker
+   sudo rm /etc/apparmor.d/docker
+   sudo groupdel docker
+   sudo rm -rf /var/run/docker.sock
+   for pkg in docker.io docker-doc docker-compose podman-docker containerd runc docker-ce docker-ce-cli; do
+       sudo apt-get purge -y $pkg
+   done
+   sudo apt update
+   echo "re-installing docker"
+   sudo apt-get install -y docker.io docker-compose
+}
+
 alias dc='docker-compose'
 alias docker-start='sudo systemctl start docker'
 alias docker-restart='sudo systemctl restart docker'

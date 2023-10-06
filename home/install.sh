@@ -15,17 +15,6 @@ case `uname` in
     ;;
 esac
 
-
-function _install_brew()
-{
-    if ! [ "$(command -v brew)" ]; then
-        if [[ -n "$_is_linux" ]] ; then
-            sudo apt-get install -y build-essential curl git
-        fi
-    fi
-    load_brew
-}
-
 function _install_nvm_nodejs()
 {
     #install nvm 
@@ -171,7 +160,6 @@ if ! grep -qF "source $profilepath" "$HOME/.zshenv"; then
 else
     echo "source command already exists in ~/.zshenv"
 fi
-
 
 #run zsh..
 zsh
