@@ -1,9 +1,11 @@
 services:
   linda:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
     build:
       context: .
       dockerfile: DockerFileU18
-    command: [ 'load' ]
     volumes:
       - ~/.workspace:/root/.workspace
     deploy:
@@ -14,10 +16,12 @@ services:
             capabilities: [ gpu, video ]
 
   chiara:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
     build:
       context: .
-      dockerfile: DockerFile20
-    command: [ 'load' ]
+      dockerfile: DockerFileU20
     volumes:
       - ~/.workspace:/root/.workspace
     deploy:
@@ -27,10 +31,12 @@ services:
           - driver: nvidia
             capabilities: [ gpu, video ]
   serena:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
     build:
       context: .
-      dockerfile: DockerFile22
-    command: [ 'load' ]
+      dockerfile: DockerFileU22
     volumes:
       - ~/.workspace:/root/.workspace
     deploy:
