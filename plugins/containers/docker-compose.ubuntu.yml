@@ -1,0 +1,47 @@
+services:
+  linda:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileU18
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]
+
+  chiara:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileU20
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]
+  serena:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileU22
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]

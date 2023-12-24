@@ -1,14 +1,20 @@
 
-WS_PATH=$HOME/.config/workspace
+
+
+WS_PATH=$HOME/.workspace
 WS_PLUGINS_PATH=$WS_PATH/plugins
 function load()
 {
+    [[ -d "/opt/homebrew/" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+    [[ -d "/home/linuxbrew/" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
     ANTIGEN_LOG=/tmp/antigen.log
-    source ~/antigen.zsh
+    source $(brew --prefix)/share/antigen/antigen.zsh
     # Load the oh-my-zsh's library.
     antigen use oh-my-zsh
 
     # Bundles from the default repo (robbyrussell's oh-my-zsh).
+    antigen bundle gitfast
     antigen bundle heroku
     antigen bundle fzf
     antigen bundle zsh-users/zsh-autosuggestions
@@ -21,10 +27,13 @@ function load()
     antigen bundle zsh-users/zsh-syntax-highlighting
 
     # Load custom bundles.
+    antigen bundle $WS_PLUGINS_PATH/docker-extra
     antigen bundle $WS_PLUGINS_PATH/venv
     antigen bundle $WS_PLUGINS_PATH/remote
     antigen bundle $WS_PLUGINS_PATH/utils
+    antigen bundle $WS_PLUGINS_PATH/fbrew
     antigen bundle $WS_PLUGINS_PATH/containers
+    antigen bundle $WS_PLUGINS_PATH/pyenv
 
     #theme
     antigen theme https://github.com/romkatv/powerlevel10k.git
@@ -35,10 +44,6 @@ function load()
 
     # Tell Antigen that you're done.
     antigen apply
-
-    #Always activate mongo environment
-    mongo-dev-activate
-    mongo-vm-activate
 
     #Set-up history
     HISTFILE=~/.zsh_history

@@ -1,0 +1,2 @@
+
+[[ -f "~/.zshrc" ]] && source ~/.zshrc
