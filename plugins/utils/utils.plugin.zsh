@@ -2,6 +2,11 @@
 
 cheat() { curl cheat.sh/"$1" ; }
 
+function test-connection()
+{
+    curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -
+}
+
 ### Set aliases
 alias ls='ls -h --color=auto'
 alias ll='ls -l'

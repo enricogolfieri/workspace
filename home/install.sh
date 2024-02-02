@@ -15,17 +15,6 @@ case `uname` in
     ;;
 esac
 
-
-function _install_brew()
-{
-    if ! [ "$(command -v brew)" ]; then
-        if [[ -n "$_is_linux" ]] ; then
-            sudo apt-get install -y build-essential curl git
-        fi
-    fi
-    load_brew
-}
-
 function _install_nvm_nodejs()
 {
     #install nvm 
@@ -78,7 +67,6 @@ function _install_docker()
 {
     if ! [ "$(command -v docker)" ]; then
         if  [[ -n "$_is_linux" ]] ; then
-            #for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
             sudo apt-get install -y docker-ce docker-ce-cli containerd.io 
         elif  [[ -n "$_is_macos" ]]; then
             brew install --cask docker 
@@ -171,7 +159,6 @@ if ! grep -qF "source $profilepath" "$HOME/.zshenv"; then
 else
     echo "source command already exists in ~/.zshenv"
 fi
-
 
 #run zsh..
 zsh

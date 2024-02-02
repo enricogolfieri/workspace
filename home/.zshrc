@@ -23,9 +23,6 @@ function load()
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
 
-    # Syntax highlighting bundle.
-    antigen bundle zsh-users/zsh-syntax-highlighting
-
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
     antigen bundle $WS_PLUGINS_PATH/venv
@@ -34,6 +31,7 @@ function load()
     antigen bundle $WS_PLUGINS_PATH/fbrew
     antigen bundle $WS_PLUGINS_PATH/containers
     antigen bundle $WS_PLUGINS_PATH/pyenv
+    antigen bundle $WS_PLUGINS_PATH/llama
 
     #theme
     antigen theme https://github.com/romkatv/powerlevel10k.git

@@ -25,5 +25,11 @@ Docker project:
     - every repo-env should provide dc-install function to create a docker image for that env
 
 
+TODO
+- rename envs into modules 
+- move fzf into /fzf module 
+- ws-setup can install fzf, it's ok to assume fzf it's installed 
+- add NO_LOAD_FZF to disable fzf loading
+
 
 

@@ -8,6 +8,7 @@
         "*.bashrc": "shellscript",
         "*.bash": "shellscript",
         "*.zsh": "shellscript",
-        "*.mongo-functions-*": "shellscript"
+        "*.mongo-functions-*": "shellscript",
+        "datax":"shellscript"
       }
 }
