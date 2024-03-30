@@ -67,7 +67,6 @@ function _install_docker()
 {
     if ! [ "$(command -v docker)" ]; then
         if  [[ -n "$_is_linux" ]] ; then
-            #for pkg in docker-ce docker-ce-cli contanderd.io docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get -y remove $pkg; done
             sudo apt-get install -y docker-ce docker-ce-cli containerd.io 
         elif  [[ -n "$_is_macos" ]]; then
             brew install --cask docker 

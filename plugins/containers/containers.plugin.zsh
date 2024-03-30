@@ -14,7 +14,7 @@ function runchiara()
 function runserena()
 {
     docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml up serena -d 
-    docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml serena linda /bin/bash  # Open an interactive shell
+    docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml exec linda /bin/bash  # Open an interactive shell
 
 }
 
