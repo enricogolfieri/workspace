@@ -15,7 +15,6 @@ function load()
     antigen bundle zsh-users/zsh-completions
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-syntax-highlighting
-    antigen bundle hschne/fzf-git
 
     # Syntax highlighting bundle.
     antigen bundle zsh-users/zsh-syntax-highlighting
