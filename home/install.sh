@@ -1,5 +1,6 @@
 alias sudo='sudo '
 _os=""
+WS_PATH=$HOME/.workspace
 case `uname` in
     Darwin)
         echo "Detected MacOS"
@@ -90,9 +91,9 @@ fi
 brew install git gh cmake ninja ccache llvm openssl readline xz zlib sqlite3
 
 #download repository if not exists
-if [ ! -d "$HOME/.workspace" ] 
+if [ ! -d "$WS_PATH" ] 
 then
-    git clone https://github.com/enricogolfieri/workspace.git $HOME/.workspace
+    git clone https://github.com/enricogolfieri/workspace.git $WS_PATH
 fi
 
 #python

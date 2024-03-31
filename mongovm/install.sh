@@ -1,3 +1,5 @@
+WS_PATH=$HOME/.config/workspace
+
 alias sudo='sudo '
 
 sudo apt-get update -y
@@ -7,9 +9,9 @@ sudo apt-get upgrade -y
 sudo apt-get install -y make build-essential git wget curl libssl-dev
 
 #download repository if not exists
-if [ ! -d "$HOME/.workspace" ] 
+if [ ! -d "$WS_PATH" ] 
 then
-    git clone https://github.com/enricogolfieri/workspace.git $HOME/.workspace
+    git clone https://github.com/enricogolfieri/workspace.git $WS_PATH
 fi
 
 #install zsh
@@ -34,7 +36,7 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo apt-get install -y docker-compose
 
 #write "source zshrc" if not exists
-zsrchpath=$HOME/.workspace/mongovm/.zshrc
+zsrchpath=$WS_PATH/mongovm/.zshrc
 if ! grep -qF "source $zsrchpath" "$HOME/.zshrc"; then
     # Append the source command to ~/.zshrc
     echo "source $zsrchpath" >> "$HOME/.zshrc"
@@ -44,7 +46,7 @@ else
 fi
 
 #write .zshenv
-profilepath=$HOME/.workspace/mongovm/.zshenv
+profilepath=$WS_PATH/mongovm/.zshenv
 if ! grep -qF "source $profilepath" "$HOME/.zshenv"; then
     # Append the source command to ~/.zshrc
     echo "source $profilepath" >> "$HOME/.zshenv"
