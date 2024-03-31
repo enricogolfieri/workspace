@@ -37,9 +37,6 @@ function load()
     antigen theme https://github.com/romkatv/powerlevel10k.git
     antigen bundle $WS_PLUGINS_PATH/p10k
 
-    # Load mongo
-    antigen bundle enricogolfieri/workspace-mongo --branch=main
-
     # Tell Antigen that you're done.
     antigen apply
 
