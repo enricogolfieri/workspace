@@ -17,12 +17,6 @@ fi
 #fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
 
-#install pihole 
-curl -sSL https://install.pi-hole.net | bash
-
-#install wireguard
-wget https://git.io/wireguard -O wireguard-install.sh && bash wireguard-install.sh
-
 #write "source bashrc" if not exists
 bashrcpath=$HOME/.workspace/pi/.bashrc
 if ! grep -qF "source $bashrcpath" "$HOME/.bashrc"; then
