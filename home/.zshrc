@@ -23,6 +23,12 @@ function load()
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
 
+    # Nvm
+    export NVM_DIR="$HOME/.nvm"
+    export NVM_LAZY_LOAD=true
+    export NVM_COMPLETION=true
+    antigen bundle lukechilds/zsh-nvm
+    
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
     antigen bundle $WS_PLUGINS_PATH/venv

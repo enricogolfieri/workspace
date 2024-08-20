@@ -16,6 +16,12 @@ function load()
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-syntax-highlighting
 
+    # Nvm
+    export NVM_DIR="$HOME/.nvm"
+    export NVM_LAZY_LOAD=true
+    export NVM_COMPLETION=true
+    antigen bundle lukechilds/zsh-nvm
+
     # Syntax highlighting bundle.
     antigen bundle zsh-users/zsh-syntax-highlighting
 
