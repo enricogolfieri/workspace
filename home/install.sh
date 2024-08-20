@@ -29,9 +29,11 @@ function _install_nvm_nodejs()
 }
 
 function _install_pyenv()
-{
+{    
     #install pyenv
     [ "$(command -v pyenv)" ] && echo "[install_pyenv] Pyenv already installed" && return
+
+    sudo apt-get install zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
     if [ ! -d "$HOME/.pyenv" ] 
     then
@@ -48,7 +50,7 @@ function _install_pyenv()
     eval "$(pyenv virtualenv-init -)"
 
     #install latest python version
-    $version="$(pyenv install --list | grep -E '^\s+[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1)"
+    version=3.11
     pyenv install $version
     pyenv global $version
 }
@@ -126,11 +128,6 @@ brew install antigen
 _install_vscode
 
 if [[ -n "$_is_linux" ]] ; then
-   #install ssh server
-    sudo apt-get install -y openssh-server
-    sudo systemctl enable ssh
-    sudo systemctl start ssh
-
     #install chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/chrome.deb
     sudo dpkg -i /tmp/chrome.deb

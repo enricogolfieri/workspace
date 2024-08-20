@@ -1,16 +1,11 @@
 
-
-
 WS_PATH=$HOME/.workspace
 WS_PLUGINS_PATH=$WS_PATH/plugins
 function load()
 {
-    [[ -d "/opt/homebrew/" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-    [[ -d "/home/linuxbrew/" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
     ANTIGEN_LOG=/tmp/antigen.log
-    source $(brew --prefix)/share/antigen/antigen.zsh
-    # Load the oh-my-zsh's library.
+    source ~/antigen.zsh
+     # Load the oh-my-zsh's library.
     antigen use oh-my-zsh
 
     # Bundles from the default repo (robbyrussell's oh-my-zsh).
@@ -23,24 +18,17 @@ function load()
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
 
-    # Nvm
-    export NVM_DIR="$HOME/.nvm"
-    export NVM_LAZY_LOAD=true
-    export NVM_COMPLETION=true
-    antigen bundle lukechilds/zsh-nvm
-    
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
     antigen bundle $WS_PLUGINS_PATH/venv
     antigen bundle $WS_PLUGINS_PATH/remote
     antigen bundle $WS_PLUGINS_PATH/utils
-    antigen bundle $WS_PLUGINS_PATH/fbrew
     antigen bundle $WS_PLUGINS_PATH/containers
     antigen bundle $WS_PLUGINS_PATH/pyenv
     antigen bundle $WS_PLUGINS_PATH/llama
 
     #theme
-    antigen theme https://github.com/romkatv/powerlevel10k.git
+   # antigen theme https://github.com/romkatv/powerlevel10k.git
     antigen bundle $WS_PLUGINS_PATH/p10k
 
     # Tell Antigen that you're done.

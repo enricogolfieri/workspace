@@ -8,6 +8,16 @@ services:
       dockerfile: DockerFileU18
     volumes:
       - ~/.workspace:/root/.workspace
+
+  linda-gpu:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileU18
+    volumes:
+      - ~/.workspace:/root/.workspace
     deploy:
       resources:
         reservations:
@@ -24,13 +34,34 @@ services:
       dockerfile: DockerFileU20
     volumes:
       - ~/.workspace:/root/.workspace
+
+  chiara-gpu:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileU20
+    volumes:
+      - ~/.workspace:/root/.workspace
     deploy:
       resources:
         reservations:
           devices:
           - driver: nvidia
             capabilities: [ gpu, video ]
+
   serena:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileU22
+    volumes:
+      - ~/.workspace:/root/.workspace
+
+  serena-gpu:
     stdin_open: true
     tty: true
     command: /bin/bash
@@ -45,3 +76,41 @@ services:
           devices:
           - driver: nvidia
             capabilities: [ gpu, video ]
+
+  maya:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileUbuntuServer
+    volumes:
+      - ~/.workspace:/root/.workspace
+
+  maya-gpu:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileUbuntuServer
+    volumes:
+      - ~/.workspace:/root/.workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            capabilities: [ gpu, video ]
+    
+  rasp:
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+    build:
+      context: .
+      dockerfile: DockerFileRasp
+    ports:
+      - "80:80"
+    volumes:
+      - ~/.workspace:/root/.workspace
