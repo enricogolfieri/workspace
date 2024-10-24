@@ -5,10 +5,16 @@ case `uname` in
     Darwin)
         echo "Detected MacOS"
         _is_macos=1
+        if [[ $(uname -m) == arm* ]] || [[ $(uname -m) == aarch64 ]]; then
+            _is_arm=1
+        fi
     ;;
     Linux)
         echo "Detected Linux"
         _is_linux=1
+        if [[ $(uname -m) == arm* ]] || [[ $(uname -m) == aarch64 ]]; then
+            _is_arm=1
+        fi
     ;;
     *)
         echo "[ENV] Unsupported OS, impossible to setup"
