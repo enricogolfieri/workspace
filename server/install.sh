@@ -87,7 +87,8 @@ sudo apt-get install -y openssh-server
 sudo systemctl enable ssh
 sudo systemctl start ssh
 
-
+#install kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 
 #write .zshenv
 profilepath=$WS_PATH/server/.zshenv

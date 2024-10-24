@@ -133,6 +133,9 @@ brew install antigen
 #vscode
 _install_vscode
 
+#install kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
 if [[ -n "$_is_linux" ]] ; then
     #install chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/chrome.deb
