@@ -1,13 +1,20 @@
 alias sudo='sudo '
 _os=""
+WS_PATH=$HOME/.workspace
 case `uname` in
     Darwin)
         echo "Detected MacOS"
         _is_macos=1
+        if [[ $(uname -m) == arm* ]] || [[ $(uname -m) == aarch64 ]]; then
+            _is_arm=1
+        fi
     ;;
     Linux)
         echo "Detected Linux"
         _is_linux=1
+        if [[ $(uname -m) == arm* ]] || [[ $(uname -m) == aarch64 ]]; then
+            _is_arm=1
+        fi
     ;;
     *)
         echo "[ENV] Unsupported OS, impossible to setup"
@@ -28,9 +35,11 @@ function _install_nvm_nodejs()
 }
 
 function _install_pyenv()
-{
+{    
     #install pyenv
     [ "$(command -v pyenv)" ] && echo "[install_pyenv] Pyenv already installed" && return
+
+    sudo apt-get install zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
     if [ ! -d "$HOME/.pyenv" ] 
     then
@@ -47,7 +56,7 @@ function _install_pyenv()
     eval "$(pyenv virtualenv-init -)"
 
     #install latest python version
-    $version="$(pyenv install --list | grep -E '^\s+[0-9]+\.[0-9]+\.[0-9]+$' | tail -n 1)"
+    version=3.11
     pyenv install $version
     pyenv global $version
 }
@@ -90,9 +99,9 @@ fi
 brew install git gh cmake ninja ccache llvm openssl readline xz zlib sqlite3
 
 #download repository if not exists
-if [ ! -d "$HOME/.workspace" ] 
+if [ ! -d "$WS_PATH" ] 
 then
-    git clone https://github.com/enricogolfieri/workspace.git $HOME/.workspace
+    git clone https://github.com/enricogolfieri/workspace.git $WS_PATH
 fi
 
 #python
@@ -124,12 +133,10 @@ brew install antigen
 #vscode
 _install_vscode
 
-if [[ -n "$_is_linux" ]] ; then
-   #install ssh server
-    sudo apt-get install -y openssh-server
-    sudo systemctl enable ssh
-    sudo systemctl start ssh
+#install kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 
+if [[ -n "$_is_linux" ]] ; then
     #install chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/chrome.deb
     sudo dpkg -i /tmp/chrome.deb

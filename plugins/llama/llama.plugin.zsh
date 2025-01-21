@@ -59,13 +59,14 @@ function _run_llama_prompt()
 
 # Use fzf to interactively select a model
 _list_models_remote() {
-    curl -s https://huggingface.co/api/models\?search\=llama | jq -r '.[] | .modelId'
+    local _keyword=${1:-llama}
+    curl -s https://huggingface.co/api/models\?search\=$_keyword | jq -r '.[] | .modelId'
 }
 
 function _select_and_download()
 {
    # Use fzf to interactively select a model
-    local _model_id=$(_list_models_remote | fzf --prompt="Select a llama model: ")
+    local _model_id=$(_list_models_remote $1 | fzf --prompt="Select a llama model: ")
 
     #_model_name=user/llama-model-name, remove user
     _model_name=${_model_id#*/}
@@ -83,7 +84,7 @@ function _select_and_download()
 function goto()
 {
     # Use fzf to interactively select a model
-    selected_model=$(_list_models_remote | fzf --prompt="Select a llama model: ")
+    selected_model=$(_list_models_remote $1 | fzf --prompt="Select a llama model: ")
 
     if [ -z "$selected_model" ]; then
         return 1
@@ -125,13 +126,13 @@ function convert()
 function llama() {
     case "$1" in
         add)
-            _select_and_download
+            _select_and_download $2
         ;;
         list)
             ls $_models_path
         ;;
         goto)
-            goto
+            goto $2
         ;;
         quantize)
             shift
