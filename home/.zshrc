@@ -22,6 +22,7 @@ function load()
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
+    antigen bundle Aloxaf/fzf-tab
 
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
@@ -36,9 +37,6 @@ function load()
     #theme
     antigen theme https://github.com/romkatv/powerlevel10k.git
     antigen bundle $WS_PLUGINS_PATH/p10k
-
-    # Load mongo
-    antigen bundle enricogolfieri/workspace-mongo --branch=main
 
     # Tell Antigen that you're done.
     antigen apply

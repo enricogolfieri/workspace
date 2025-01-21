@@ -1,5 +1,5 @@
 
-WS_PATH=$HOME/.config/workspace
+WS_PATH=$HOME/.workspace
 WS_PLUGINS_PATH=$WS_PATH/plugins
 function load()
 {
@@ -16,6 +16,7 @@ function load()
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
+    antigen bundle Aloxaf/fzf-tab
 
     # Syntax highlighting bundle.
     antigen bundle zsh-users/zsh-syntax-highlighting
