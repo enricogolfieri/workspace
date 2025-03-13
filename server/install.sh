@@ -1,8 +1,19 @@
 alias sudo='sudo '
 WS_PATH=$HOME/.workspace
 
+_nvm_version=0.38.0
+_python_version=3.11
 function _install_npm()
 {
+    #install nvm 
+    _nvm_version
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$_nvm_version/install.sh | bash
+    source ~/.nvm/nvm.sh
+
+    # Note the following might not work if sourcing nvm.sh for some reason fail.
+    #install nodejs
+    nvm install node --lts
+
     #install npm 
     sudo apt-get install -y npm
     npm install -g npm
@@ -39,7 +50,7 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 
 #basics
-sudo apt-get install -y make build-essential git wget curl libssl-dev
+sudo apt-get install -y make build-essential git wget curl libssl-dev unzip zip llvm 
 
 #download repository if not exists
 if [ ! -d "$WS_PATH" ] 
@@ -87,7 +98,11 @@ sudo apt-get install -y openssh-server
 sudo systemctl enable ssh
 sudo systemctl start ssh
 
-
+#install homebox
+wget https://github.com/bastienwirtz/homer/releases/latest/download/homer.zip
+unzip homer.zip
+cd homer
+cp assets/config.yml.dist assets/config.yml
 
 #write .zshenv
 profilepath=$WS_PATH/server/.zshenv
