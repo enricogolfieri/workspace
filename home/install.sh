@@ -5,10 +5,16 @@ case `uname` in
     Darwin)
         echo "Detected MacOS"
         _is_macos=1
+        if [[ $(uname -m) == arm* ]] || [[ $(uname -m) == aarch64 ]]; then
+            _is_arm=1
+        fi
     ;;
     Linux)
         echo "Detected Linux"
         _is_linux=1
+        if [[ $(uname -m) == arm* ]] || [[ $(uname -m) == aarch64 ]]; then
+            _is_arm=1
+        fi
     ;;
     *)
         echo "[ENV] Unsupported OS, impossible to setup"
@@ -126,6 +132,9 @@ brew install antigen
 
 #vscode
 _install_vscode
+
+#install kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 
 if [[ -n "$_is_linux" ]] ; then
     #install chrome

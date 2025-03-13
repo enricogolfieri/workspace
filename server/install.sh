@@ -104,6 +104,9 @@ unzip homer.zip
 cd homer
 cp assets/config.yml.dist assets/config.yml
 
+#install kitty
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
 #write .zshenv
 profilepath=$WS_PATH/server/.zshenv
 if ! grep -qF "source $profilepath" "$HOME/.zshenv"; then
