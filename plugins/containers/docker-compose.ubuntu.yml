@@ -9,6 +9,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
+      - dev-mongo-volume:/root/mongo
       - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
       - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
       - ~/.workspace:/root/.workspace
@@ -92,4 +93,7 @@ services:
           devices:
           - driver: nvidia
             capabilities: [ gpu, video ]
+
+volumes:
+  dev-mongo-volume:
     
