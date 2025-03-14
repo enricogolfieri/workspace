@@ -18,6 +18,9 @@ function load()
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
 
+    #load nvm
+    antigen bundle lukechilds/zsh-nvm
+
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
     antigen bundle $WS_PLUGINS_PATH/venv
