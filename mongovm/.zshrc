@@ -16,7 +16,6 @@ function load()
     antigen bundle zsh-users/zsh-history-substring-search
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle hschne/fzf-git
-    antigen bundle Aloxaf/fzf-tab
 
     # Nvm
     export NVM_DIR="$HOME/.nvm"
@@ -44,8 +43,7 @@ function load()
     antigen apply
 
     #Always activate mongo environment
-    mongo-dev-activate
-    mongo-vm-activate
+    mongo-enable
 
     #Set-up history
     HISTFILE=~/.zsh_history
