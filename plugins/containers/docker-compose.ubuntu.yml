@@ -1,75 +1,61 @@
 services:
-  linda:
+  dev-mongo:
     stdin_open: true
     tty: true
     command: /bin/bash
     build:
-      context: .
-      dockerfile: DockerFileU18
+      context: ~/.workspace/mongovm/
+      dockerfile: Dockerfile
+    ports:
+      - "27017:27017"
     volumes:
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
       - ~/.workspace:/root/.workspace
+      - ~/.workspace/mongovm/.zshrc:/root/.zshrc:ro
+      - ~/.workspace/mongovm/.zshenv:/root/.zshenv:ro
+      - ~/.workspace/mongovm/gitconfig:/root/.gitconfig
+      - ~/.workspace/mongovm/gitignore:/root/.gitignore
+    environment:
+      - GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
 
-  linda-gpu:
+  pi:
     stdin_open: true
     tty: true
     command: /bin/bash
     build:
-      context: .
-      dockerfile: DockerFileU18
+      context: ~/.workspace/pi
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
     volumes:
       - ~/.workspace:/root/.workspace
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            capabilities: [ gpu, video ]
+      - ~/.workspace/pi/.zshrc:/root/.zshrc:ro
+      - ~/.workspace/pi/.zshenv:/root/.zshenv:ro
 
-  chiara:
+  home:
     stdin_open: true
     tty: true
     command: /bin/bash
     build:
-      context: .
-      dockerfile: DockerFileU20
+      context: ~/.workspace/home
+      dockerfile: Dockerfile
     volumes:
       - ~/.workspace:/root/.workspace
+      - ~/.workspace/home/.zshrc:/root/.zshrc:ro
+      - ~/.workspace/home/.zshenv:/root/.zshenv:ro
 
-  chiara-gpu:
+  home-server:
     stdin_open: true
     tty: true
     command: /bin/bash
     build:
-      context: .
-      dockerfile: DockerFileU20
+      context: ~/.workspace/server
+      dockerfile: Dockerfile
     volumes:
       - ~/.workspace:/root/.workspace
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            capabilities: [ gpu, video ]
-
-  serena:
-    stdin_open: true
-    tty: true
-    command: /bin/bash
-    build:
-      context: .
-      dockerfile: DockerFileU22
-    volumes:
-      - ~/.workspace:/root/.workspace
-
-  serena-gpu:
-    stdin_open: true
-    tty: true
-    command: /bin/bash
-    build:
-      context: .
-      dockerfile: DockerFileU22
-    volumes:
-      - ~/.workspace:/root/.workspace
+      - ~/.workspace/server/.zshrc:/root/.zshrc:ro
+      - ~/.workspace/server/.zshenv:/root/.zshenv:ro
     deploy:
       resources:
         reservations:
@@ -103,14 +89,3 @@ services:
           - driver: nvidia
             capabilities: [ gpu, video ]
     
-  rasp:
-    stdin_open: true
-    tty: true
-    command: /bin/bash
-    build:
-      context: .
-      dockerfile: DockerFileRasp
-    ports:
-      - "80:80"
-    volumes:
-      - ~/.workspace:/root/.workspace

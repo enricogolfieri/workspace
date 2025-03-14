@@ -1,4 +1,0 @@
-#run docker image with base environment loaded
-FROM ubuntu:20.04
-RUN apt-get update && \
-      apt-get -y install sudo
