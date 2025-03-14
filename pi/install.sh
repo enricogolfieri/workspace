@@ -15,7 +15,7 @@ then
 fi
 
 #fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --key-bindings --completion --no-update-rc
 
 #write "source bashrc" if not exists
 bashrcpath=$HOME/.workspace/pi/.bashrc
