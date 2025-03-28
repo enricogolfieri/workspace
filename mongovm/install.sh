@@ -25,7 +25,7 @@ curl -L git.io/antigen > ~/antigen.zsh
 sudo apt install -y snapd gh xclip htop ncdu bpytop tmux nano xclip ripgrep
 
 #fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --completion --key-bindings --no-update-rc
 sudo apt install bat fd-find 
 
 #cargo
