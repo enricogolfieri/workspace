@@ -34,7 +34,7 @@ function load()
 
     #theme
     antigen theme https://github.com/romkatv/powerlevel10k.git
-    antigen bundle $WS_PLUGINS_PATH/p10k
+    antigen bundle enricogolfieri/p10k-config --branch=main
 
     # Load mongo
     antigen bundle enricogolfieri/workspace-mongo --branch=main

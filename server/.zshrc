@@ -31,8 +31,8 @@ function load()
     antigen bundle $WS_PLUGINS_PATH/llama
 
     #theme
-   # antigen theme https://github.com/romkatv/powerlevel10k.git
-    antigen bundle $WS_PLUGINS_PATH/p10k
+    antigen theme https://github.com/romkatv/powerlevel10k.git
+    antigen bundle enricogolfieri/p10k-config --branch=main
 
     # Tell Antigen that you're done.
     antigen apply
