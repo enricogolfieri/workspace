@@ -19,7 +19,7 @@ function runmaya-gpu()
 
 function build-mongovm()
 {
-    docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml up -d dev-mongo
+    docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml up -d --build dev-mongo
 }
 
 function run-mongovm()
