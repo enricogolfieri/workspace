@@ -1,4 +1,4 @@
-WS_PATH=$HOME/.config/workspace
+WS_PATH=$HOME/.workspace
 
 alias sudo='sudo '
 
@@ -35,25 +35,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo apt-get install -y docker-compose
 
-#write "source zshrc" if not exists
-zsrchpath=$WS_PATH/mongovm/.zshrc
-if ! grep -qF "source $zsrchpath" "$HOME/.zshrc"; then
-    # Append the source command to ~/.zshrc
-    echo "source $zsrchpath" >> "$HOME/.zshrc"
-    echo "Added source command to ~/.zshrc"
-else
-    echo "source command already exists in ~/.zshrc"
-fi
-
-#write .zshenv
-profilepath=$WS_PATH/mongovm/.zshenv
-if ! grep -qF "source $profilepath" "$HOME/.zshenv"; then
-    # Append the source command to ~/.zshrc
-    echo "source $profilepath" >> "$HOME/.zshenv"
-    echo "Added source command to ~/.zshenv"
-else
-    echo "source command already exists in ~/.zshenv"
-fi
+# run connect.sh
+zsh $WS_PATH/mongovm/connect.sh
 
 #run zsh..
 zsh
