@@ -10,14 +10,10 @@ services:
       - "27017:27017"
     volumes:
       - dev-mongo-volume:/root/mongo
-      - dev-mongo-volume-vscode-server:/root/.vscode-server/   
+      - dev-mongo-volume-vscode-server:/root/.vscode-server/
+      - dev-mongo-evg-yml:/root/.evergreen.yml
       - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
       - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
-      - ~/.antigen/bundles/enricogolfieri:/root/.workspace-mongo
-      - ~/.workspace/mongovm/.zshrc:/root/.zshrc:ro
-      - ~/.workspace/mongovm/.zshenv:/root/.zshenv:ro
-      - ~/.workspace/mongovm/gitconfig:/root/.gitconfig
-      - ~/.workspace/mongovm/gitignore:/root/.gitignore
     environment:
       - GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
 
@@ -98,4 +94,4 @@ services:
 volumes:
   dev-mongo-volume:
   dev-mongo-volume-vscode-server:
-    
+  dev-mongo-evg-yml:    

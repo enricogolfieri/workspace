@@ -48,13 +48,20 @@ RUN USER=${USER:-$(whoami)} /tmp/toolchain_installer.sh
 RUN /opt/mongodbtoolchain/v5/bin/pip3 install pymongo
 
 # Install mongosh for aarch64
-# NOTE check here to install it for a different architecture 
+# NOTE check documentation to install it for a different architecture 
 RUN sudo apt-get install gnupg && curl -fsSL https://pgp.mongodb.com/server-6.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg --dearmor
 RUN echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
 RUN sudo apt-get update && sudo apt-get install -y mongodb-mongosh
 
 # Install mongo tools (mongo export, mongosync etc ..)
+# NOTE check documentation to install it for a different architecture 
 RUN curl "https://fastdl.mongodb.org/tools/db/mongodb-database-tools-amazon2023-aarch64-100.9.5.tgz" --output /tmp/user-tools.tgz 
 RUN mkdir -p /tmp/user-tools-output && tar -zxvf /tmp/user-tools.tgz -C /tmp/user-tools-output --strip-components=1 && cp /tmp/user-tools-output/bin/* /usr/local/bin/
 
+# Install evergreen for aarch64
+# NOTE check evergreen website to install it for a different architecture 
+RUN curl https://evg-bucket-evergreen.s3.amazonaws.com/evergreen/clients/evergreen_ad3a8afd665f67cb48b4742b6514230d8a519a60/linux_arm64/evergreen -o /tmp/evergreen
+RUN mv /tmp/evergreen /usr/local/bin/evergreen && sudo chmod +x /usr/local/bin/evergreen
 
+# install workspace 
+RUN git clone https://github.com/enricogolfieri/workspace.git /root/.workspace
