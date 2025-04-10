@@ -55,13 +55,6 @@ function load()
     HISTSIZE=100000
     SAVEHIST=10000
     setopt SHARE_HISTORY
-
-    #Set-up mongo docker extra volumes for mongo workspace
-    GITIGNORE_PATH=$WS_PATH/mongovm/gitignore:/root/.gitignore \
-    GITCONFIG_PATH=$WS_PATH/mongovm/gitconfig:/root/.gitconfig \
-    ZSHRC_PATH=$WS_PATH/mongovm/.zshrc:/root/.zshrc \
-    ZSHENV_PATH=$WS_PATH/mongovm/.zshenv:/root/.zshenv \
-    WORKSPACE_PATH=$WS_PATH:/root/.workspace \
 }
 
 function load-w-trace()
