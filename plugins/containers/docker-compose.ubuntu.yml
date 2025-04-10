@@ -1,22 +1,4 @@
 services:
-  dev-mongo:
-    stdin_open: true
-    tty: true
-    command: /bin/bash
-    build:
-      context: ~/.workspace/mongovm/
-      dockerfile: Dockerfile
-    ports:
-      - "27017:27017"
-    volumes:
-      - dev-mongo-volume:/root/mongo
-      - dev-mongo-volume-vscode-server:/root/.vscode-server/
-      - dev-mongo-evg-yml:/root/.evergreen.yml
-      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
-      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
-    environment:
-      - GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
-
   pi:
     stdin_open: true
     tty: true
@@ -91,7 +73,3 @@ services:
           - driver: nvidia
             capabilities: [ gpu, video ]
 
-volumes:
-  dev-mongo-volume:
-  dev-mongo-volume-vscode-server:
-  dev-mongo-evg-yml:    

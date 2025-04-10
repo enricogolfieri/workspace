@@ -44,6 +44,9 @@ function load()
     antigen theme https://github.com/romkatv/powerlevel10k.git
     antigen bundle enricogolfieri/p10k-config --branch=main
 
+    # Load mongo
+    antigen bundle enricogolfieri/workspace-mongo --branch=main
+
     # Tell Antigen that you're done.
     antigen apply
 
@@ -52,6 +55,13 @@ function load()
     HISTSIZE=100000
     SAVEHIST=10000
     setopt SHARE_HISTORY
+
+    #Set-up mongo docker extra volumes for mongo workspace
+    GITIGNORE_PATH=$WS_PATH/mongovm/gitignore:/root/.gitignore \
+    GITCONFIG_PATH=$WS_PATH/mongovm/gitconfig:/root/.gitconfig \
+    ZSHRC_PATH=$WS_PATH/mongovm/.zshrc:/root/.zshrc \
+    ZSHENV_PATH=$WS_PATH/mongovm/.zshenv:/root/.zshenv \
+    WORKSPACE_PATH=$WS_PATH:/root/.workspace \
 }
 
 function load-w-trace()

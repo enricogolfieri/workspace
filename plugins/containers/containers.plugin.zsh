@@ -17,16 +17,6 @@ function runmaya-gpu()
     docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml exec maya-gpu /bin/bash  # Open an interactive shell
 }
 
-function build-mongovm()
-{
-    docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml up -d --build dev-mongo
-}
-
-function run-mongovm()
-{
-    docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml exec dev-mongo /bin/bash
-}
-
 function runhome()
 {
     docker-compose -f $WS_PLUGINS_PATH/containers/docker-compose.ubuntu.yml up home -d 
