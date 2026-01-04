@@ -4,8 +4,8 @@ services:
     tty: true
     command: /bin/bash
     build:
-      context: ~/.workspace/pi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DockerFileU22
     ports:
       - "80:80"
     volumes:
@@ -18,8 +18,8 @@ services:
     tty: true
     command: /bin/bash
     build:
-      context: ~/.workspace/home
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DockerFileU22
     volumes:
       - ~/.workspace:/root/.workspace
       - ~/.workspace/home/.zshrc:/root/.zshrc:ro
@@ -30,8 +30,8 @@ services:
     tty: true
     command: /bin/bash
     build:
-      context: ~/.workspace/server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DockerFileU22
     volumes:
       - ~/.workspace:/root/.workspace
       - ~/.workspace/server/.zshrc:/root/.zshrc:ro
