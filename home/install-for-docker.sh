@@ -1,6 +1,6 @@
 alias sudo='sudo '
 
-function _install_pyenv()
+function _install_pyenv
 {    
     #install pyenv
     [ "$(command -v pyenv)" ] && echo "[install_pyenv] Pyenv already installed" && return
