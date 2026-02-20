@@ -27,7 +27,7 @@ function load()
     antigen bundle zsh-users/zsh-syntax-highlighting
 
     # Load custom bundles.
-    antigen bundle $WS_PLUGINS_PATH/venv
+    antigen bundle enricogolfieri/antigen-venv.git --branch=main
     antigen bundle $WS_PLUGINS_PATH/remote
     antigen bundle $WS_PLUGINS_PATH/utils
     antigen bundle $WS_PLUGINS_PATH/containers
@@ -48,8 +48,9 @@ function load()
     #Set-up history
     HISTFILE=~/.zsh_history
     HISTSIZE=100000
-    SAVEHIST=10000
+    SAVEHIST=100000
     setopt SHARE_HISTORY
+    unsetopt HIST_IGNORE_SPACE
 }
 
 function load-w-trace()

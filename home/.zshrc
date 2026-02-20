@@ -32,7 +32,6 @@ function load()
     
     # Load custom bundles.
     antigen bundle $WS_PLUGINS_PATH/docker-extra
-    antigen bundle $WS_PLUGINS_PATH/venv
     antigen bundle $WS_PLUGINS_PATH/remote
     antigen bundle $WS_PLUGINS_PATH/utils
     antigen bundle $WS_PLUGINS_PATH/fbrew
@@ -47,6 +46,9 @@ function load()
     # Load mongo
     antigen bundle enricogolfieri/workspace-mongo --branch=main
 
+    # Load venv 
+    antigen bundle enricogolfieri/antigen-venv.git --branch=main
+
     # Tell Antigen that you're done.
     antigen apply
 
@@ -55,6 +57,7 @@ function load()
     HISTSIZE=100000
     SAVEHIST=10000
     setopt SHARE_HISTORY
+    unsetopt HIST_IGNORE_SPACE
 }
 
 function load-w-trace()
