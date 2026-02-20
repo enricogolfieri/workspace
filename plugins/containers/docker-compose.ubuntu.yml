@@ -21,7 +21,7 @@ services:
     volumes:
       - ~/.workspace:/root/.workspace
 
-  maya:
+  home-server:
     stdin_open: true
     tty: true
     command: /bin/bash
@@ -33,7 +33,7 @@ services:
     volumes:
       - ~/.workspace:/root/.workspace
 
-  maya-gpu:
+  home-server-gpu:
     stdin_open: true
     tty: true
     command: /bin/bash
