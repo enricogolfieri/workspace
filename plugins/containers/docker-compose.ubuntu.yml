@@ -4,44 +4,22 @@ services:
     tty: true
     command: /bin/bash
     build:
-      context: ~/.workspace/pi
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DockerfilePi
     ports:
       - "80:80"
     volumes:
       - ~/.workspace:/root/.workspace
-      - ~/.workspace/pi/.zshrc:/root/.zshrc:ro
-      - ~/.workspace/pi/.zshenv:/root/.zshenv:ro
 
   home:
     stdin_open: true
     tty: true
     command: /bin/bash
     build:
-      context: ~/.workspace/home
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DockerfileU22
     volumes:
       - ~/.workspace:/root/.workspace
-      - ~/.workspace/home/.zshrc:/root/.zshrc:ro
-      - ~/.workspace/home/.zshenv:/root/.zshenv:ro
-
-  home-server:
-    stdin_open: true
-    tty: true
-    command: /bin/bash
-    build:
-      context: ~/.workspace/server
-      dockerfile: Dockerfile
-    volumes:
-      - ~/.workspace:/root/.workspace
-      - ~/.workspace/server/.zshrc:/root/.zshrc:ro
-      - ~/.workspace/server/.zshenv:/root/.zshenv:ro
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            capabilities: [ gpu, video ]
 
   maya:
     stdin_open: true
