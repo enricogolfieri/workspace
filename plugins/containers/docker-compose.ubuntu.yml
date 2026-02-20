@@ -17,7 +17,7 @@ services:
     command: /bin/bash
     build:
       context: .
-      dockerfile: DockerfileU22
+      dockerfile: DockerFileU22
     volumes:
       - ~/.workspace:/root/.workspace
 
