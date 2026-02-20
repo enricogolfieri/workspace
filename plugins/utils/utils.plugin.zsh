@@ -1,5 +1,10 @@
 ### Utils ####
 
+alias setup-workspace-mongo='echo "curl -sL https://raw.githubusercontent.com/enricogolfieri/workspace/main/home/install.sh | bash"'
+alias setup-workspace-home='echo "curl -sL https://raw.githubusercontent.com/enricogolfieri/workspace/main/home/install.sh | bash"'
+alias setup-workspace-home-docker='echo "curl -sL https://raw.githubusercontent.com/enricogolfieri/main/workspace/home/install-docker.sh | bash"'
+alias setup-workspace-home-server='echo "curl -sL https://raw.githubusercontent.com/enricogolfieri/main/workspace/home/install-server.sh | bash"'
+
 cheat() { curl cheat.sh/"$1" ; }
 
 function test-connection()
