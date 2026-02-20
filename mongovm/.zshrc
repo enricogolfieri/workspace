@@ -51,6 +51,11 @@ function load()
     SAVEHIST=100000
     setopt SHARE_HISTORY
     unsetopt HIST_IGNORE_SPACE
+
+   # For disagg
+    CARGO_HOME="$HOME/.ds_toolchain/.cargo"
+    RUSTUP_HOME="$HOME/.ds_toolchain/.rustup"
+    PATH="$HOME/.ds_toolchain/coveralls/bin:$HOME/.ds_toolchain/yq/bin:$HOME/.ds_toolchain/jq/bin:$HOME/.ds_toolchain/buf/bin:$HOME/.ds_toolchain/helm/bin:$HOME/.ds_toolchain/minikube/bin:$HOME/.ds_toolchain/mongosh/bin:$HOME/.ds_toolchain/grpcurl/bin:$HOME/.ds_toolchain/sccache/bin:$HOME/.ds_toolchain/protoc/bin:$HOME/.ds_toolchain/just/bin:$HOME/.ds_toolchain/.cargo/bin:$PATH"
 }
 
 function load-w-trace()
