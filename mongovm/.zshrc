@@ -31,12 +31,14 @@ function load()
     antigen bundle $WS_PLUGINS_PATH/remote
     antigen bundle $WS_PLUGINS_PATH/utils
     antigen bundle $WS_PLUGINS_PATH/containers
+    antigen bundle $WS_PLUGINS_PATH/pyenv
 
     #theme
     antigen theme https://github.com/romkatv/powerlevel10k.git
     antigen bundle enricogolfieri/p10k-config --branch=main
 
     # Load mongo
+    antigen bundle enricogolfieri/workspace-mongo-ai-harness --branch=main
     antigen bundle enricogolfieri/workspace-mongo --branch=main
 
     # Tell Antigen that you're done.
