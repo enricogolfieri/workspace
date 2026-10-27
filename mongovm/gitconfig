@@ -6,4 +6,4 @@
 [alias]
 	l1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)(%an)%C(reset)%C(bold yellow)%d%C(reset)'
 [credential]
-	helper = "!f() { /root/.vscode-server/bin/fc3def6774c76082adf699d366f31a557ce5573f/node /tmp/vscode-remote-containers-06045fc1-90bb-498c-9677-666150239b37.js git-credential-helper $*; }; f"
+	helper = "!f() { /root/.vscode-server/bin/08d4889f9ec4a1685d257b9b95de036c8e1ce1e5/node /tmp/vscode-remote-containers-45381df3-9b05-499c-90a2-d9880ba49a3b.js git-credential-helper $*; }; f"
