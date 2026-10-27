@@ -10,6 +10,8 @@ services:
       - "80:80"
     volumes:
       - ~/.workspace:/root/.workspace
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
 
   home:
     stdin_open: true
@@ -20,6 +22,8 @@ services:
       dockerfile: DockerFileU22
     volumes:
       - ~/.workspace:/root/.workspace
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
 
   home-server:
     stdin_open: true
@@ -32,6 +36,8 @@ services:
       - "8000:8000"
     volumes:
       - ~/.workspace:/root/.workspace
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
 
   home-server-gpu:
     stdin_open: true
@@ -44,6 +50,8 @@ services:
       - "8000:8000"
     volumes:
       - ~/.workspace:/root/.workspace
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     deploy:
       resources:
         reservations:
