@@ -12,3 +12,8 @@ if [ -d "$HOME/.pyenv" ]; then
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init - --no-rehash)"
 fi
+
+function pyenv-latest() {
+    pyenv install $(pyenv latest)
+    pyenv global $(pyenv latest)
+}
